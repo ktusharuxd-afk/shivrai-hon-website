@@ -3,105 +3,293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHIVRAI HON (HON) - Digital Swarajya</title>
+<title>SHIVRAI HON - Digital Swarajya</title>
+<link rel="icon" type="image/svg+xml" href="HON_coin_Fevicon.svg">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#0f0600;color:#f5c518}
-header{background:linear-gradient(135deg,#2d1200,#1a0800);padding:40px 20px;text-align:center;border-bottom:2px solid #f5c518}
-header h1{font-size:2.5em;color:#FF9900;margin-bottom:10px}
-header p{color:#ccc;font-size:1.1em}
-.badge{display:inline-block;background:#FF9900;color:#000;padding:5px 15px;border-radius:20px;font-weight:bold;margin-top:10px}
-.stats{display:flex;flex-wrap:wrap;gap:15px;padding:30px 20px;justify-content:center;max-width:900px;margin:0 auto}
-.card{background:#2d1500;border:1px solid #FF9900;border-radius:10px;padding:20px;text-align:center;min-width:180px;flex:1}
-.card h3{font-size:0.85em;color:#aaa;text-transform:uppercase;margin-bottom:8px}
-.card p{font-size:1.6em;font-weight:bold;color:#FF9900}
-.section{max-width:900px;margin:0 auto;padding:30px 20px}
-.section h2{font-size:1.5em;color:#FF9900;margin-bottom:20px;border-bottom:1px solid #2d1500;padding-bottom:10px}
-table{width:100%;border-collapse:collapse;margin-bottom:20px}
-th{background:#2d1500;color:#FF9900;padding:12px;text-align:left;font-size:0.9em}
-td{padding:12px;border-bottom:1px solid #2d1500;color:#ccc}
-tr:hover td{background:#1a0800}
-.buttons{display:flex;flex-wrap:wrap;gap:15px;margin-top:20px}
-.btn{display:inline-block;padding:12px 25px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:0.95em}
-.btn-primary{background:#FF9900;color:#000}
-.btn-secondary{background:transparent;color:#FF9900;border:2px solid #FF9900}
-.btn:hover{opacity:0.85}
-.roadmap{list-style:none;padding:0}
-.roadmap li{padding:15px;border-left:3px solid #FF9900;margin-bottom:10px;background:#1a0800}
-.roadmap li.done{border-color:#4ade80}
-.roadmap li.done span{color:#4ade80}
-.roadmap li span{color:#FF9900;font-weight:bold;display:block;margin-bottom:5px}
-footer{text-align:center;padding:30px;border-top:1px solid #2d1500;color:#666;margin-top:40px}
+:root{--gold:#FFCC00;--orange:#FF9900;--dark:#0a0400;--dark2:#150800}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--dark);color:#fff;overflow-x:hidden}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+nav{position:fixed;top:0;width:100%;z-index:100;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,4,0,0.9);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,153,0,0.2)}
+.nav-logo img{height:35px;max-width:150px;object-fit:contain}
+.nav-links{display:flex;flex-wrap:wrap;gap:5px}
+.nav-links a{color:#ccc;text-decoration:none;padding:5px 10px;font-size:0.85em;transition:color 0.3s;border-radius:5px}
+.nav-links a:hover{color:var(--gold);background:rgba(255,153,0,0.1)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px}
+.hamburger span{width:25px;height:2px;background:var(--gold);border-radius:2px;transition:all 0.3s}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;width:100%;background:rgba(10,4,0,0.98);z-index:99;padding:20px;border-bottom:1px solid rgba(255,153,0,0.2)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;color:#ccc;text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,153,0,0.1);font-size:1em}
+.mobile-menu a:hover{color:var(--gold)}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;z-index:1}
+.hero-glow{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(255,153,0,0.12) 0%,transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse-glow 3s ease-in-out infinite}
+@keyframes pulse-glow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.7}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1}}
+.coin-logo{width:130px;height:130px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 25px rgba(255,204,0,0.6))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.hero h1{font-size:clamp(2em,6vw,4em);font-weight:700;margin:15px 0 8px;background:linear-gradient(135deg,#FFCC00,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .tagline{font-size:clamp(0.95em,2.5vw,1.3em);color:#ccc;margin-bottom:8px}
+.hero .subtitle{font-size:clamp(0.75em,1.5vw,0.95em);color:rgba(255,153,0,0.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:30px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-glow{padding:12px 24px;border-radius:50px;font-weight:bold;font-size:clamp(0.85em,2vw,1em);text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-primary{background:linear-gradient(135deg,#FFCC00,#FF9900);color:#000;box-shadow:0 0 20px rgba(255,153,0,0.4)}
+.btn-primary:hover{box-shadow:0 0 40px rgba(255,153,0,0.8);transform:translateY(-2px)}
+.btn-outline{border:2px solid var(--gold);color:var(--gold)}
+.btn-outline:hover{background:rgba(255,204,0,0.1);transform:translateY(-2px)}
+.ticker{background:linear-gradient(90deg,#150800,#2d1500,#150800);border-top:1px solid rgba(255,153,0,0.3);border-bottom:1px solid rgba(255,153,0,0.3);padding:10px 0;overflow:hidden;position:relative;z-index:1}
+.ticker-inner{display:flex;animation:ticker 25s linear infinite;white-space:nowrap}
+.ticker-item{margin:0 30px;color:var(--gold);font-size:0.85em;font-weight:500}
+.ticker-item span{color:#fff;margin-left:6px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+section{position:relative;z-index:1}
+.section-title{text-align:center;font-size:clamp(1.8em,4vw,2.5em);margin-bottom:40px;background:linear-gradient(135deg,#FFCC00,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stats-section{padding:60px 20px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;max-width:1000px;margin:0 auto}
+.stat-card{background:linear-gradient(135deg,rgba(45,21,0,0.8),rgba(21,8,0,0.9));border:1px solid rgba(255,153,0,0.3);border-radius:16px;padding:25px 15px;text-align:center;transition:all 0.3s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transition:left 0.5s}
+.stat-card:hover::before{left:100%}
+.stat-card:hover{border-color:rgba(255,204,0,0.6);box-shadow:0 10px 30px rgba(255,153,0,0.2);transform:translateY(-5px)}
+.stat-icon{font-size:1.8em;margin-bottom:8px}
+.stat-value{font-size:clamp(1.3em,3vw,1.8em);font-weight:700;color:var(--gold)}
+.stat-label{font-size:0.75em;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.about-section{padding:60px 20px;background:linear-gradient(180deg,transparent,rgba(45,21,0,0.3),transparent)}
+.about-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.about-text h2{font-size:clamp(1.8em,4vw,2.5em);margin-bottom:15px;background:linear-gradient(135deg,#FFCC00,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.about-text p{color:#aaa;line-height:1.9;margin-bottom:12px;font-size:0.95em}
+.hex-container{width:160px;height:160px;margin:0 auto}
+.hex{width:160px;height:160px;background:linear-gradient(135deg,rgba(255,204,0,0.1),rgba(255,153,0,0.05));border:1px solid rgba(255,204,0,0.3);border-radius:20px;display:flex;align-items:center;justify-content:center;animation:rotate-hex 8s linear infinite}
+@keyframes rotate-hex{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.hex-inner{animation:counter-rotate 8s linear infinite;font-size:3.5em}
+@keyframes counter-rotate{0%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
+.specs-section{padding:60px 20px}
+.specs-table{max-width:700px;margin:0 auto;border-radius:16px;overflow:hidden;border:1px solid rgba(255,153,0,0.2)}
+.spec-row{display:grid;grid-template-columns:1fr 1fr;padding:15px 20px;border-bottom:1px solid rgba(255,153,0,0.1);transition:background 0.3s}
+.spec-row:hover{background:rgba(255,153,0,0.05)}
+.spec-row:last-child{border-bottom:none}
+.spec-row:nth-child(odd){background:rgba(45,21,0,0.4)}
+.spec-key{color:#888;font-size:0.9em}
+.spec-val{color:var(--gold);font-weight:500;text-align:right;font-size:0.9em}
+.roadmap-section{padding:60px 20px}
+.roadmap{max-width:700px;margin:0 auto;position:relative}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gold),rgba(255,153,0,0.1))}
+.roadmap-item{display:flex;gap:15px;margin-bottom:30px;align-items:flex-start}
+.roadmap-dot{width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;flex-shrink:0;position:relative;z-index:1}
+.dot-done{background:linear-gradient(135deg,#FFCC00,#FF9900);box-shadow:0 0 15px rgba(255,204,0,0.5)}
+.dot-active{background:linear-gradient(135deg,#FF9900,#FF6600);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 15px rgba(255,153,0,0.5)}50%{box-shadow:0 0 35px rgba(255,153,0,0.9)}}
+.dot-pending{background:rgba(45,21,0,0.8);border:2px solid rgba(255,153,0,0.3)}
+.roadmap-content{background:rgba(45,21,0,0.5);border:1px solid rgba(255,153,0,0.2);border-radius:12px;padding:15px;flex:1}
+.roadmap-content h3{color:var(--gold);margin-bottom:6px;font-size:1em}
+.roadmap-content p{color:#888;font-size:0.85em;line-height:1.6}
+.cta-section{padding:60px 20px;text-align:center}
+.cta-box{max-width:700px;margin:0 auto;background:linear-gradient(135deg,rgba(45,21,0,0.8),rgba(21,8,0,0.9));border:1px solid rgba(255,153,0,0.3);border-radius:24px;padding:50px 30px;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent,rgba(255,204,0,0.05),transparent,rgba(255,153,0,0.05),transparent);animation:cta-rotate 8s linear infinite}
+@keyframes cta-rotate{100%{transform:rotate(360deg)}}
+.cta-box h2{font-size:clamp(1.5em,4vw,2.2em);margin-bottom:12px;background:linear-gradient(135deg,#FFCC00,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:1}
+.cta-box p{color:#aaa;margin-bottom:25px;position:relative;z-index:1}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+footer{text-align:center;padding:35px 20px;border-top:1px solid rgba(255,153,0,0.15)}
+footer img{height:45px;margin-bottom:12px;opacity:0.8;max-width:200px}
+footer p{color:#555;font-size:0.85em;margin:4px 0}
+.footer-gold{color:var(--gold);font-size:1em;font-weight:500}
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* MOBILE RESPONSIVE */
+@media(max-width:768px){
+.nav-links{display:none}
+.hamburger{display:flex}
+.coin-logo{width:100px;height:100px}
+.about-inner{grid-template-columns:1fr;text-align:center}
+.about-visual{order:-1}
+.hero-btns .btn-glow{padding:10px 18px;font-size:0.85em}
+.stats-grid{grid-template-columns:repeat(2,1fr)}
+.roadmap::before{left:24px}
+.roadmap-dot{width:48px;height:48px;font-size:1em}
+.cta-box{padding:35px 20px}
+.spec-row{padding:12px 15px}
+}
+@media(max-width:400px){
+.stats-grid{grid-template-columns:1fr 1fr}
+.hero-btns{flex-direction:column;align-items:center}
+.cta-btns{flex-direction:column;align-items:center}
+}
 </style>
 </head>
 <body>
 
-<header>
-<div class="badge">🚩 Jai Bhavani! Jai Shivaji!</div>
-<h1>SHIVRAI HON</h1>
-<p>Decentralized Digital Currency of Bharat</p>
-<p style="color:#FF9900;margin-top:10px;font-size:1.2em">Symbol: HON</p>
-</header>
+<canvas id="particles"></canvas>
 
-<div class="stats">
-<div class="card"><h3>Total Supply</h3><p>84M HON</p></div>
-<div class="card"><h3>Block Reward</h3><p>200 HON</p></div>
-<div class="card"><h3>Block Time</h3><p>5 Min</p></div>
-<div class="card"><h3>Halving</h3><p>2 Years</p></div>
-<div class="card"><h3>Algorithm</h3><p>SHA-256</p></div>
-</div>
+<nav>
+  <div class="nav-logo"><img src="HON_coin_logo.svg" alt="SHIVRAI HON"></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#specs">Specs</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="https://shivrai-hon-explorer.onrender.com" target="_blank">Explorer</a>
+    <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
 
-<div class="section">
-<h2>About SHIVRAI HON</h2>
-<p style="color:#ccc;line-height:1.8">SHIVRAI HON (HON) is a decentralized cryptocurrency inspired by the spirit of Chhatrapati Shivaji Maharaj — built for the people of Bharat. It represents financial sovereignty — Swarajya in the digital age. No central authority. No single point of control. Power to the people.</p>
-
-<div class="buttons">
-<a href="https://shivrai-hon-explorer.onrender.com" class="btn btn-primary" target="_blank">🔍 Block Explorer</a>
-<a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" class="btn btn-secondary" target="_blank">📦 GitHub</a>
-<a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper.pdf" class="btn btn-secondary" target="_blank">📄 Whitepaper</a>
-</div>
-</div>
-
-<div class="section">
-<h2>Technical Specifications</h2>
-<table>
-<tr><th>Parameter</th><th>Value</th></tr>
-<tr><td>Coin Name</td><td>SHIVRAI HON</td></tr>
-<tr><td>Symbol</td><td>HON</td></tr>
-<tr><td>Total Supply</td><td>84,000,000 HON</td></tr>
-<tr><td>Block Reward</td><td>200 HON</td></tr>
-<tr><td>Block Time</td><td>5 Minutes</td></tr>
-<tr><td>Halving Interval</td><td>Every 2 Years (210,240 blocks)</td></tr>
-<tr><td>Algorithm</td><td>SHA-256 Proof of Work</td></tr>
-<tr><td>P2P Port</td><td>8444</td></tr>
-<tr><td>Consensus</td><td>Proof of Work</td></tr>
-</table>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#specs" onclick="toggleMenu()">Specifications</a>
+  <a href="#roadmap" onclick="toggleMenu()">Roadmap</a>
+  <a href="https://shivrai-hon-explorer.onrender.com" target="_blank">Block Explorer</a>
+  <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
+  <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper.pdf" target="_blank">Whitepaper</a>
 </div>
 
-<div class="section">
-<h2>Roadmap</h2>
-<ul class="roadmap">
-<li class="done"><span>✅ Phase 1 — Foundation</span>Core blockchain development, genesis block, block explorer launched.</li>
-<li class="done"><span>✅ Phase 2 — Node Launch</span>Mainnet live, node setup guide, whitepaper published.</li>
-<li><span>🔄 Phase 3 — Community</span>Public node network, community mining, wallet development.</li>
-<li><span>⏳ Phase 4 — Exchange Listing</span>CoinMarketCap, CoinGecko listing, exchange integration.</li>
-<li><span>⏳ Phase 5 — Ecosystem</span>Mobile wallet, DeFi integrations, merchant adoption.</li>
-</ul>
+<section class="hero">
+  <div class="hero-glow"></div>
+  <img src="HON_coin_Fevicon.svg" class="coin-logo" alt="HON">
+  <h1>SHIVRAI HON</h1>
+  <p class="tagline">Decentralized Digital Currency of Bharat</p>
+  <p class="subtitle">🚩 Jai Bhavani! Jai Shivaji! 🚩</p>
+  <div class="hero-btns">
+    <a href="https://shivrai-hon-explorer.onrender.com" class="btn-glow btn-primary" target="_blank">🔍 Explorer</a>
+    <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" class="btn-glow btn-outline" target="_blank">📦 Node</a>
+    <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper.pdf" class="btn-glow btn-outline" target="_blank">📄 Whitepaper</a>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">HON<span>Digital Swarajya</span></span>
+    <span class="ticker-item">Block Reward<span>200 HON</span></span>
+    <span class="ticker-item">Block Time<span>5 Minutes</span></span>
+    <span class="ticker-item">Total Supply<span>84,000,000 HON</span></span>
+    <span class="ticker-item">Algorithm<span>SHA-256 PoW</span></span>
+    <span class="ticker-item">Halving<span>Every 2 Years</span></span>
+    <span class="ticker-item">HON<span>Digital Swarajya</span></span>
+    <span class="ticker-item">Block Reward<span>200 HON</span></span>
+    <span class="ticker-item">Block Time<span>5 Minutes</span></span>
+    <span class="ticker-item">Total Supply<span>84,000,000 HON</span></span>
+    <span class="ticker-item">Algorithm<span>SHA-256 PoW</span></span>
+    <span class="ticker-item">Halving<span>Every 2 Years</span></span>
+  </div>
 </div>
 
-<div class="section">
-<h2>Run a Node</h2>
-<p style="color:#ccc;line-height:1.8">Help decentralize the SHIVRAI HON network! Download and run a node on your computer. Every node makes the network stronger and more secure.</p>
-<div class="buttons" style="margin-top:15px">
-<a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" class="btn btn-primary" target="_blank">⬇️ Download Node</a>
-</div>
-</div>
+<section class="stats-section" id="about">
+  <h2 class="section-title">Network Stats</h2>
+  <div class="stats-grid reveal">
+    <div class="stat-card"><div class="stat-icon">🪙</div><div class="stat-value">84M</div><div class="stat-label">Total Supply</div></div>
+    <div class="stat-card"><div class="stat-icon">⛏️</div><div class="stat-value">200</div><div class="stat-label">Block Reward</div></div>
+    <div class="stat-card"><div class="stat-icon">⏱️</div><div class="stat-value">5 Min</div><div class="stat-label">Block Time</div></div>
+    <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-value">2 Yr</div><div class="stat-label">Halving</div></div>
+    <div class="stat-card"><div class="stat-icon">🔐</div><div class="stat-value">SHA-256</div><div class="stat-label">Algorithm</div></div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-inner reveal">
+    <div class="about-text">
+      <h2>Digital Swarajya</h2>
+      <p>SHIVRAI HON (HON) is a decentralized cryptocurrency inspired by the spirit of Chhatrapati Shivaji Maharaj — built for the people of Bharat.</p>
+      <p>Financial sovereignty in the digital age. No central authority. No single point of control. Power to the people.</p>
+      <p>Built on Bitcoin Core — battle-tested, secure, and truly decentralized.</p>
+    </div>
+    <div class="about-visual">
+      <div class="hex-container">
+        <div class="hex"><div class="hex-inner">🚩</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="specs-section" id="specs">
+  <h2 class="section-title">Technical Specifications</h2>
+  <div class="specs-table reveal">
+    <div class="spec-row"><span class="spec-key">Coin Name</span><span class="spec-val">SHIVRAI HON</span></div>
+    <div class="spec-row"><span class="spec-key">Symbol</span><span class="spec-val">HON</span></div>
+    <div class="spec-row"><span class="spec-key">Total Supply</span><span class="spec-val">84,000,000 HON</span></div>
+    <div class="spec-row"><span class="spec-key">Block Reward</span><span class="spec-val">200 HON</span></div>
+    <div class="spec-row"><span class="spec-key">Block Time</span><span class="spec-val">5 Minutes</span></div>
+    <div class="spec-row"><span class="spec-key">Halving</span><span class="spec-val">Every 2 Years</span></div>
+    <div class="spec-row"><span class="spec-key">Algorithm</span><span class="spec-val">SHA-256 PoW</span></div>
+    <div class="spec-row"><span class="spec-key">P2P Port</span><span class="spec-val">8444</span></div>
+    <div class="spec-row"><span class="spec-key">Consensus</span><span class="spec-val">Proof of Work</span></div>
+  </div>
+</section>
+
+<section class="roadmap-section" id="roadmap">
+  <h2 class="section-title">Roadmap</h2>
+  <div class="roadmap reveal">
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-done">✅</div>
+      <div class="roadmap-content"><h3>Phase 1 — Foundation</h3><p>Bitcoin Core fork, genesis block, 200 HON block reward, explorer launched.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-done">✅</div>
+      <div class="roadmap-content"><h3>Phase 2 — Launch</h3><p>Mainnet live, whitepaper published, node setup guide, website launched.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-active">🔄</div>
+      <div class="roadmap-content"><h3>Phase 3 — Community</h3><p>Public node network, community mining, social media launch.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-pending">⏳</div>
+      <div class="roadmap-content"><h3>Phase 4 — Exchange Listing</h3><p>CoinMarketCap, CoinGecko, exchange integration.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot dot-pending">⏳</div>
+      <div class="roadmap-content"><h3>Phase 5 — Ecosystem</h3><p>Mobile wallet, DeFi, merchant adoption, community DAO.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-box reveal">
+    <h2>Join the Revolution</h2>
+    <p>Run a node. Mine HON. Be part of Digital Swarajya.</p>
+    <div class="cta-btns">
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" class="btn-glow btn-primary" target="_blank">⬇️ Download Node</a>
+      <a href="https://shivrai-hon-explorer.onrender.com" class="btn-glow btn-outline" target="_blank">🔍 Explorer</a>
+    </div>
+  </div>
+</section>
 
 <footer>
-<p style="color:#FF9900;font-size:1.1em">🚩 SHIVRAI HON — Digital Swarajya</p>
-<p style="margin-top:5px">Jai Bhavani! Jai Shivaji!</p>
-<p style="margin-top:10px;font-size:0.85em">© 2025 SHIVRAI HON. Open Source — MIT License</p>
+  <img src="HON_coin_logo.svg" alt="SHIVRAI HON">
+  <p class="footer-gold">🚩 SHIVRAI HON — Digital Swarajya</p>
+  <p>Jai Bhavani! Jai Shivaji!</p>
+  <p style="margin-top:8px">© 2025 SHIVRAI HON | Open Source — MIT License</p>
 </footer>
 
+<script>
+// PARTICLES
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();
+window.addEventListener('resize',resize);
+const particles=[];
+for(let i=0;i<70;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,size:Math.random()*2+0.5,alpha:Math.random()*0.4+0.1})}
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach(p=>{
+p.x+=p.vx;p.y+=p.vy;
+if(p.x<0||p.x>canvas.width)p.vx*=-1;
+if(p.y<0||p.y>canvas.height)p.vy*=-1;
+ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.fillStyle=`rgba(255,204,0,${p.alpha})`;ctx.fill();
+});
+particles.forEach((p,i)=>{
+particles.slice(i+1).forEach(p2=>{
+const d=Math.hypot(p.x-p2.x,p.y-p2.y);
+if(d<100){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.strokeStyle=`rgba(255,153,0,${0.12*(1-d/100)})`;ctx.lineWidth=0.5;ctx.stroke()}
+})});
+requestAnimationFrame(draw)}
+draw();
+
+// MOBILE MENU
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+
+// REVEAL
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
 </body>
 </html>
