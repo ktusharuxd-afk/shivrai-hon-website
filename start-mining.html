@@ -312,47 +312,87 @@ while true; do $CLI generatetoaddress 1 "$ADDR"; sleep 1; done</div>
     <!-- WINDOWS DESKTOP -->
     <div class="platform-content active" id="desktop-win">
       <div class="step">
-        <div class="step-header"><div class="step-num">1</div><div class="step-title">Install Node.js</div></div>
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Download Mining Node (Required)</div></div>
         <div class="step-body">
-          <a href="https://nodejs.org" target="_blank" class="download-btn">⬇ Download Node.js (LTS)</a>
-          <p>Download and install Node.js LTS version. Restart your computer after install.</p>
+          <p>Desktop App la mining node lagto. Aadhi he download kara:</p>
+          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/v2.1" target="_blank" class="download-btn">⬇ Download Windows Miner v2.1 Secure (19MB)</a>
+          <p>1. ZIP download kara</p>
+          <p>2. Right-click → <span class="highlight">"Extract All"</span> → Extract kara</p>
+          <p>3. <span class="highlight">1_START_NODE.bat</span> double-click kara</p>
+          <p>4. Black window yeil — <span class="highlight">band karu naka!</span></p>
+          <div class="tip">✅ Node chalu zali ki Desktop App la data distay — balance, blocks, peers sagle!</div>
         </div>
       </div>
 
       <div class="step">
-        <div class="step-header"><div class="step-num">2</div><div class="step-title">Download Desktop App</div></div>
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Install Node.js</div></div>
         <div class="step-body">
-          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases" target="_blank" class="download-btn">⬇ Download SHIVRAI HON Desktop App v1.0</a>
-          <p>Download <span class="highlight">SHIVRAI-HON-Desktop-v1.0.zip</span> and extract it.</p>
+          <a href="https://nodejs.org" target="_blank" class="download-btn">⬇ Download Node.js (LTS Version)</a>
+          <p>Download kara ani install kara. Install nantara computer <span class="highlight">restart</span> kara.</p>
+          <div class="tip">✅ "LTS" version select kara — he sabse stable ahe.</div>
         </div>
       </div>
 
       <div class="step">
-        <div class="step-header"><div class="step-num">3</div><div class="step-title">Download Electron</div></div>
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Download Desktop App</div></div>
         <div class="step-body">
-          <a href="https://github.com/electron/electron/releases" target="_blank" class="download-btn">⬇ Download Electron Binary</a>
-          <p>1. Download <span class="highlight">electron-vXX-win32-x64.zip</span></p>
-          <p>2. Extract to <span class="highlight">C:\electron-bin\</span></p>
+          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/desktop-v1.0" target="_blank" class="download-btn">⬇ Download SHIVRAI HON Desktop App v1.0</a>
+          <p>1. <span class="highlight">SHIVRAI-HON-Desktop-v1.0.zip</span> download kara</p>
+          <p>2. Right-click → <span class="highlight">"Extract All"</span></p>
+          <p>3. Extract kara — folder madhe he files distil: main.js, package.json, renderer/, rpc.conf</p>
         </div>
       </div>
 
       <div class="step">
-        <div class="step-header"><div class="step-num">4</div><div class="step-title">Install & Run</div></div>
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Download Electron</div></div>
         <div class="step-body">
-          <p>Open <span class="highlight">Command Prompt</span> (CMD):</p>
+          <a href="https://github.com/electron/electron/releases/latest" target="_blank" class="download-btn">⬇ Download Electron Binary</a>
+          <p>1. Latest release page var ja</p>
+          <p>2. <span class="highlight">electron-vXX-win32-x64.zip</span> download kara (XX = version number)</p>
+          <p>3. Nava folder banva: <span class="highlight">C:\electron-bin\</span></p>
+          <p>4. ZIP extract kara tya folder madhe</p>
+          <div class="tip">✅ C:\electron-bin\ madhe electron.exe disayला pahije!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">5</div><div class="step-title">Configure RPC Connection</div></div>
+        <div class="step-body">
+          <p>Desktop App folder madhe <span class="highlight">rpc.conf</span> file ahe — Notepad ne open kara:</p>
+          <div class="code-box">rpcuser=shivraiuser
+rpcpassword=YourPassword
+rpchost=127.0.0.1
+rpcport=8332</div>
+          <p>Password file ithe ahe: <span class="highlight">%APPDATA%\SHIVRAI-HON\rpc.key</span></p>
+          <p>Ti file open kara → password copy kara → rpc.conf madhe paste kara</p>
+          <div class="warning">⚠️ rpc.key file 1_START_NODE.bat pahilya veli run kelyavr auto-create hote.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">6</div><div class="step-title">Install Dependencies & Run</div></div>
+        <div class="step-body">
+          <p>Windows Search madhe <span class="highlight">cmd</span> type kara → <span class="highlight">Command Prompt</span> open kara:</p>
           <div class="code-box">cd Downloads\SHIVRAI-HON-Desktop-v1.0
 npm install
 set ELECTRON_OVERRIDE_DIST_PATH=C:\electron-bin
 npm start</div>
-          <div class="tip">✅ The Desktop App will open with Dashboard, Mining, Wallet, and Send features!</div>
+          <div class="tip">✅ SHIVRAI HON Desktop App open hoil!</div>
+          <div class="warning">⚠️ Pratyek veli app start karayala "set ELECTRON_OVERRIDE_DIST_PATH=C:\electron-bin" lagto.</div>
         </div>
       </div>
 
       <div class="step">
-        <div class="step-header"><div class="step-num">5</div><div class="step-title">Start Mining Node</div></div>
+        <div class="step-header"><div class="step-num">7</div><div class="step-title">Enjoy Your Dashboard! 🎉</div></div>
         <div class="step-body">
-          <p>You also need the mining node running. Download the <span class="highlight">Windows Miner v2.1</span> and run <span class="highlight">1_START_NODE.bat</span> alongside the Desktop App.</p>
-          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/v2.1" target="_blank" class="download-btn">⬇ Download Windows Miner v2.1</a>
+          <p>App madhe tumhala he features milतil:</p>
+          <p>✅ <span class="highlight">Dashboard</span> — Balance, Block Count, Peers, Mining Status</p>
+          <p>✅ <span class="highlight">Mining</span> — Start/Stop mining, Live hash rate graph</p>
+          <p>✅ <span class="highlight">Wallet</span> — Balance check, New address generate</p>
+          <p>✅ <span class="highlight">Send HON</span> — Dusarya user la HON pathava (Real blockchain transaction!)</p>
+          <p>✅ <span class="highlight">History</span> — Recent blocks ani transactions</p>
+          <p>✅ <span class="highlight">Profile</span> — Account details</p>
+          <div class="tip">✅ Node chalu asel tar sagle data auto-refresh hoto!</div>
         </div>
       </div>
     </div>
