@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Mining — SHIVRAI HON</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#FFB300;--gold2:#FFCC00;--dark:#090909;--dark2:#0f0f0f;--green:#4ade80;--red:#f87171}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--dark);color:#fff;overflow-x:hidden;line-height:1.8}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#111}
+::-webkit-scrollbar-thumb{background:#FFB300;border-radius:5px}
+
+header{position:fixed;width:100%;top:0;z-index:1000;background:rgba(9,9,9,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,179,0,0.1)}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 5%;max-width:1400px;margin:auto}
+
+
+.nav-links{display:flex;align-items:center;gap:5px}
+.nav-links a{text-decoration:none;color:#bbb;padding:7px 14px;border-radius:8px;font-size:0.85em;font-weight:500;transition:all 0.3s}
+.nav-links a:hover{color:var(--gold);background:rgba(255,179,0,0.08)}
+.nav-cta{background:linear-gradient(135deg,#FFB300,#FF8C00)!important;color:#000!important;border-radius:50px!important;font-weight:600!important}
+
+.hero{padding:120px 5% 60px;text-align:center;background:radial-gradient(ellipse at top,rgba(255,179,0,0.06),transparent 60%)}
+.hero h1{font-size:clamp(2em,4vw,3em);font-weight:800;margin-bottom:12px}
+.hero h1 .gold{background:linear-gradient(135deg,#FFB300,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#888;font-size:1em;max-width:650px;margin:0 auto 30px}
+
+.container{max-width:900px;margin:0 auto;padding:0 5%}
+
+/* METHOD SELECTOR */
+.method-selector{display:flex;gap:12px;justify-content:center;margin-bottom:40px;flex-wrap:wrap}
+.method-btn{padding:14px 32px;border-radius:14px;border:1.5px solid rgba(255,179,0,0.2);background:rgba(255,255,255,0.03);color:#bbb;font-family:'Poppins',sans-serif;font-size:0.95em;font-weight:600;cursor:pointer;transition:all 0.3s}
+.method-btn.active{background:linear-gradient(135deg,#FFB300,#FF8C00);color:#000;border-color:transparent;box-shadow:0 5px 25px rgba(255,179,0,0.3)}
+.method-btn:hover{border-color:var(--gold);color:var(--gold)}
+.method-content{display:none}
+.method-content.active{display:block}
+
+/* PLATFORM TABS */
+.platform-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:30px;flex-wrap:wrap}
+.platform-tab{padding:10px 24px;border-radius:50px;border:1.5px solid rgba(255,179,0,0.15);background:transparent;color:#888;font-family:'Poppins',sans-serif;font-size:0.85em;font-weight:600;cursor:pointer;transition:all 0.3s}
+.platform-tab.active{background:rgba(255,179,0,0.15);color:var(--gold);border-color:var(--gold)}
+.platform-content{display:none}
+.platform-content.active{display:block}
+
+/* STEPS */
+.step{background:linear-gradient(135deg,#131313,#0d0d0d);border:1px solid rgba(255,179,0,0.1);border-radius:20px;padding:28px;margin-bottom:18px;position:relative;transition:all 0.3s}
+.step:hover{border-color:rgba(255,179,0,0.3);transform:translateY(-2px);box-shadow:0 12px 35px rgba(255,179,0,0.05)}
+.step-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.step-num{width:42px;height:42px;background:linear-gradient(135deg,#FFB300,#FF8C00);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95em;color:#000;flex-shrink:0}
+.step-title{font-size:1.1em;font-weight:700}
+.step-body{color:#aaa;font-size:0.88em;line-height:1.9}
+.step-body p{margin-bottom:10px}
+.code-box{background:#0a0a0a;border:1px solid rgba(255,179,0,0.15);border-radius:12px;padding:14px 16px;margin:10px 0;font-family:'Courier New',monospace;font-size:0.82em;color:var(--gold);overflow-x:auto;line-height:1.6;user-select:all}
+.highlight{color:var(--gold);font-weight:600}
+.warning{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:12px;padding:14px 16px;margin:10px 0;color:#f87171;font-size:0.83em}
+.tip{background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:12px;padding:14px 16px;margin:10px 0;color:#4ade80;font-size:0.83em}
+.download-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;background:linear-gradient(135deg,#FFB300,#FF8C00);color:#000;font-weight:700;border-radius:50px;text-decoration:none;font-size:0.95em;transition:all 0.3s;margin:10px 0}
+.download-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,179,0,0.3)}
+
+/* SPECS TABLE */
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:30px 0}
+.spec-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,179,0,0.1);border-radius:14px;padding:18px;text-align:center}
+.spec-card .label{font-size:0.72em;color:#666;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.spec-card .value{font-size:1.1em;font-weight:700;color:var(--gold)}
+
+/* FAQ */
+.faq{margin:50px 0}
+.faq h2{text-align:center;font-size:1.6em;margin-bottom:25px}
+.faq h2 .gold{background:linear-gradient(135deg,#FFB300,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.faq-item{background:linear-gradient(135deg,#131313,#0d0d0d);border:1px solid rgba(255,179,0,0.1);border-radius:14px;padding:18px 22px;margin-bottom:10px;cursor:pointer;transition:all 0.3s}
+.faq-item:hover{border-color:rgba(255,179,0,0.3)}
+.faq-q{font-weight:600;font-size:0.92em;display:flex;justify-content:space-between;align-items:center}
+.faq-a{color:#888;font-size:0.83em;margin-top:10px;display:none;line-height:1.8}
+.faq-item.open .faq-a{display:block}
+.faq-item.open{border-color:rgba(255,179,0,0.3);background:linear-gradient(135deg,#1a1200,#0d0900)}
+
+footer{border-top:1px solid rgba(255,179,0,0.08);padding:30px 5%;text-align:center;color:#444;font-size:0.8em;margin-top:50px}
+
+@media(max-width:768px){
+.nav-links{display:none}
+.step{padding:20px}
+.method-btn{padding:10px 20px;font-size:0.85em}
+}
+{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+
+.mobile-menu{display:none;position:fixed;top:62px;left:0;width:100%;background:rgba(9,9,9,0.98);backdrop-filter:blur(20px);z-index:999;padding:20px 5%;border-bottom:1px solid rgba(255,179,0,0.15)}
+
+footer{padding:60px 5% 40px;border-top:1px solid rgba(255,179,0,0.08);background:#070707}
+.footer-top{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-bottom:40px}
+.footer-brand img{height:45px;object-fit:contain;margin-bottom:12px}
+.footer-brand p{color:#555;font-size:0.8em;line-height:1.7;max-width:250px}
+.footer-links h4{color:#fff;font-size:0.88em;font-weight:600;margin-bottom:14px}
+.footer-links a{display:block;color:#555;text-decoration:none;font-size:0.8em;margin-bottom:7px;transition:color 0.3s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{max-width:1200px;margin:0 auto;padding-top:22px;border-top:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{color:#444;font-size:0.76em}
+@media(max-width:768px){
+.nav-links{display:none}
+.hamburger{display:flex}
+.footer-top{flex-direction:column}
+.footer-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website" class="logo-area">
+      <img src="HON coin logo.svg" alt="SHIVRAI HON">
+    </a>
+    <div class="nav-links">
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#features">Features</a>
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#download">Download</a>
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#specs">Specs</a>
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#roadmap">Roadmap</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="start-mining.html">Start Mining</a>
+      <a href="help.html">Help</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases" target="_blank" class="nav-cta">Download Miner</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website" onclick="toggleMenu()">Home</a>
+  <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#features" onclick="toggleMenu()">Features</a>
+  <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#download" onclick="toggleMenu()">Download</a>
+  <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#specs" onclick="toggleMenu()">Specs</a>
+  <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#roadmap" onclick="toggleMenu()">Roadmap</a>
+  <a href="explorer.html" onclick="toggleMenu()">Explorer</a>
+  <a href="start-mining.html" onclick="toggleMenu()">Start Mining</a>
+  <a href="help.html" onclick="toggleMenu()">Help</a>
+  <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases" target="_blank">Download Miner</a>
+</div>
+
+<section class="hero">
+  <h1>Start Mining <span class="gold">SHIVRAI HON</span></h1>
+  <p>Mine HON on your computer. No special hardware needed. Choose your method below — simple BAT files or the full Desktop App.</p>
+</section>
+
+<div class="container">
+
+  <!-- SPECS -->
+  <div class="specs">
+    <div class="spec-card"><div class="label">Block Reward</div><div class="value">2000 HON</div></div>
+    <div class="spec-card"><div class="label">Block Time</div><div class="value">5 Minutes</div></div>
+    <div class="spec-card"><div class="label">Algorithm</div><div class="value">HONPoW</div></div>
+    <div class="spec-card"><div class="label">Rewards</div><div class="value">Permanent</div></div>
+  </div>
+
+  <!-- METHOD SELECTOR -->
+  <div class="method-selector">
+    <button class="method-btn active" onclick="switchMethod('simple')">⛏️ Simple Mining (BAT Files)</button>
+    <button class="method-btn" onclick="switchMethod('desktop')">💻 Desktop App</button>
+  </div>
+
+  <!-- ==================== SIMPLE MINING ==================== -->
+  <div class="method-content active" id="method-simple">
+    <div class="platform-tabs">
+      <button class="platform-tab active" onclick="switchPlatform('simple','windows')">🪟 Windows</button>
+      <button class="platform-tab" onclick="switchPlatform('simple','mac')">🍎 Mac</button>
+      <button class="platform-tab" onclick="switchPlatform('simple','linux')">🐧 Linux</button>
+    </div>
+
+    <!-- WINDOWS -->
+    <div class="platform-content active" id="simple-windows">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Download the Miner</div></div>
+        <div class="step-body">
+          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/v2.1" target="_blank" class="download-btn">⬇ Download SHIVRAI HON Miner v2.1 Secure (19MB)</a>
+          <p>Click on <span class="highlight">SHIVRAI-HON-Windows-Miner-v2.1-Secure.zip</span> to download.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Extract the ZIP</div></div>
+        <div class="step-body">
+          <p>1. Open your <span class="highlight">Downloads</span> folder</p>
+          <p>2. Right-click on the ZIP → <span class="highlight">"Extract All..."</span></p>
+          <p>3. Choose location like <span class="highlight">C:\SHIVRAI-HON\</span></p>
+          <p>4. Click <span class="highlight">"Extract"</span></p>
+          <div class="tip">✅ You should see: bitcoind.exe, bitcoin-cli.exe, 2 BAT files, many DLL files, and README.txt</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Handle Windows Security</div></div>
+        <div class="step-body">
+          <p>Windows may show <span class="highlight">"Windows protected your PC"</span> — this is normal.</p>
+          <p>1. Click <span class="highlight">"More info"</span></p>
+          <p>2. Click <span class="highlight">"Run anyway"</span></p>
+          <div class="warning">⚠️ If antivirus blocks bitcoind.exe, add your SHIVRAI-HON folder as an exception. The code is open source — verify on GitHub.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Start the Node</div></div>
+        <div class="step-body">
+          <p>Double-click <span class="highlight">1_START_NODE.bat</span></p>
+          <p>A black window opens — the node automatically:</p>
+          <p>✅ Creates data folder &nbsp; ✅ Generates secure password &nbsp; ✅ Connects to network</p>
+          <div class="tip">✅ Keep this window open! Do NOT close it.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">5</div><div class="step-title">Open Control Panel</div></div>
+        <div class="step-body">
+          <p>Open a <span class="highlight">NEW</span> window — double-click <span class="highlight">2_CONTROL_PANEL.bat</span></p>
+          <p>You'll see a menu with options [1] to [9]</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">6</div><div class="step-title">Create Mining Address</div></div>
+        <div class="step-body">
+          <p>Type <span class="highlight">3</span> → Press Enter → New address appears (<span class="highlight">bc1q...</span>)</p>
+          <p>Copy this address — this is YOUR wallet!</p>
+          <div class="warning">⚠️ Save this address somewhere safe!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">7</div><div class="step-title">Start Mining! 🎉</div></div>
+        <div class="step-body">
+          <p>Type <span class="highlight">4</span> → Paste your address → Press Enter</p>
+          <p><span class="highlight">Mining starts!</span> Every block = <span style="color:var(--gold);font-weight:700">2000 HON</span></p>
+          <div class="tip">✅ Check balance anytime: Press [2] in Control Panel</div>
+          <div class="tip">✅ Mined coins appear after 100 block confirmations</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAC -->
+    <div class="platform-content" id="simple-mac">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Install Dependencies</div></div>
+        <div class="step-body">
+          <p>Open <span class="highlight">Terminal</span> and run:</p>
+          <div class="code-box">brew install automake libtool boost pkg-config libevent</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Clone & Build</div></div>
+        <div class="step-body">
+          <div class="code-box">git clone https://github.com/ktusharuxd-afk/shivrai-hon-core.git
+cd shivrai-hon-core
+./autogen.sh
+./configure --without-gui
+make -j$(sysctl -n hw.ncpu)</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Configure & Run</div></div>
+        <div class="step-body">
+          <div class="code-box">mkdir -p ~/Library/Application\ Support/SHIVRAI-HON
+cat > ~/Library/Application\ Support/SHIVRAI-HON/bitcoin.conf << 'EOF'
+rpcuser=shivraiuser
+rpcpassword=YourSecurePassword
+server=1
+txindex=1
+listen=1
+addnode=bore.pub:34969
+EOF
+./src/bitcoind -datadir="$HOME/Library/Application Support/SHIVRAI-HON" -printtoconsole</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Mine!</div></div>
+        <div class="step-body">
+          <p>New terminal window:</p>
+          <div class="code-box">CLI="./src/bitcoin-cli -datadir=$HOME/Library/Application\ Support/SHIVRAI-HON"
+$CLI createwallet "honwallet"
+ADDR=$($CLI getnewaddress "" "bech32")
+echo "Mining to: $ADDR"
+while true; do $CLI generatetoaddress 1 "$ADDR"; sleep 1; done</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINUX -->
+    <div class="platform-content" id="simple-linux">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Install Dependencies</div></div>
+        <div class="step-body">
+          <div class="code-box">sudo apt update && sudo apt install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 libevent-dev libboost-dev libsqlite3-dev</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Clone & Build</div></div>
+        <div class="step-body">
+          <div class="code-box">git clone https://github.com/ktusharuxd-afk/shivrai-hon-core.git
+cd shivrai-hon-core
+./autogen.sh
+./configure --without-gui
+make -j$(nproc)</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Configure & Run</div></div>
+        <div class="step-body">
+          <div class="code-box">mkdir -p ~/.shivrai-hon
+cat > ~/.shivrai-hon/bitcoin.conf << 'EOF'
+rpcuser=shivraiuser
+rpcpassword=YourSecurePassword
+server=1
+txindex=1
+listen=1
+addnode=bore.pub:34969
+EOF
+./src/bitcoind -datadir=$HOME/.shivrai-hon -printtoconsole</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Mine!</div></div>
+        <div class="step-body">
+          <p>New terminal:</p>
+          <div class="code-box">CLI="./src/bitcoin-cli -datadir=$HOME/.shivrai-hon"
+$CLI createwallet "honwallet"
+ADDR=$($CLI getnewaddress "" "bech32")
+echo "Mining to: $ADDR"
+while true; do $CLI generatetoaddress 1 "$ADDR"; sleep 1; done</div>
+          <div class="tip">✅ Check balance: <code>$CLI getbalance</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DESKTOP APP ==================== -->
+  <div class="method-content" id="method-desktop">
+    <div class="platform-tabs">
+      <button class="platform-tab active" onclick="switchPlatform('desktop','win')">🪟 Windows</button>
+      <button class="platform-tab" onclick="switchPlatform('desktop','macapp')">🍎 Mac</button>
+      <button class="platform-tab" onclick="switchPlatform('desktop','linuxapp')">🐧 Linux</button>
+    </div>
+
+    <!-- WINDOWS DESKTOP -->
+    <div class="platform-content active" id="desktop-win">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Download Mining Node (Required)</div></div>
+        <div class="step-body">
+          <p>Desktop App la mining node lagto. Aadhi he download kara:</p>
+          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/v2.1" target="_blank" class="download-btn">⬇ Download Windows Miner v2.1 Secure (19MB)</a>
+          <p>1. ZIP download kara</p>
+          <p>2. Right-click → <span class="highlight">"Extract All"</span> → Extract kara</p>
+          <p>3. <span class="highlight">1_START_NODE.bat</span> double-click kara</p>
+          <p>4. Black window yeil — <span class="highlight">band karu naka!</span></p>
+          <div class="tip">✅ Node chalu zali ki Desktop App la data distay — balance, blocks, peers sagle!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Install Node.js</div></div>
+        <div class="step-body">
+          <a href="https://nodejs.org" target="_blank" class="download-btn">⬇ Download Node.js (LTS Version)</a>
+          <p>Download kara ani install kara. Install nantara computer <span class="highlight">restart</span> kara.</p>
+          <div class="tip">✅ "LTS" version select kara — he sabse stable ahe.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">3</div><div class="step-title">Download Desktop App</div></div>
+        <div class="step-body">
+          <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/desktop-v1.0" target="_blank" class="download-btn">⬇ Download SHIVRAI HON Desktop App v1.0</a>
+          <p>1. <span class="highlight">SHIVRAI-HON-Desktop-v1.0.zip</span> download kara</p>
+          <p>2. Right-click → <span class="highlight">"Extract All"</span></p>
+          <p>3. Extract kara — folder madhe he files distil: main.js, package.json, renderer/, rpc.conf</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">4</div><div class="step-title">Download Electron</div></div>
+        <div class="step-body">
+          <a href="https://github.com/electron/electron/releases/latest" target="_blank" class="download-btn">⬇ Download Electron Binary</a>
+          <p>1. Latest release page var ja</p>
+          <p>2. <span class="highlight">electron-vXX-win32-x64.zip</span> download kara (XX = version number)</p>
+          <p>3. Nava folder banva: <span class="highlight">C:\electron-bin\</span></p>
+          <p>4. ZIP extract kara tya folder madhe</p>
+          <div class="tip">✅ C:\electron-bin\ madhe electron.exe disayला pahije!</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">5</div><div class="step-title">Configure RPC Connection</div></div>
+        <div class="step-body">
+          <p>Desktop App folder madhe <span class="highlight">rpc.conf</span> file ahe — Notepad ne open kara:</p>
+          <div class="code-box">rpcuser=shivraiuser
+rpcpassword=YourPassword
+rpchost=127.0.0.1
+rpcport=8332</div>
+          <p>Password file ithe ahe: <span class="highlight">%APPDATA%\SHIVRAI-HON\rpc.key</span></p>
+          <p>Ti file open kara → password copy kara → rpc.conf madhe paste kara</p>
+          <div class="warning">⚠️ rpc.key file 1_START_NODE.bat pahilya veli run kelyavr auto-create hote.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">6</div><div class="step-title">Install Dependencies & Run</div></div>
+        <div class="step-body">
+          <p>Windows Search madhe <span class="highlight">cmd</span> type kara → <span class="highlight">Command Prompt</span> open kara:</p>
+          <div class="code-box">cd Downloads\SHIVRAI-HON-Desktop-v1.0
+npm install
+set ELECTRON_OVERRIDE_DIST_PATH=C:\electron-bin
+npm start</div>
+          <div class="tip">✅ SHIVRAI HON Desktop App open hoil!</div>
+          <div class="warning">⚠️ Pratyek veli app start karayala "set ELECTRON_OVERRIDE_DIST_PATH=C:\electron-bin" lagto.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">7</div><div class="step-title">Enjoy Your Dashboard! 🎉</div></div>
+        <div class="step-body">
+          <p>App madhe tumhala he features milतil:</p>
+          <p>✅ <span class="highlight">Dashboard</span> — Balance, Block Count, Peers, Mining Status</p>
+          <p>✅ <span class="highlight">Mining</span> — Start/Stop mining, Live hash rate graph</p>
+          <p>✅ <span class="highlight">Wallet</span> — Balance check, New address generate</p>
+          <p>✅ <span class="highlight">Send HON</span> — Dusarya user la HON pathava (Real blockchain transaction!)</p>
+          <p>✅ <span class="highlight">History</span> — Recent blocks ani transactions</p>
+          <p>✅ <span class="highlight">Profile</span> — Account details</p>
+          <div class="tip">✅ Node chalu asel tar sagle data auto-refresh hoto!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAC DESKTOP -->
+    <div class="platform-content" id="desktop-macapp">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Install Node.js</div></div>
+        <div class="step-body">
+          <div class="code-box">brew install node</div>
+          <p>Or download from <a href="https://nodejs.org" target="_blank" style="color:var(--gold)">nodejs.org</a></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Download & Run</div></div>
+        <div class="step-body">
+          <div class="code-box">git clone https://github.com/ktusharuxd-afk/shivrai-hon-desktop.git
+cd shivrai-hon-desktop
+npm install
+npm start</div>
+          <div class="tip">✅ Build the HON node first (see Simple Mining → Mac tab) then run the Desktop App.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINUX DESKTOP -->
+    <div class="platform-content" id="desktop-linuxapp">
+      <div class="step">
+        <div class="step-header"><div class="step-num">1</div><div class="step-title">Install Node.js</div></div>
+        <div class="step-body">
+          <div class="code-box">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header"><div class="step-num">2</div><div class="step-title">Download & Run</div></div>
+        <div class="step-body">
+          <div class="code-box">git clone https://github.com/ktusharuxd-afk/shivrai-hon-desktop.git
+cd shivrai-hon-desktop
+npm install
+npm start</div>
+          <div class="tip">✅ Build the HON node first (see Simple Mining → Linux tab) then run the Desktop App.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked <span class="gold">Questions</span></h2>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">What is SHIVRAI HON? <span>+</span></div>
+      <div class="faq-a">SHIVRAI HON (HON) is an independent decentralized cryptocurrency. It uses the HONPoW mining algorithm with 2000 HON reward per block and 5-minute block time. Named after Chhatrapati Shivaji Maharaj's historic gold coin.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Is mining free? <span>+</span></div>
+      <div class="faq-a">Yes! Mining is completely free. You just need a computer and internet connection. No special hardware required — any CPU can mine SHIVRAI HON.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Why is my balance showing 0? <span>+</span></div>
+      <div class="faq-a">Mined coins need 100 block confirmations before they appear in your balance. Keep mining — after 100 blocks, your rewards will show up!</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">What's the difference between Simple Mining and Desktop App? <span>+</span></div>
+      <div class="faq-a">Simple Mining uses BAT files in Command Prompt — quick and easy to start. The Desktop App gives you a beautiful dashboard with balance charts, mining controls, transaction history, and send/transfer features.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Is it safe? <span>+</span></div>
+      <div class="faq-a">Yes! SHIVRAI HON is built on proven cryptographic technology. Each install generates a unique secure password. The source code is fully open source on GitHub — verify everything yourself.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">How much HON can I earn? <span>+</span></div>
+      <div class="faq-a">Every block mined earns you 2000 HON. With a 5-minute block target, you can potentially earn ~576,000 HON per day if you're the only miner. Rewards are permanent — no halving!</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Node not connecting? <span>+</span></div>
+      <div class="faq-a">Make sure the seed node (bore.pub:34969) is active. If you see 0 peers after a few minutes, the seed node may be temporarily offline. Check back later or join our community for support.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img src="HON coin logo.svg" alt="SHIVRAI HON">
+      <p>Real mining. Real coins. Real freedom.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Resources</h4>
+      <a href="explorer.html">Block Explorer</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank">Whitepaper</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
+    </div>
+    <div class="footer-links">
+      <h4>Network</h4>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases" target="_blank">Download Miner</a>
+      <a href="explorer.html">View Blockchain</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">Source Code</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>SHIVRAI HON — Decentralized Cryptocurrency | Open Source — MIT License | © 2026</p>
+    <p style="color:#FFB300">HON</p>
+  </div>
+</footer>
+
+<script>
+function switchMethod(method) {
+  document.querySelectorAll('.method-content').forEach(m => m.classList.remove('active'))
+  document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'))
+  document.getElementById('method-' + method).classList.add('active')
+  event.target.classList.add('active')
+}
+
+function switchPlatform(method, platform) {
+  const parent = document.getElementById('method-' + method)
+  parent.querySelectorAll('.platform-content').forEach(p => p.classList.remove('active'))
+  parent.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'))
+  document.getElementById((method === 'simple' ? 'simple-' : 'desktop-') + platform).classList.add('active')
+  event.target.classList.add('active')
+}
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+</script>
+
+</body>
+</html>
