@@ -333,7 +333,8 @@ async function register() {
     body: JSON.stringify({ email, password: pass, data: { full_name: name } })
   })
   const data = await res.json()
-  if (data.user) {
+  console.log('Signup response:', data)
+  if (data.user || data.id) {
     showAuthAlert('✅ Account banvla! Email verify kara mag login kara.', 'success')
     setTimeout(showLogin, 2000)
   } else {
