@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mine HON — SHIVRAI HON</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#FFB300;--dark:#090909;--green:#4ade80;--red:#f87171}
+body{font-family:'Poppins',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+
+/* NAV — same as website */
+header{position:fixed;width:100%;top:0;z-index:1000;background:rgba(9,9,9,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,179,0,0.1)}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 5%;max-width:1400px;margin:auto}
+.logo-area{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-area img{height:36px;width:auto;object-fit:contain}
+.nav-links{display:flex;align-items:center;gap:5px}
+.nav-links a{text-decoration:none;color:#bbb;padding:7px 14px;border-radius:8px;font-size:0.85em;font-weight:500;transition:all 0.3s}
+.nav-links a:hover{color:var(--gold);background:rgba(255,179,0,0.08)}
+.nav-links a.active{color:var(--gold)}
+.nav-cta{background:linear-gradient(135deg,#FFB300,#FF8C00)!important;color:#000!important;border-radius:50px!important;font-weight:600!important}
+
+/* HERO */
+.hero{padding:120px 5% 60px;text-align:center;background:radial-gradient(ellipse at top,rgba(255,179,0,0.06),transparent 60%)}
+.hero h1{font-size:clamp(2em,4vw,3em);font-weight:800;margin-bottom:12px}
+.hero h1 .gold{background:linear-gradient(135deg,#FFB300,#FF6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#888;font-size:1em;margin-bottom:30px}
+
+/* MAIN CONTAINER */
+.container{max-width:1100px;margin:0 auto;padding:0 5% 60px}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:linear-gradient(135deg,#131313,#0d0d0d);border:1px solid rgba(255,179,0,0.1);border-radius:16px;padding:22px;text-align:center;transition:all 0.3s}
+.stat-card:hover{border-color:rgba(255,179,0,0.3);transform:translateY(-3px)}
+.stat-icon{font-size:1.6em;margin-bottom:8px}
+.stat-label{font-size:0.7em;color:#555;text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
+.stat-value{font-size:1.6em;font-weight:700;color:var(--gold);margin-top:4px}
+.stat-sub{font-size:0.72em;color:#444;margin-top:2px}
+
+/* MINING CARD */
+.mining-card{background:linear-gradient(135deg,#131313,#0d0d0d);border:1px solid rgba(255,179,0,0.15);border-radius:20px;padding:32px;margin-bottom:20px}
+.mining-card h2{font-size:1.3em;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+
+/* MINING BUTTON */
+.mine-btn{width:100%;padding:18px;font-size:1.1em;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all 0.3s;font-family:'Poppins',sans-serif;margin-bottom:16px}
+.mine-btn.start{background:linear-gradient(135deg,#FFB300,#FF8C00);color:#000}
+.mine-btn.start:hover{box-shadow:0 10px 30px rgba(255,179,0,0.3);transform:translateY(-2px)}
+.mine-btn.stop{background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.3)}
+.mine-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* PROGRESS BAR */
+.progress-wrap{background:#0a0a0a;border-radius:50px;height:8px;margin-bottom:16px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,#FFB300,#FF6600);border-radius:50px;width:0%;transition:width 0.5s}
+
+/* HASHRATE DISPLAY */
+.hashrate-display{display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;border-radius:12px;padding:14px 18px;margin-bottom:16px}
+.hashrate-display .label{font-size:0.8em;color:#555}
+.hashrate-display .value{font-size:1em;font-weight:600;color:var(--green)}
+
+/* LOG */
+.mining-log{background:#050505;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:16px;height:180px;overflow-y:auto;font-family:monospace;font-size:0.78em;color:#666}
+.mining-log .entry{margin-bottom:4px}
+.mining-log .entry.success{color:var(--green)}
+.mining-log .entry.info{color:#888}
+.mining-log .entry.gold{color:var(--gold)}
+
+/* WALLET CARD */
+.wallet-card{background:linear-gradient(135deg,#131313,#0d0d0d);border:1px solid rgba(255,179,0,0.1);border-radius:20px;padding:28px;margin-bottom:20px}
+.wallet-card h2{font-size:1.1em;font-weight:700;margin-bottom:16px}
+.address-box{background:#0a0a0a;border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px 16px;font-family:monospace;font-size:0.8em;color:#888;word-break:break-all;margin-bottom:14px;cursor:pointer;transition:all 0.3s}
+.address-box:hover{border-color:rgba(255,179,0,0.3);color:var(--gold)}
+
+/* SEND FORM */
+.form-group{margin-bottom:14px}
+.form-input{width:100%;background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:11px 14px;color:#fff;font-size:0.88em;font-family:'Poppins',sans-serif;outline:none;transition:all 0.2s}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:#333}
+.btn-send{width:100%;padding:12px;background:linear-gradient(135deg,#FFB300,#FF8C00);color:#000;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.9em;transition:all 0.3s}
+.btn-send:hover{box-shadow:0 8px 20px rgba(255,179,0,0.25)}
+
+/* STATUS BADGE */
+.status{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:50px;font-size:0.72em;font-weight:600}
+.status.online{background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
+.status.offline{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* AUTH MODAL */
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-card{background:#0f0f0f;border:1px solid rgba(255,179,0,0.15);border-radius:20px;padding:36px;width:360px;text-align:center}
+.modal-card h2{font-size:1.3em;font-weight:700;margin-bottom:6px}
+.modal-card h2 span{color:var(--gold)}
+.modal-card p{color:#555;font-size:0.85em;margin-bottom:24px}
+.modal-input{width:100%;background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;color:#fff;font-size:0.88em;font-family:'Poppins',sans-serif;outline:none;margin-bottom:12px;transition:all 0.2s}
+.modal-input:focus{border-color:var(--gold)}
+.modal-btn{width:100%;padding:13px;background:linear-gradient(135deg,#FFB300,#FF8C00);color:#000;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:'Poppins',sans-serif;margin-bottom:10px}
+.modal-switch{font-size:0.8em;color:#555;cursor:pointer}
+.modal-switch span{color:var(--gold)}
+
+/* ALERT */
+.alert{padding:10px 14px;border-radius:10px;font-size:0.82em;margin-bottom:12px;display:none}
+.alert.show{display:block}
+.alert.success{background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
+.alert.error{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,179,0,0.08);padding:25px 5%;text-align:center;color:#444;font-size:0.78em}
+
+@media(max-width:768px){
+.stats-grid{grid-template-columns:repeat(2,1fr)}
+.nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="nav">
+    <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website" class="logo-area">
+      <img src="HON coin logo.svg" alt="HON">
+    </a>
+    <div class="nav-links">
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#features">Features</a>
+      <a href="https://ktusharuxd-afk.github.io/shivrai-hon-website#specs">Specs</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="mining-dashboard.html" class="active">Mine HON</a>
+      <a href="help.html">Help</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases" target="_blank" class="nav-cta">Download</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Mine <span class="gold">HON</span> in Browser</h1>
+  <p>No install. No setup. Just click and start earning. <span id="nodeStatusBadge" class="status offline"><span class="dot"></span> Checking...</span></p>
+</section>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">Total Earned</div>
+      <div class="stat-value" id="totalEarned">0</div>
+      <div class="stat-sub">HON</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🧱</div>
+      <div class="stat-label">Blocks Mined</div>
+      <div class="stat-value" id="blocksMined">0</div>
+      <div class="stat-sub">This session</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-label">Hash Rate</div>
+      <div class="stat-value" id="hashRate">0</div>
+      <div class="stat-sub">H/s</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌐</div>
+      <div class="stat-label">Network Block</div>
+      <div class="stat-value" id="networkBlock">—</div>
+      <div class="stat-sub">Current height</div>
+    </div>
+  </div>
+
+  <!-- MINING CARD -->
+  <div class="mining-card">
+    <h2>⛏️ Mining Control</h2>
+
+    <div id="mineAlert" class="alert"></div>
+
+    <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">
+      ⛏️ Start Mining — Earn 2000 HON per Block
+    </button>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="hashrate-display">
+      <span class="label">Status</span>
+      <span class="value" id="miningStatus">Ready to mine</span>
+    </div>
+
+    <div class="hashrate-display">
+      <span class="label">Mining Address</span>
+      <span class="value" id="miningAddr" style="font-size:0.8em;color:#888">—</span>
+    </div>
+
+    <div class="mining-log" id="miningLog">
+      <div class="entry info">HON Web Miner ready. Click "Start Mining" to begin!</div>
+    </div>
+  </div>
+
+  <!-- WALLET CARD -->
+  <div class="wallet-card">
+    <h2>💰 Wallet</h2>
+
+    <div class="address-box" id="walletAddress" onclick="copyAddress()">
+      Click "Start Mining" to generate your wallet address...
+    </div>
+
+    <div id="sendAlert" class="alert"></div>
+
+    <div class="form-group">
+      <input type="text" class="form-input" id="sendTo" placeholder="Receiver cha HON address (bc1q...)">
+    </div>
+    <div class="form-group">
+      <input type="number" class="form-input" id="sendAmount" placeholder="Amount (HON)" min="0.00000001" step="0.00000001">
+    </div>
+    <button class="btn-send" onclick="sendHON()">📤 Send HON</button>
+  </div>
+
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-card">
+    <h2>SHIVRAI <span>HON</span></h2>
+    <p id="authSubtitle">Login karoon mining chalu kara</p>
+
+    <div id="authAlert" class="alert"></div>
+
+    <div id="loginForm">
+      <input type="email" class="modal-input" id="authEmail" placeholder="Email">
+      <input type="password" class="modal-input" id="authPassword" placeholder="Password">
+      <button class="modal-btn" onclick="login()">🔑 Login</button>
+      <p class="modal-switch">Account nahi? <span onclick="showRegister()">Register kara</span></p>
+    </div>
+
+    <div id="registerForm" style="display:none">
+      <input type="text" class="modal-input" id="regName" placeholder="Full Name">
+      <input type="email" class="modal-input" id="regEmail" placeholder="Email">
+      <input type="password" class="modal-input" id="regPassword" placeholder="Password (min 6)">
+      <button class="modal-btn" onclick="register()">✅ Register</button>
+      <p class="modal-switch">Already account ahe? <span onclick="showLogin()">Login kara</span></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>SHIVRAI HON — Independent Decentralized Cryptocurrency | © 2026</p>
+  <p style="color:var(--gold);margin-top:6px">2000 HON per block · Permanent Rewards · HONPoW</p>
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+const API = 'https://hon-secure-server.onrender.com'
+const SUPABASE_URL = 'https://pctlqnityusjxlicreax.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjdGxxbml0eXVzanhsaWNyZWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5MzM4NTUsImV4cCI6MjA2MTUwOTg1NX0.ZrW1jFBfEBwXgkuXPCNfzF0VZqKUJhUcLj2HuvBJDTY'
+
+let user = null
+let miningInterval = null
+let isMining = false
+let sessionBlocks = 0
+let walletAddress = null
+
+// ══════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════
+async function checkAuth() {
+  const token = localStorage.getItem('hon_web_token')
+  if (!token) { showAuthModal(); return false }
+
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+  })
+  if (res.ok) {
+    user = await res.json()
+    return true
+  }
+  showAuthModal()
+  return false
+}
+
+function showAuthModal() {
+  document.getElementById('authModal').classList.add('open')
+}
+
+function showRegister() {
+  document.getElementById('loginForm').style.display = 'none'
+  document.getElementById('registerForm').style.display = 'block'
+  document.getElementById('authSubtitle').textContent = 'Nava account banva'
+}
+
+function showLogin() {
+  document.getElementById('loginForm').style.display = 'block'
+  document.getElementById('registerForm').style.display = 'none'
+  document.getElementById('authSubtitle').textContent = 'Login karoon mining chalu kara'
+}
+
+async function login() {
+  const email = document.getElementById('authEmail').value.trim()
+  const pass = document.getElementById('authPassword').value
+  if (!email || !pass) return showAuthAlert('Email ani password bhara!', 'error')
+
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password: pass })
+  })
+  const data = await res.json()
+  if (data.access_token) {
+    localStorage.setItem('hon_web_token', data.access_token)
+    user = data.user
+    document.getElementById('authModal').classList.remove('open')
+    initDashboard()
+  } else {
+    showAuthAlert(data.error_description || 'Login failed!', 'error')
+  }
+}
+
+async function register() {
+  const name = document.getElementById('regName').value.trim()
+  const email = document.getElementById('regEmail').value.trim()
+  const pass = document.getElementById('regPassword').value
+  if (!name || !email || !pass) return showAuthAlert('Sagle fields bhara!', 'error')
+  if (pass.length < 6) return showAuthAlert('Password min 6 characters!', 'error')
+
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+    method: 'POST',
+    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password: pass, data: { full_name: name } })
+  })
+  const data = await res.json()
+  if (data.user) {
+    showAuthAlert('✅ Account banvla! Email verify kara mag login kara.', 'success')
+    setTimeout(showLogin, 2000)
+  } else {
+    showAuthAlert(data.error_description || 'Signup failed!', 'error')
+  }
+}
+
+function showAuthAlert(msg, type) {
+  const el = document.getElementById('authAlert')
+  el.textContent = msg
+  el.className = `alert ${type} show`
+  setTimeout(() => el.classList.remove('show'), 4000)
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+async function initDashboard() {
+  const authed = await checkAuth()
+  if (!authed) return
+
+  // Get/create wallet
+  const res = await fetch(`${API}/api/wallet/new-address`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: user.id })
+  })
+  const data = await res.json()
+  if (data.address) {
+    walletAddress = data.address
+    document.getElementById('walletAddress').textContent = walletAddress
+    document.getElementById('miningAddr').textContent = walletAddress.substring(0, 20) + '...'
+  }
+
+  // Load stats
+  loadStats()
+  checkNodeStatus()
+  setInterval(checkNodeStatus, 30000)
+}
+
+async function loadStats() {
+  if (!user) return
+  const res = await fetch(`${API}/api/mining/stats/${user.id}`)
+  const data = await res.json()
+  document.getElementById('totalEarned').textContent = (data.total_earned || 0).toLocaleString()
+  document.getElementById('blocksMined').textContent = data.blocks_mined || 0
+}
+
+async function checkNodeStatus() {
+  try {
+    const res = await fetch(`${API}/api/node/status`)
+    const data = await res.json()
+    const badge = document.getElementById('nodeStatusBadge')
+    const block = document.getElementById('networkBlock')
+    if (data.online) {
+      badge.className = 'status online'
+      badge.innerHTML = '<span class="dot"></span> Node Online'
+      block.textContent = data.blocks?.toLocaleString() || '—'
+    } else {
+      badge.className = 'status offline'
+      badge.innerHTML = '<span class="dot"></span> Node Offline'
+    }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════
+// MINING
+// ══════════════════════════════════════
+async function toggleMining() {
+  if (!user) { showAuthModal(); return }
+  if (!walletAddress) { showMineAlert('Wallet address milala nahi!', 'error'); return }
+
+  if (isMining) {
+    stopMining()
+  } else {
+    startMining()
+  }
+}
+
+function startMining() {
+  isMining = true
+  const btn = document.getElementById('mineBtn')
+  btn.textContent = '⏹ Stop Mining'
+  btn.className = 'mine-btn stop'
+  document.getElementById('miningStatus').textContent = 'Mining chalu ahe...'
+  addLog('⛏️ Mining suru zali!', 'gold')
+  addLog(`📍 Address: ${walletAddress.substring(0,20)}...`, 'info')
+
+  let progress = 0
+  miningInterval = setInterval(async () => {
+    // Animate progress
+    progress = (progress + Math.random() * 15) % 100
+    document.getElementById('progressBar').style.width = progress + '%'
+
+    // Update hashrate (simulated)
+    const hr = Math.floor(Math.random() * 500 + 100)
+    document.getElementById('hashRate').textContent = hr
+
+    // Submit to backend
+    try {
+      const res = await fetch(`${API}/api/mining/share`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user.id,
+          address: walletAddress,
+          hashrate: hr
+        })
+      })
+      const data = await res.json()
+      if (data.success) {
+        sessionBlocks++
+        document.getElementById('blocksMined').textContent = sessionBlocks
+        document.getElementById('totalEarned').textContent = data.total_earned?.toLocaleString() || 0
+        addLog(`✅ Block mined! +2000 HON | Total: ${data.total_earned?.toLocaleString()}`, 'success')
+      }
+    } catch(e) {
+      addLog('⚠️ Mining attempt...', 'info')
+    }
+  }, 5000)
+}
+
+function stopMining() {
+  isMining = false
+  if (miningInterval) clearInterval(miningInterval)
+  const btn = document.getElementById('mineBtn')
+  btn.textContent = '⛏️ Start Mining — Earn 2000 HON per Block'
+  btn.className = 'mine-btn start'
+  document.getElementById('miningStatus').textContent = 'Mining band'
+  document.getElementById('progressBar').style.width = '0%'
+  document.getElementById('hashRate').textContent = '0'
+  addLog('⏹ Mining band keli.', 'info')
+}
+
+function addLog(msg, type = 'info') {
+  const log = document.getElementById('miningLog')
+  const time = new Date().toLocaleTimeString()
+  log.innerHTML += `<div class="entry ${type}">[${time}] ${msg}</div>`
+  log.scrollTop = log.scrollHeight
+}
+
+function showMineAlert(msg, type) {
+  const el = document.getElementById('mineAlert')
+  el.textContent = msg
+  el.className = `alert ${type} show`
+  setTimeout(() => el.classList.remove('show'), 4000)
+}
+
+// ══════════════════════════════════════
+// WALLET
+// ══════════════════════════════════════
+function copyAddress() {
+  if (!walletAddress) return
+  navigator.clipboard.writeText(walletAddress)
+  document.getElementById('walletAddress').textContent = '✅ Copied!'
+  setTimeout(() => document.getElementById('walletAddress').textContent = walletAddress, 2000)
+}
+
+async function sendHON() {
+  const to = document.getElementById('sendTo').value.trim()
+  const amount = document.getElementById('sendAmount').value
+  if (!to || !amount) return showSendAlert('Address ani amount bhara!', 'error')
+
+  try {
+    const res = await fetch(`${API}/api/wallet/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from_user_id: user?.id, to_address: to, amount })
+    })
+    const data = await res.json()
+    if (data.success) {
+      showSendAlert(`✅ ${amount} HON pathavle! TxID: ${data.txid?.substring(0,16)}...`, 'success')
+      document.getElementById('sendTo').value = ''
+      document.getElementById('sendAmount').value = ''
+    } else {
+      showSendAlert(`❌ Failed: ${data.error}`, 'error')
+    }
+  } catch(e) {
+    showSendAlert('Network error!', 'error')
+  }
+}
+
+function showSendAlert(msg, type) {
+  const el = document.getElementById('sendAlert')
+  el.textContent = msg
+  el.className = `alert ${type} show`
+  setTimeout(() => el.classList.remove('show'), 5000)
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', initDashboard)
+</script>
+</body>
+</html>
