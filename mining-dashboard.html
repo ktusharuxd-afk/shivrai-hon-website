@@ -377,39 +377,35 @@ function showAuthAlert(msg, type) {
 // INIT
 // ══════════════════════════════════════
 async function initDashboard() {
-  // Check URL for magic link token
+  // Check URL for magic link token — ONE TIME ONLY
   const hash = window.location.hash
   if (hash && hash.includes('access_token')) {
     const params = new URLSearchParams(hash.substring(1))
     const token = params.get('access_token')
     const refresh = params.get('refresh_token')
-    if (token && params.get('type') !== 'recovery') {
+    if (token) {
       localStorage.setItem('hon_web_token', token)
       if (refresh) localStorage.setItem('hon_web_refresh', refresh)
-      window.history.replaceState({}, '', window.location.pathname)
+      // Clear URL without reload
+      window.history.replaceState({}, document.title, window.location.pathname)
+      user = { id: null, email: null }
+      // Fetch user directly
+      try {
+        const res = await fetch(SUPABASE_URL + '/auth/v1/user', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + token }
+        })
+        if (res.ok) {
+          user = await res.json()
+          setupDashboard()
+          return
+        }
+      } catch(e) {}
     }
   }
   
   const authed = await checkAuth()
   if (!authed) return
-
-  // Get/create wallet
-  const res = await fetch(`${API}/api/wallet/new-address`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user_id: user.id })
-  })
-  const data = await res.json()
-  if (data.address) {
-    walletAddress = data.address
-    document.getElementById('walletAddress').textContent = walletAddress
-    document.getElementById('miningAddr').textContent = walletAddress.substring(0, 20) + '...'
-  }
-
-  // Load stats
-  loadStats()
-  checkNodeStatus()
-  setInterval(checkNodeStatus, 30000)
+  setupDashboard()
 }
 
 async function loadStats() {
@@ -559,6 +555,29 @@ function showSendAlert(msg, type) {
   el.textContent = msg
   el.className = `alert ${type} show`
   setTimeout(() => el.classList.remove('show'), 5000)
+}
+
+// ══════════════════════════════════════
+// SETUP DASHBOARD (after auth)
+// ══════════════════════════════════════
+async function setupDashboard() {
+  // Get/create wallet
+  try {
+    const res = await fetch(API + '/api/wallet/new-address', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: user.id })
+    })
+    const data = await res.json()
+    if (data.address) {
+      walletAddress = data.address
+      document.getElementById('walletAddress').textContent = walletAddress
+      document.getElementById('miningAddr').textContent = walletAddress.substring(0, 20) + '...'
+    }
+  } catch(e) {}
+  loadStats()
+  checkNodeStatus()
+  setInterval(checkNodeStatus, 30000)
 }
 
 // ══════════════════════════════════════
