@@ -552,9 +552,13 @@ function addLog(msg,type){
 
 async function refreshWallet(){
   try{
-    const r=await fetch(`${API}/api/wallet/balance?address=${walletAddress}`)
-    const d=await r.json()
-    document.getElementById('walletBal').textContent=parseFloat(d.balance||0).toFixed(2)
+    // Get balance from earnings (Supabase)
+    if(user){
+      const r=await fetch(`${API}/api/mining/stats/${user.id}`)
+      const d=await r.json()
+      document.getElementById('walletBal').textContent=parseFloat(d.total_earned||0).toLocaleString()
+      document.getElementById('sendBal').textContent=(d.total_earned||0).toLocaleString()+' HON'
+    }
   }catch(e){}
 }
 
@@ -568,6 +572,7 @@ function copyAddr(){
 
 async function refreshSend(){
   document.getElementById('sendBal').textContent=document.getElementById('totalEarned').textContent+' HON'
+  refreshWallet()
 }
 
 async function sendHON(){
