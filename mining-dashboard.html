@@ -520,12 +520,16 @@ function startMining(){
     try{
       const r=await fetch(`${API}/api/mining/share`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:user.id,address:walletAddress})})
       const d=await r.json()
+      console.log('Mining response:', JSON.stringify(d))
       if(d.success){
         sessionBlocks++
-        document.getElementById('blocksMined').textContent=d.blocks_mined||sessionBlocks
-        document.getElementById('totalEarned').textContent=(d.total_earned||0).toLocaleString()
+        const earned = d.total_earned || 0
+        const blocks = d.blocks_mined || sessionBlocks
+        console.log('Updating UI - earned:', earned, 'blocks:', blocks)
+        document.getElementById('blocksMined').textContent = blocks
+        document.getElementById('totalEarned').textContent = earned.toLocaleString()
         refreshWallet()
-        addLog(`✅ Block mined! +2000 HON | Total: ${(d.total_earned||0).toLocaleString()}`,'ok')
+        addLog(`✅ Block mined! +2000 HON | Total: ${earned.toLocaleString()}`,'ok')
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
   },5000)
