@@ -39,14 +39,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
 
 
 /* ── 3D CSS COIN ── */
-.coin-scene{display:flex;justify-content:center;align-items:center;position:relative;height:500px;perspective:1000px}
-.coin-outer-glow{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(232,160,32,.2) 0%,rgba(153,69,255,.08) 50%,transparent 70%);animation:glow 4s ease-in-out infinite;pointer-events:none}
+.coin-scene{display:flex;justify-content:center;align-items:center;position:relative;height:400px;perspective:1000px}
+.coin-outer-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(232,160,32,.2) 0%,rgba(153,69,255,.08) 50%,transparent 70%);animation:glow 4s ease-in-out infinite;pointer-events:none}
 @keyframes glow{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.12);opacity:1}}
-.coin-ring{position:absolute;width:380px;height:380px;border-radius:50%;border:1px solid rgba(232,160,32,.25);animation:ring-spin 18s linear infinite}
+.coin-ring{position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(232,160,32,.25);animation:ring-spin 18s linear infinite}
 .coin-ring::before{content:'';position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 15px var(--gold),0 0 30px var(--gold);transform:translateX(-50%)}
-.coin-ring2{position:absolute;width:440px;height:440px;border-radius:50%;border:1px dashed rgba(232,160,32,.1);animation:ring-spin 30s linear infinite reverse}
+.coin-ring2{position:absolute;width:340px;height:340px;border-radius:50%;border:1px dashed rgba(232,160,32,.1);animation:ring-spin 30s linear infinite reverse}
 @keyframes ring-spin{to{transform:rotate(360deg)}}
-.coin-3d{width:300px;height:300px;border-radius:50%;position:relative;z-index:2;transform-style:preserve-3d;animation:coin-float 6s ease-in-out infinite}
+.coin-3d{width:220px;height:220px;border-radius:50%;position:relative;z-index:2;transform-style:preserve-3d;animation:coin-float 6s ease-in-out infinite}
 @keyframes coin-float{
   0%{transform:rotateY(-20deg) rotateX(8deg) translateY(0) rotate(-2deg)}
   25%{transform:rotateY(0deg) rotateX(3deg) translateY(-18px) rotate(0deg)}
@@ -56,7 +56,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
 }
 /* Coin body */
 .coin-body{
-  width:300px;height:300px;border-radius:50%;
+  width:220px;height:220px;border-radius:50%;
   position:relative;
   background:
     radial-gradient(circle at 35% 28%, #FFF5A0 0%, #FFD700 20%, #DAA520 42%, #B8860B 62%, #8B6914 80%, #5C4410 100%);
@@ -75,7 +75,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
 /* Coin shine effect */
 .coin-body::before{
   content:'';position:absolute;
-  width:200px;height:280px;
+  width:150px;height:200px;
   background:linear-gradient(135deg,rgba(255,255,255,.35) 0%,transparent 50%);
   border-radius:50%;top:-20px;left:-30px;
   pointer-events:none;
@@ -96,7 +96,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
   pointer-events:none;
 }
 .coin-inner{
-  width:240px;height:240px;border-radius:50%;
+  width:176px;height:176px;border-radius:50%;
   background:radial-gradient(circle at 38% 32%,#FFF0A0 0%,#F0C040 25%,#D4A017 50%,#A07810 70%,#705808 90%);
   display:flex;align-items:center;justify-content:center;
   box-shadow:
@@ -106,7 +106,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
   position:relative;z-index:1;
 }
 .coin-symbol{
-  width:120px;height:120px;border-radius:50%;
+  width:88px;height:88px;border-radius:50%;
   background:radial-gradient(circle at 40% 35%,#FFE060 0%,#D4A017 40%,#8B6914 75%);
   display:flex;align-items:center;justify-content:center;
   box-shadow:
@@ -114,7 +114,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
     inset 0 2px 4px rgba(255,220,80,.5),
     inset 0 -2px 4px rgba(0,0,0,.4);
   font-family:"Cabinet Grotesk","DM Sans",sans-serif;
-  font-size:3.2rem;font-weight:900;
+  font-size:2.4rem;font-weight:900;
   color:#5C3D00;
   text-shadow:0 2px 4px rgba(255,200,0,.4),0 -1px 2px rgba(0,0,0,.5);
   letter-spacing:-.05em;
