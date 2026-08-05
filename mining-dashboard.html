@@ -355,8 +355,7 @@ function switchTab(tab){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'))
   event.target.classList.add('active')
   document.getElementById('tab-'+tab).classList.add('active')
-  if(tab==='wallet')refreshWallet()
-  if(tab==='send')refreshSend()
+  if(tab==='wallet'||tab==='send')refreshWallet()
 }
 
 // Auth
@@ -525,6 +524,7 @@ function startMining(){
         sessionBlocks++
         document.getElementById('blocksMined').textContent=d.blocks_mined||sessionBlocks
         document.getElementById('totalEarned').textContent=(d.total_earned||0).toLocaleString()
+        refreshWallet()
         addLog(`✅ Block mined! +2000 HON | Total: ${(d.total_earned||0).toLocaleString()}`,'ok')
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
@@ -551,15 +551,17 @@ function addLog(msg,type){
 }
 
 async function refreshWallet(){
+  if(!user||!user.id)return
   try{
-    // Get balance from earnings (Supabase)
-    if(user){
-      const r=await fetch(`${API}/api/mining/stats/${user.id}`)
-      const d=await r.json()
-      document.getElementById('walletBal').textContent=parseFloat(d.total_earned||0).toLocaleString()
-      document.getElementById('sendBal').textContent=(d.total_earned||0).toLocaleString()+' HON'
-    }
-  }catch(e){}
+    const r=await fetch(`${API}/api/mining/stats/${user.id}`)
+    const d=await r.json()
+    const bal=(d.total_earned||0).toLocaleString()
+    document.getElementById('walletBal').textContent=bal
+    document.getElementById('totalEarned').textContent=bal
+    document.getElementById('blocksMined').textContent=d.blocks_mined||0
+    const sendEl=document.getElementById('sendBal')
+    if(sendEl)sendEl.textContent=bal+' HON'
+  }catch(e){console.log('wallet err',e)}
 }
 
 function copyAddr(){
