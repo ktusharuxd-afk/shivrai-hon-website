@@ -84,10 +84,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .spec-v.gold{color:var(--gold)}
 .spec-container{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 
-footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:40px;margin-top:20px}
-.fi{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:48px 40px 32px;margin-top:20px}
+.fi{max-width:900px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center}
 .fl{display:flex;align-items:center;gap:10px}
-.fl img{height:30px;filter:drop-shadow(0 0 8px rgba(232,160,32,.4))}
+.fl img{height:32px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5));display:block}
 .fl span{font-size:.85rem;font-weight:700;color:#fff}
 .fl em{font-style:normal;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .flinks{display:flex;gap:20px}
@@ -132,9 +132,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 
   <div class="help-tabs">
     <button class="htab active" onclick="switchTab('faq')">❓ FAQ</button>
-    <button class="htab" onclick="switchTab('guide')">📖 Web Mining Guide</button>
+    <button class="htab" onclick="switchTab('guide')">📖 Mining Guide</button>
     <button class="htab" onclick="switchTab('downloads')">⬇ Downloads</button>
-    <button class="htab" onclick="switchTab('specs')">⚙ Specs</button>
   </div>
 
   <!-- FAQ -->
@@ -227,16 +226,6 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
         <div class="dl-info"><h3>Whitepaper v3</h3><p>Technical documentation & protocol specs</p></div>
         <span class="dl-arr">↗</span>
       </a>
-      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/v2.1" target="_blank" class="dl-card">
-        <div class="dl-icon ic-gr">⬇️</div>
-        <div class="dl-info"><h3>Windows Miner v2.1</h3><p>Desktop mining software (19MB ZIP)</p></div>
-        <span class="dl-arr">↗</span>
-      </a>
-      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/releases/tag/desktop-v1.0" target="_blank" class="dl-card">
-        <div class="dl-icon ic-g">💻</div>
-        <div class="dl-info"><h3>Desktop App v1.0</h3><p>Full wallet + mining desktop application</p></div>
-        <span class="dl-arr">↗</span>
-      </a>
       <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank" class="dl-card">
         <div class="dl-icon ic-w">💾</div>
         <div class="dl-info"><h3>Source Code</h3><p>Open source on GitHub — MIT License</p></div>
@@ -245,39 +234,28 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     </div>
   </div>
 
-  <!-- SPECS -->
-  <div class="help-pane" id="pane-specs">
-    <div class="spec-container">
-      <table class="spec-table">
-        <tr><td class="spec-k">Coin Name</td><td class="spec-v">SHIVRAI HON</td></tr>
-        <tr><td class="spec-k">Symbol</td><td class="spec-v gold">HON</td></tr>
-        <tr><td class="spec-k">Block Reward</td><td class="spec-v gold">2000 HON</td></tr>
-        <tr><td class="spec-k">Block Time</td><td class="spec-v">5 Minutes</td></tr>
-        <tr><td class="spec-k">Algorithm</td><td class="spec-v">HONPoW</td></tr>
-        <tr><td class="spec-k">Consensus</td><td class="spec-v">Proof of Work</td></tr>
-        <tr><td class="spec-k">Halving</td><td class="spec-v">None — Permanent Rewards</td></tr>
-        <tr><td class="spec-k">P2P Port</td><td class="spec-v">8444</td></tr>
-        <tr><td class="spec-k">Pre-mine</td><td class="spec-v">Zero</td></tr>
-        <tr><td class="spec-k">ICO</td><td class="spec-v">None</td></tr>
-        <tr><td class="spec-k">License</td><td class="spec-v">MIT Open Source</td></tr>
-        <tr><td class="spec-k">wHON</td><td class="spec-v">ERC-20 on Polygon (Coming Soon)</td></tr>
-      </table>
-    </div>
-  </div>
+
 </div>
 
 <footer>
   <div class="fi">
-    <div class="fl">
-      <img src="HON coin logo.svg" alt="HON">
-      <span>SHIVRAI <em>HON</em></span>
+    <div class="ft">
+      <div>
+        <div class="fl">
+          <img src="HON coin logo.svg" alt="HON">
+          <span>SHIVRAI <em>HON</em></span>
+        </div>
+        <p class="ftag">Real mining. Real coins. No one controls it.<br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="flinks">
+        <a href="index.html">Home</a>
+        <a href="explorer.html">Explorer</a>
+        <a href="mining-dashboard.html">⛏ Mine HON</a>
+        <a href="help.html">Help</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
+      </div>
     </div>
-    <div class="flinks">
-      <a href="index.html">Home</a>
-      <a href="explorer.html">Explorer</a>
-      <a href="mining-dashboard.html">Mine HON</a>
-    </div>
-    <div class="fbot">SHIVRAI HON · Decentralized Cryptocurrency · © 2026</div>
+    <div class="fbot">SHIVRAI HON · Independent Decentralized Cryptocurrency · MIT License · © 2026</div>
   </div>
 </footer>
 

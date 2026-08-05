@@ -90,7 +90,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .spinner{display:inline-block;width:24px;height:24px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:40px;margin-top:20px}
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:48px 40px 32px;margin-top:20px}
 .fi{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
 .fl{display:flex;align-items:center;gap:10px}
 .fl img{height:30px;filter:drop-shadow(0 0 8px rgba(232,160,32,.4))}
@@ -177,17 +177,23 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 
 <footer>
   <div class="fi">
-    <div class="fl">
-      <img src="HON coin logo.svg" alt="HON">
-      <span>SHIVRAI <em>HON</em></span>
+    <div class="ft">
+      <div>
+        <div class="fl">
+          <img src="HON coin logo.svg" alt="HON">
+          <span>SHIVRAI <em>HON</em></span>
+        </div>
+        <p class="ftag">Real mining. Real coins. No one controls it.<br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="flinks">
+        <a href="index.html">Home</a>
+        <a href="explorer.html">Explorer</a>
+        <a href="mining-dashboard.html">⛏ Mine HON</a>
+        <a href="help.html">Help</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
+      </div>
     </div>
-    <div class="flinks">
-      <a href="index.html">Home</a>
-      <a href="mining-dashboard.html">Mine HON</a>
-      <a href="help.html">Help</a>
-      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">GitHub</a>
-    </div>
-    <div class="fbot">SHIVRAI HON · Decentralized Cryptocurrency · © 2026</div>
+    <div class="fbot">SHIVRAI HON · Independent Decentralized Cryptocurrency · MIT License · © 2026</div>
   </div>
 </footer>
 
