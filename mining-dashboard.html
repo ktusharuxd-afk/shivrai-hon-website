@@ -185,8 +185,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <div class="page-hero">
     <div class="page-badge"><span class="dot"></span> Web Mining Live</div>
     <h1 class="page-title">Mine <span class="grd">HON</span><br>in Browser</h1>
-    <p class="page-sub">No install. No setup. Just click and earn.<br>
-    <span id="nodeStatusBadge" class="node-status ns-off" style="margin-top:12px;display:inline-flex"><span class="ns-dot"></span> Checking...</span></p>
+    <p class="page-sub">No install. No setup. Just click and earn.</p>
+    <div style="margin-top:16px"><span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span></div>
   </div>
 
   <!-- AUTH -->
@@ -292,7 +292,10 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 <!-- FOOTER -->
 <footer>
   <div class="fi">
-    <span class="fl">SHIVRAI <em>HON</em></span>
+    <div class="fl" style="display:flex;align-items:center;gap:10px">
+      <img src="HON coin logo.svg" alt="HON" style="height:28px;filter:drop-shadow(0 0 8px rgba(232,160,32,.4))">
+      <span>SHIVRAI <em>HON</em></span>
+    </div>
     <div class="flinks">
       <a href="index.html">Home</a>
       <a href="explorer.html">Explorer</a>
@@ -479,7 +482,7 @@ function loadStats(){
 
 // Mining
 function toggleMining(){
-  if(!walletAddress){addLog('❌ Address milala nahi!','inf');return}
+  if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
   isMining?stopMining():startMining()
 }
 
