@@ -37,6 +37,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
 @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(.9)}66%{transform:translate(-40px,60px) scale(1.1)}}
 @keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,40px)}}
 
+
+/* ── 3D COIN ── */
+.coin-scene{display:flex;justify-content:center;align-items:center;position:relative;height:480px}
+.coin-outer-glow{position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(232,160,32,.18) 0%,transparent 70%);animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.15);opacity:1}}
+.coin-ring{position:absolute;width:360px;height:360px;border-radius:50%;border:1px solid rgba(232,160,32,.2);animation:ring-spin 20s linear infinite}
+.coin-ring::before{content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);transform:translateX(-50%)}
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+.coin-3d{width:280px;height:280px;border-radius:50%;position:relative;z-index:1;transform-style:preserve-3d;animation:coin-float 6s ease-in-out infinite;box-shadow:0 0 0 2px rgba(232,160,32,.3),0 0 40px rgba(232,160,32,.25),0 0 80px rgba(232,160,32,.1)}
+@keyframes coin-float{0%,100%{transform:rotateY(-15deg) rotateX(5deg) translateY(0)}50%{transform:rotateY(15deg) rotateX(-5deg) translateY(-20px)}}
+.coin-face{width:100%;height:100%;border-radius:50%;background:conic-gradient(from 0deg at 50% 50%,#4A3500,#B8860B,#DAA520,#FFD700,#FFF08A,#FFD700,#DAA520,#B8860B,#6B4D00,#B8860B,#DAA520,#FFD700,#FFF08A,#FFD700,#DAA520,#B8860B,#4A3500);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 4px 16px rgba(255,255,255,.25),inset 0 -4px 16px rgba(0,0,0,.4)}
+.coin-face-inner{width:240px;height:240px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE45C 0%,#DAA520 35%,#B8860B 60%,#7A5C0A 85%);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 4px 12px rgba(255,255,255,.35),inset 0 -4px 12px rgba(0,0,0,.35)}
+.coin-logo{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5)) drop-shadow(0 0 20px rgba(232,160,32,.3))}
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr!important;text-align:center}
+  .coin-scene{display:none}
+  .hero-nums{justify-content:center}
+  .hero-ctas{justify-content:center}
+}
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.7);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
@@ -200,8 +219,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 <!-- NAV -->
 <nav>
   <a href="index.html" class="logo">
-    <img src="HON coin logo.svg" alt="HON">
-    <span class="logo-txt">SHIVRAI <em>HON</em></span>
+    <img src="HON coin logo.svg" alt="SHIVRAI HON" style="height:38px;filter:drop-shadow(0 0 12px rgba(232,160,32,.5))">
   </a>
   <div class="nav-r">
     <a href="explorer.html">Explorer</a>
@@ -221,24 +239,33 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 </div>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-tag"><span class="dot"></span> Mainnet Live</div>
-  <h1 class="hero-h">
-    <span class="line"><span class="word">Mine it.</span></span>
-    <span class="line"><span class="word">Hold it.</span></span>
-    <span class="line"><span class="word grd">Rule it.</span></span>
-  </h1>
-  <div class="hero-body">
-    <p class="hero-desc">SHIVRAI HON is a fully independent digital currency. Every coin is mined — not assigned. Start earning from your browser, and bridge to Polygon via wHON.</p>
-    <div class="hero-actions">
-      <div class="hero-ctas">
-        <a href="mining-dashboard.html" class="btn-p">⛏ Start Mining Free</a>
-        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank" class="btn-s">Read Whitepaper</a>
-      </div>
-      <div class="hero-nums">
-        <div class="hnum"><div class="n g" id="hBlk">—</div><div class="l">Blocks Mined</div></div>
-        <div class="hnum"><div class="n p">2000</div><div class="l">HON / Block</div></div>
-        <div class="hnum"><div class="n gr">∞</div><div class="l">Permanent</div></div>
+<section id="hero" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;min-height:100vh;padding:100px 40px 80px">
+  <div>
+    <div class="hero-tag"><span class="dot"></span> Mainnet Live</div>
+    <h1 class="hero-h">
+      <span class="line"><span class="word">Mine it.</span></span>
+      <span class="line"><span class="word">Hold it.</span></span>
+      <span class="line"><span class="word grd">Rule it.</span></span>
+    </h1>
+    <p class="hero-desc" style="margin-top:32px">SHIVRAI HON is a fully independent digital currency. Every coin is mined — not assigned. Start earning from your browser, and bridge to Polygon via wHON.</p>
+    <div class="hero-ctas" style="margin-top:32px">
+      <a href="mining-dashboard.html" class="btn-p">⛏ Start Mining Free</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank" class="btn-s">Read Whitepaper</a>
+    </div>
+    <div class="hero-nums" style="margin-top:40px">
+      <div class="hnum"><div class="n g" id="hBlk">—</div><div class="l">Blocks Mined</div></div>
+      <div class="hnum"><div class="n p">2000</div><div class="l">HON / Block</div></div>
+      <div class="hnum"><div class="n gr">∞</div><div class="l">Permanent</div></div>
+    </div>
+  </div>
+  <div class="coin-scene">
+    <div class="coin-outer-glow"></div>
+    <div class="coin-ring"></div>
+    <div class="coin-3d">
+      <div class="coin-face">
+        <div class="coin-face-inner">
+          <img src="HON coin logo.svg" alt="HON" class="coin-logo">
+        </div>
       </div>
     </div>
   </div>
