@@ -378,23 +378,9 @@ function switchTab(tab){
 }
 
 // Auth
-async function loginGoogle(){
-  try{
-    const { data, error } = await (async()=>{
-      const r = await fetch(`${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.href)}`, {
-        headers: {'apikey': SB_KEY}
-      })
-      return { data: { url: r.url }, error: null }
-    })()
-    // Redirect to Google
-    const r = await fetch(`${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.href)}`, {
-      method: 'GET',
-      headers: {'apikey': SB_KEY},
-      redirect: 'manual'
-    })
-    // Get the redirect URL from Supabase
-    window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent('https://ktusharuxd-afk.github.io/shivrai-hon-website/mining-dashboard.html')}`
-  }catch(e){console.log('Google login error:', e)}
+function loginGoogle(){
+  const redirectTo = 'https://shivrai-hon-website.vercel.app/mining-dashboard.html'
+  window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`
 }
 
 async function login(){
