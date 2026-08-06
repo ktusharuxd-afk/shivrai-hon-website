@@ -379,7 +379,7 @@ function switchTab(tab){
 
 // Auth
 function loginGoogle(){
-  const redirectTo = 'https://shivrai-hon-website.vercel.app/mining-dashboard.html'
+  const redirectTo = window.location.origin + window.location.pathname
   window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`
 }
 
