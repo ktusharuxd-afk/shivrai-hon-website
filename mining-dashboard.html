@@ -486,7 +486,8 @@ async function initDash(){
   loadStats()
   loadUserStats()
   checkNode()
-  setInterval(checkNode,30000)
+setTimeout(checkNode, 2000)  
+setInterval(checkNode,30000)
 }
 
 async function getWallet(){
