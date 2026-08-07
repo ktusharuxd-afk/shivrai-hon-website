@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Block Explorer — SHIVRAI HON</title>
+<link rel="icon" href="HON coin Fevicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080808;--gold:#E8A020;--purple:#9945FF;--green:#14F195;--w6:rgba(255,255,255,0.6);--w3:rgba(255,255,255,0.3);--w1:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.07);--red:#FF4444}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;padding-bottom:72px}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold),var(--purple))}
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none}
+.o1{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(153,69,255,.1),transparent 70%);top:-100px;right:-100px;animation:f1 18s ease-in-out infinite}
+.o2{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(232,160,32,.06),transparent 70%);bottom:0;left:-100px;animation:f2 22s ease-in-out infinite}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,40px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.8);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo img{height:36px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-r a{font-size:.78rem;font-weight:500;color:var(--w6);text-decoration:none;padding:7px 13px;border-radius:8px;transition:all .15s}
+.nav-r a:hover{color:#fff;background:var(--w1)}
+.nav-r a.on{color:var(--gold)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;background:none;border:none}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--w6);border-radius:2px}
+.mob{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(8,8,8,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 24px}
+.mob.on{display:block}
+.mob a{display:block;color:var(--w6);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+.mob a:last-child{border:none}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:88px 24px 40px}
+.page-hero{padding:40px 0 40px}
+.eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;display:block}
+.page-title{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:10px}
+.grd{background:linear-gradient(90deg,var(--gold),var(--purple));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:.9rem;color:var(--w6);font-weight:300}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px;text-align:center;transition:.25s}
+.stat:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+.stat-n{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat-n.gold{color:var(--gold)}.stat-n.purple{color:var(--purple)}.stat-n.green{color:var(--green)}
+.stat-l{font-size:.62rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:32px}
+.search-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 20px 14px 52px;color:#fff;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.search-input:focus{border-color:var(--gold);background:rgba(255,255,255,.07)}
+.search-input::placeholder{color:var(--w3)}
+.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--w3);font-size:1.1rem}
+.search-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:linear-gradient(90deg,var(--gold),var(--purple));color:#000;border:none;border-radius:10px;padding:8px 20px;font-weight:700;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* CARDS */
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;margin-bottom:16px}
+.card-title{font-size:.72rem;font-weight:700;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.card-title .badge{background:rgba(20,241,149,.1);color:var(--green);border:1px solid rgba(20,241,149,.2);padding:3px 10px;border-radius:50px;font-size:.65rem}
+
+/* TABLE */
+.etable{width:100%;border-collapse:collapse}
+.etable th{font-size:.65rem;font-weight:700;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;padding:10px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+.etable td{padding:14px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem;color:var(--w6);transition:.15s}
+.etable tr:hover td{color:#fff;background:rgba(255,255,255,.02)}
+.etable tr:last-child td{border:none}
+.hash{font-family:monospace;font-size:.75rem;color:var(--purple);cursor:pointer}
+.hash:hover{color:var(--gold)}
+.block-h{color:var(--gold);font-weight:700}
+.tx-badge{display:inline-block;background:rgba(153,69,255,.1);color:var(--purple);border:1px solid rgba(153,69,255,.2);padding:2px 8px;border-radius:50px;font-size:.68rem}
+
+/* BLOCK DETAIL */
+.block-detail{display:none}
+.block-detail.show{display:block}
+.detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.83rem;gap:20px}
+.detail-row:last-child{border:none}
+.detail-key{color:var(--w3);font-weight:500;min-width:140px;flex-shrink:0}
+.detail-val{color:#fff;font-family:monospace;font-size:.78rem;word-break:break-all;text-align:right}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--w6);font-size:.8rem;cursor:pointer;margin-bottom:20px;transition:.15s;border:none;background:none;font-family:'DM Sans',sans-serif}
+.back-btn:hover{color:var(--gold)}
+
+/* STATUS */
+.node-status{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:100px}
+.ns-on{background:rgba(20,241,149,.1);color:var(--green);border:1px solid rgba(20,241,149,.2)}
+.ns-off{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.ns-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--w3);font-size:.85rem}
+.spinner{display:inline-block;width:24px;height:24px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+
+
+
+
+
+
+
+
+
+
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:499;background:rgba(8,8,8,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.07);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
+.bni{display:flex;justify-content:space-around}
+.bna{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--w3);font-size:.54rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;transition:.15s}
+.bna.on,.bna:hover{color:var(--gold)}
+.bico{font-size:1.2rem}
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  nav{padding:0 20px}.nav-r a:not(.on){display:none}.hbg{display:flex}
+  .bnav{display:block}.page{padding:80px 16px 40px}
+}
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:72px 40px 40px}
+.fi{max-width:1200px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fb .logo-txt{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.01em}
+.fb .logo-txt em{font-style:normal;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.fb .logo-img{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fb .logo-img img{height:32px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.fb p{font-size:.8rem;color:var(--w3);margin-top:4px;line-height:1.8;font-weight:300;max-width:220px}
+.fcol h4{font-size:.6rem;text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--w3);margin-bottom:20px}
+.fcol a{display:block;font-size:.8rem;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:12px;transition:.15s;font-weight:300}
+.fcol a:hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;font-size:.7rem;color:var(--w3);flex-wrap:wrap;gap:12px}
+.hpill{font-size:.7rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;border:1px solid rgba(153,69,255,.25);padding:5px 14px;border-radius:100px}
+</style>
+</head>
+<body>
+<div class="mesh"><div class="o1"></div><div class="o2"></div></div>
+
+<nav>
+  <a href="index.html" class="logo"><img src="HON coin logo.svg" alt="SHIVRAI HON"></a>
+  <div class="nav-r">
+    <a href="explorer.html" class="on">🔍 Explorer</a>
+    <a href="mining-dashboard.html">⛏ Mine HON</a>
+    <a href="help.html">Help</a>
+  </div>
+  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html" onclick="toggleMob()">🏠 Home</a>
+  <a href="mining-dashboard.html" onclick="toggleMob()">⛏ Mine HON</a>
+  <a href="help.html" onclick="toggleMob()">❓ Help</a>
+</div>
+
+<div class="page">
+  <div class="page-hero">
+    <span class="eyebrow">Live Blockchain</span>
+    <h1 class="page-title">Block <span class="grd">Explorer</span></h1>
+    <p class="page-sub">Real-time HON blockchain data — blocks, transactions, network status. &nbsp;<span id="nodeStatus" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span></p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-n gold" id="sBlocks">—</div><div class="stat-l">Total Blocks</div></div>
+    <div class="stat"><div class="stat-n purple" id="sDiff">—</div><div class="stat-l">Difficulty</div></div>
+    <div class="stat"><div class="stat-n green" id="sConns">—</div><div class="stat-l">Connections</div></div>
+    <div class="stat"><div class="stat-n" id="sChain">—</div><div class="stat-l">Network</div></div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search block height or hash..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button class="search-btn" onclick="doSearch()">Search</button>
+  </div>
+
+  <!-- BLOCK DETAIL -->
+  <div id="blockDetail" class="block-detail">
+    <button class="back-btn" onclick="showList()">← Back to blocks</button>
+    <div class="card">
+      <div class="card-title">Block Details</div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <!-- BLOCKS LIST -->
+  <div id="blocksList">
+    <div class="card">
+      <div class="card-title">
+        Recent Blocks
+        <span class="badge" id="refreshBadge">● Live</span>
+      </div>
+      <div id="blocksContent">
+        <div class="loading"><div class="spinner"></div><br>Loading blocks...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div class="fb">
+        <div class="logo-img">
+          <img src="HON coin logo.svg" alt="HON">
+          <span class="logo-txt">SHIVRAI <em>HON</em></span>
+        </div>
+        <p>Real mining. Real coins.<br>No one controls it.<br><br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="fcol">
+        <h4>Network</h4>
+        <a href="explorer.html">Block Explorer</a>
+        <a href="mining-dashboard.html">Mine HON</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">Source Code</a>
+      </div>
+      <div class="fcol">
+        <h4>Resources</h4>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank">Whitepaper</a>
+        <a href="help.html">Help Centre</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>SHIVRAI HON · Decentralized Cryptocurrency · MIT License · © 2026</p>
+      <span class="hpill">HON</span>
+    </div>
+  </div>
+</footer>
+
+<nav class="bnav">
+  <div class="bni">
+    <a href="index.html" class="bna"><span class="bico">🏠</span>Home</a>
+    <a href="mining-dashboard.html" class="bna"><span class="bico">⛏️</span>Mine</a>
+    <a href="explorer.html" class="bna on"><span class="bico">🔍</span>Explorer</a>
+    <a href="help.html" class="bna"><span class="bico">❓</span>Help</a>
+  </div>
+</nav>
+
+<script>
+const API='https://hon-secure-server.onrender.com'
+let blocks=[]
+
+function toggleMob(){document.getElementById('mob').classList.toggle('on')}
+
+async function loadInfo(){
+  try{
+    const r=await fetch(`${API}/api/node/status`)
+    const d=await r.json()
+    const ns=document.getElementById('nodeStatus')
+    if(d.online){
+      ns.className='node-status ns-on'
+      ns.innerHTML='<span class="ns-dot"></span> Node Online'
+      document.getElementById('sBlocks').textContent=(d.blocks||0).toLocaleString()
+      document.getElementById('sDiff').textContent=parseFloat(d.difficulty||0).toExponential(2)
+      document.getElementById('sConns').textContent=d.connections||0
+      document.getElementById('sChain').textContent=(d.chain||'main').toUpperCase()
+    }else{
+      ns.className='node-status ns-off'
+      ns.innerHTML='<span class="ns-dot"></span> Node Offline'
+    }
+  }catch(e){}
+}
+
+async function loadBlocks(){
+  try{
+    const r=await fetch(`${API}/api/blocks`)
+    blocks=await r.json()
+    renderBlocks(blocks)
+  }catch(e){
+    document.getElementById('blocksContent').innerHTML='<div class="loading">Failed to load blocks. Node may be offline.</div>'
+  }
+}
+
+function renderBlocks(data){
+  if(!data||!data.length){
+    document.getElementById('blocksContent').innerHTML='<div class="loading">No blocks found.</div>'
+    return
+  }
+  let html=`<table class="etable">
+    <thead><tr>
+      <th>Height</th><th>Hash</th><th>Time</th><th>Txs</th><th>Size</th>
+    </tr></thead><tbody>`
+  data.forEach(b=>{
+    const t=new Date(b.time*1000).toLocaleTimeString()
+    const hash=b.hash?.substring(0,16)+'...'
+    html+=`<tr onclick="showBlock('${b.hash}')" style="cursor:pointer">
+      <td><span class="block-h">#${b.height?.toLocaleString()}</span></td>
+      <td><span class="hash">${hash}</span></td>
+      <td>${t}</td>
+      <td><span class="tx-badge">${b.nTx||b.tx?.length||0} tx</span></td>
+      <td>${((b.size||0)/1024).toFixed(2)} KB</td>
+    </tr>`
+  })
+  html+='</tbody></table>'
+  document.getElementById('blocksContent').innerHTML=html
+}
+
+async function showBlock(hash){
+  document.getElementById('blocksList').style.display='none'
+  document.getElementById('blockDetail').classList.add('show')
+  document.getElementById('detailContent').innerHTML='<div class="loading"><div class="spinner"></div><br>Loading...</div>'
+  try{
+    const r=await fetch(`${API}/api/block/${hash}`)
+    const b=await r.json()
+    const t=new Date(b.time*1000).toLocaleString()
+    document.getElementById('detailContent').innerHTML=`
+      <div class="detail-row"><span class="detail-key">Height</span><span class="detail-val">#${b.height?.toLocaleString()}</span></div>
+      <div class="detail-row"><span class="detail-key">Hash</span><span class="detail-val">${b.hash}</span></div>
+      <div class="detail-row"><span class="detail-key">Previous Hash</span><span class="detail-val">${b.previousblockhash||'Genesis'}</span></div>
+      <div class="detail-row"><span class="detail-key">Time</span><span class="detail-val">${t}</span></div>
+      <div class="detail-row"><span class="detail-key">Transactions</span><span class="detail-val">${b.nTx||b.tx?.length||0}</span></div>
+      <div class="detail-row"><span class="detail-key">Size</span><span class="detail-val">${((b.size||0)/1024).toFixed(2)} KB</span></div>
+      <div class="detail-row"><span class="detail-key">Difficulty</span><span class="detail-val">${parseFloat(b.difficulty||0).toFixed(8)}</span></div>
+      <div class="detail-row"><span class="detail-key">Merkle Root</span><span class="detail-val">${b.merkleroot||'—'}</span></div>
+      <div class="detail-row"><span class="detail-key">Bits</span><span class="detail-val">${b.bits||'—'}</span></div>
+      <div class="detail-row"><span class="detail-key">Nonce</span><span class="detail-val">${b.nonce?.toLocaleString()||'—'}</span></div>
+    `
+  }catch(e){document.getElementById('detailContent').innerHTML='<div class="loading">Error loading block.</div>'}
+}
+
+function showList(){
+  document.getElementById('blocksList').style.display='block'
+  document.getElementById('blockDetail').classList.remove('show')
+}
+
+async function doSearch(){
+  const q=document.getElementById('searchInput').value.trim()
+  if(!q)return
+  document.getElementById('blocksList').style.display='none'
+  document.getElementById('blockDetail').classList.add('show')
+  document.getElementById('detailContent').innerHTML='<div class="loading"><div class="spinner"></div><br>Searching...</div>'
+  try{
+    let hash=q
+    if(!isNaN(q)){
+      const r=await fetch(`${API}/api/blockhash/${q}`)
+      hash=await r.json()
+    }
+    showBlock(hash)
+  }catch(e){
+    document.getElementById('detailContent').innerHTML='<div class="loading">Block not found.</div>'
+  }
+}
+
+loadInfo()
+loadBlocks()
+setInterval(()=>{loadInfo();loadBlocks()},30000)
+</script>
+</body>
+</html>

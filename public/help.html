@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help — SHIVRAI HON</title>
+<link rel="icon" href="HON coin Fevicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080808;--gold:#E8A020;--purple:#9945FF;--green:#14F195;--w6:rgba(255,255,255,0.6);--w3:rgba(255,255,255,0.3);--w1:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.07)}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;padding-bottom:72px}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold),var(--purple))}
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none}
+.o1{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(153,69,255,.1),transparent 70%);top:-100px;right:-100px;animation:f1 18s ease-in-out infinite}
+.o2{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(20,241,149,.06),transparent 70%);bottom:0;left:-100px;animation:f2 22s ease-in-out infinite}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,40px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.8);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo img{height:36px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-r a{font-size:.78rem;font-weight:500;color:var(--w6);text-decoration:none;padding:7px 13px;border-radius:8px;transition:all .15s}
+.nav-r a:hover{color:#fff;background:var(--w1)}
+.nav-r a.on{color:var(--gold)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;background:none;border:none}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--w6);border-radius:2px}
+.mob{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(8,8,8,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 24px}
+.mob.on{display:block}
+.mob a{display:block;color:var(--w6);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+.mob a:last-child{border:none}
+.page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:88px 24px 40px}
+.page-hero{padding:40px 0 48px}
+.eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;display:block}
+.page-title{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:10px}
+.grd{background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:.9rem;color:var(--w6);font-weight:300}
+
+/* TABS */
+.help-tabs{display:flex;gap:0;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:32px}
+.htab{flex:1;padding:13px;font-size:.82rem;font-weight:600;color:var(--w3);cursor:pointer;text-align:center;border:none;background:transparent;transition:.2s;font-family:'DM Sans',sans-serif}
+.htab.active{color:#fff;background:rgba(255,255,255,.08)}
+
+/* SECTIONS */
+.help-pane{display:none}
+.help-pane.active{display:block}
+
+/* FAQ */
+.faq-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:.2s}
+.faq-item:hover{border-color:rgba(255,255,255,.12)}
+.faq-q{padding:18px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;font-weight:600;color:#fff}
+.faq-q .arrow{color:var(--w3);transition:.3s;font-size:.8rem}
+.faq-item.open .faq-q .arrow{transform:rotate(180deg);color:var(--gold)}
+.faq-a{display:none;padding:0 20px 18px;font-size:.85rem;color:var(--w6);line-height:1.75;font-weight:300}
+.faq-item.open .faq-a{display:block}
+
+/* GUIDE STEPS */
+.guide-step{display:flex;gap:20px;padding:24px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;transition:.2s}
+.guide-step:hover{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06)}
+.step-num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--purple));color:#000;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body h3{font-size:.9rem;font-weight:700;margin-bottom:6px}
+.step-body p{font-size:.82rem;color:var(--w6);line-height:1.7;font-weight:300}
+.step-body code{background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;font-size:.78rem;font-family:monospace;color:var(--gold)}
+
+/* DOWNLOADS */
+.dl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.dl-card{display:flex;align-items:center;gap:16px;padding:20px 22px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;text-decoration:none;transition:.2s}
+.dl-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.dl-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.ic-g{background:rgba(232,160,32,.1)}.ic-p{background:rgba(153,69,255,.1)}.ic-gr{background:rgba(20,241,149,.1)}.ic-w{background:rgba(255,255,255,.07)}
+.dl-info h3{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:3px}
+.dl-info p{font-size:.75rem;color:var(--w3);font-weight:300}
+.dl-arr{margin-left:auto;color:var(--w3);transition:.2s}
+.dl-card:hover .dl-arr{color:var(--gold)}
+
+/* SPEC TABLE */
+.spec-table{width:100%;border-collapse:collapse}
+.spec-table tr{border-bottom:1px solid rgba(255,255,255,.06);transition:.15s}
+.spec-table tr:hover{background:rgba(255,255,255,.03)}
+.spec-table tr:last-child{border:none}
+.spec-table td{padding:14px 16px;font-size:.83rem}
+.spec-k{color:var(--w3);width:45%}
+.spec-v{color:#fff;font-weight:500}
+.spec-v.gold{color:var(--gold)}
+.spec-container{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
+
+
+
+
+
+
+
+
+
+
+
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:499;background:rgba(8,8,8,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.07);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
+.bni{display:flex;justify-content:space-around}
+.bna{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--w3);font-size:.54rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;transition:.15s}
+.bna.on,.bna:hover{color:var(--gold)}
+.bico{font-size:1.2rem}
+@media(max-width:768px){
+  nav{padding:0 20px}.nav-r a:not(.on){display:none}.hbg{display:flex}
+  .bnav{display:block}.page{padding:80px 16px 40px}.dl-grid{grid-template-columns:1fr}
+}
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:72px 40px 40px}
+.fi{max-width:1200px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fb .logo-txt{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.01em}
+.fb .logo-txt em{font-style:normal;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.fb .logo-img{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fb .logo-img img{height:32px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.fb p{font-size:.8rem;color:var(--w3);margin-top:4px;line-height:1.8;font-weight:300;max-width:220px}
+.fcol h4{font-size:.6rem;text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--w3);margin-bottom:20px}
+.fcol a{display:block;font-size:.8rem;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:12px;transition:.15s;font-weight:300}
+.fcol a:hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;font-size:.7rem;color:var(--w3);flex-wrap:wrap;gap:12px}
+.hpill{font-size:.7rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;border:1px solid rgba(153,69,255,.25);padding:5px 14px;border-radius:100px}
+</style>
+</head>
+<body>
+<div class="mesh"><div class="o1"></div><div class="o2"></div></div>
+
+<nav>
+  <a href="index.html" class="logo"><img src="HON coin logo.svg" alt="SHIVRAI HON"></a>
+  <div class="nav-r">
+    <a href="explorer.html">🔍 Explorer</a>
+    <a href="mining-dashboard.html">⛏ Mine HON</a>
+    <a href="help.html" class="on">Help</a>
+  </div>
+  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html" onclick="toggleMob()">🏠 Home</a>
+  <a href="explorer.html" onclick="toggleMob()">🔍 Explorer</a>
+  <a href="mining-dashboard.html" onclick="toggleMob()">⛏ Mine HON</a>
+</div>
+
+<div class="page">
+  <div class="page-hero">
+    <span class="eyebrow">Support</span>
+    <h1 class="page-title">Help <span class="grd">Centre</span></h1>
+    <p class="page-sub">Everything you need to start mining and using HON.</p>
+  </div>
+
+  <div class="help-tabs">
+    <button class="htab active" onclick="switchTab('faq')">❓ FAQ</button>
+    <button class="htab" onclick="switchTab('guide')">📖 Mining Guide</button>
+    <button class="htab" onclick="switchTab('downloads')">⬇ Downloads</button>
+  </div>
+
+  <!-- FAQ -->
+  <div class="help-pane active" id="pane-faq">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is SHIVRAI HON? <span class="arrow">▼</span></div>
+      <div class="faq-a">SHIVRAI HON (HON) is an independent decentralized cryptocurrency. Every coin is earned through Proof of Work mining — no pre-mine, no ICO, no central authority. Inspired by Chhatrapati Shivaji Maharaj.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I start mining HON? <span class="arrow">▼</span></div>
+      <div class="faq-a">The easiest way is Web Mining — go to the Mine HON page, create an account, and click "Start Mining". Your browser will automatically mine HON. No downloads or setup needed!</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How much HON do I earn per block? <span class="arrow">▼</span></div>
+      <div class="faq-a">2000 HON per block — permanently. There is no halving, so rewards remain constant forever. This makes HON mining always worthwhile.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is the block time? <span class="arrow">▼</span></div>
+      <div class="faq-a">Target block time is 5 minutes, using the HONPoW algorithm which automatically adjusts difficulty to maintain this target.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is web mining safe? <span class="arrow">▼</span></div>
+      <div class="faq-a">Yes, completely safe. Mining happens in your browser using standard web APIs. Your private keys are generated and stored only on your device — never sent to any server.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is wHON? <span class="arrow">▼</span></div>
+      <div class="faq-a">wHON (Wrapped HON) is an ERC-20 token on Polygon that represents HON on the blockchain. Once the bridge is live, you'll be able to convert HON to wHON and trade it on Uniswap and other DeFi platforms.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I mine on mobile? <span class="arrow">▼</span></div>
+      <div class="faq-a">Yes! Web mining works on any device with a modern browser — desktop, laptop, tablet, or mobile phone. The miner automatically adjusts to your device's capabilities.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Where is my wallet stored? <span class="arrow">▼</span></div>
+      <div class="faq-a">Your HON wallet address is stored on the HON blockchain. Your account is secured via our authentication system. The network maintains your balance — not any single server.</div>
+    </div>
+  </div>
+
+  <!-- GUIDE -->
+  <div class="help-pane" id="pane-guide">
+    <div class="guide-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Go to Mine HON page</h3>
+        <p>Visit <code>mining-dashboard.html</code> or click "⛏ Mine HON" in the navigation bar from any page.</p>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Create your account</h3>
+        <p>Click "Sign Up" tab, enter your name, email and password (min 6 characters). Your HON wallet address is automatically generated when you register.</p>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Login to your account</h3>
+        <p>Enter your email and password on the Login tab. You'll be taken directly to the mining dashboard.</p>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Click Start Mining</h3>
+        <p>Hit the gold "⛏ Start Mining" button. Your browser connects to the HON network and begins mining. You'll see live logs in the mining console.</p>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Earn 2000 HON per block</h3>
+        <p>Every successful block gives you 2000 HON. Watch your balance grow in real-time on the dashboard.</p>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h3>Send HON to anyone</h3>
+        <p>Go to "📤 Send HON" tab, enter the receiver's HON address (starts with <code>bc1q...</code>) and amount. Click Send!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOWNLOADS -->
+  <div class="help-pane" id="pane-downloads">
+    <div class="dl-grid">
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank" class="dl-card">
+        <div class="dl-icon ic-p">📄</div>
+        <div class="dl-info"><h3>Whitepaper v3</h3><p>Technical documentation & protocol specs</p></div>
+        <span class="dl-arr">↗</span>
+      </a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank" class="dl-card">
+        <div class="dl-icon ic-w">💾</div>
+        <div class="dl-info"><h3>Source Code</h3><p>Open source on GitHub — MIT License</p></div>
+        <span class="dl-arr">↗</span>
+      </a>
+    </div>
+  </div>
+
+
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div class="fb">
+        <div class="logo-img">
+          <img src="HON coin logo.svg" alt="HON">
+          <span class="logo-txt">SHIVRAI <em>HON</em></span>
+        </div>
+        <p>Real mining. Real coins.<br>No one controls it.<br><br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="fcol">
+        <h4>Network</h4>
+        <a href="explorer.html">Block Explorer</a>
+        <a href="mining-dashboard.html">Mine HON</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">Source Code</a>
+      </div>
+      <div class="fcol">
+        <h4>Resources</h4>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank">Whitepaper</a>
+        <a href="help.html">Help Centre</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>SHIVRAI HON · Decentralized Cryptocurrency · MIT License · © 2026</p>
+      <span class="hpill">HON</span>
+    </div>
+  </div>
+</footer>
+
+<nav class="bnav">
+  <div class="bni">
+    <a href="index.html" class="bna"><span class="bico">🏠</span>Home</a>
+    <a href="mining-dashboard.html" class="bna"><span class="bico">⛏️</span>Mine</a>
+    <a href="explorer.html" class="bna"><span class="bico">🔍</span>Explorer</a>
+    <a href="help.html" class="bna on"><span class="bico">❓</span>Help</a>
+  </div>
+</nav>
+
+<script>
+function toggleMob(){document.getElementById('mob').classList.toggle('on')}
+
+function switchTab(tab){
+  document.querySelectorAll('.htab').forEach((t,i)=>{
+    const tabs=['faq','guide','downloads','specs']
+    t.classList.toggle('active',tabs[i]===tab)
+  })
+  document.querySelectorAll('.help-pane').forEach(p=>p.classList.remove('active'))
+  document.getElementById('pane-'+tab).classList.add('active')
+}
+
+function toggleFaq(el){
+  const item=el.parentElement
+  item.classList.toggle('open')
+}
+</script>
+</body>
+</html>

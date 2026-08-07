@@ -1,0 +1,773 @@
+<!-- v2.3 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mine HON — SHIVRAI HON</title>
+<link rel="icon" href="HON coin Fevicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080808;--gold:#E8A020;--purple:#9945FF;--green:#14F195;--w6:rgba(255,255,255,0.6);--w3:rgba(255,255,255,0.3);--w1:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.07);--card:rgba(255,255,255,0.04);--red:#FF4444}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;padding-bottom:72px}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold),var(--purple))}
+
+/* MESH */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none}
+.o1{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(153,69,255,.12),transparent 70%);top:-100px;right:-100px;animation:f1 18s ease-in-out infinite}
+.o2{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(140px);background:radial-gradient(circle,rgba(232,160,32,.08),transparent 70%);bottom:0;left:-100px;animation:f2 22s ease-in-out infinite}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,40px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-30px)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.8);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo img{height:36px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-r a{font-size:.78rem;font-weight:500;color:var(--w6);text-decoration:none;padding:7px 13px;border-radius:8px;transition:all .15s}
+.nav-r a:hover{color:#fff;background:var(--w1)}
+.nav-r a.on{color:var(--gold)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;background:none;border:none}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--w6);border-radius:2px}
+.mob{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(8,8,8,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 24px}
+.mob.on{display:block}
+.mob a{display:block;color:var(--w6);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+.mob a:last-child{border:none;color:var(--gold);font-weight:700}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:88px 24px 40px}
+.page-hero{text-align:center;padding:40px 0 48px}
+.page-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(153,69,255,.35);border-radius:100px;padding:6px 16px;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);background:rgba(153,69,255,.07);margin-bottom:24px}
+.page-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:14px}
+.grd{background:linear-gradient(90deg,var(--gold),var(--purple),var(--green));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gs 5s linear infinite}
+@keyframes gs{0%{background-position:0%}100%{background-position:200%}}
+.page-sub{font-size:.95rem;color:var(--w6);font-weight:300;line-height:1.7}
+
+
+/* GOOGLE BTN */
+.btn-google{width:100%;padding:12px;background:#fff;color:#3c4043;font-weight:600;font-size:.88rem;border:1px solid rgba(255,255,255,.15);border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:4px}
+.btn-google:hover{background:#f8f8f8;box-shadow:0 4px 12px rgba(0,0,0,.3);transform:translateY(-1px)}
+.divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--w3);font-size:.75rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+/* AUTH TABS */
+.auth-tabs{display:flex;gap:0;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:28px;max-width:340px;margin:0 auto 28px}
+.auth-tab{flex:1;padding:12px;font-size:.85rem;font-weight:600;color:var(--w3);cursor:pointer;text-align:center;border:none;background:transparent;transition:all .2s;font-family:'DM Sans',sans-serif}
+.auth-tab.active{color:#000;background:linear-gradient(90deg,var(--gold),var(--purple))}
+
+/* AUTH CARD */
+.auth-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:400px;margin:0 auto 40px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:.75rem;font-weight:600;color:var(--w6);margin-bottom:8px;display:block;letter-spacing:.04em}
+.form-input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--gold);background:rgba(255,255,255,.08)}
+.form-input::placeholder{color:var(--w3)}
+.btn-auth{width:100%;padding:13px;background:linear-gradient(90deg,var(--gold),var(--purple));color:#000;font-weight:700;font-size:.9rem;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-top:4px}
+.btn-auth:hover{opacity:.9;transform:translateY(-1px)}
+.btn-auth:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.auth-alert{padding:12px 16px;border-radius:10px;font-size:.82rem;margin-bottom:16px;display:none}
+.auth-alert.show{display:block}
+.auth-alert.err{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.2);color:var(--red)}
+.auth-alert.ok{background:rgba(20,241,149,.08);border:1px solid rgba(20,241,149,.2);color:var(--green)}
+
+/* DASHBOARD */
+.dash{display:none}
+.dash.active{display:block}
+
+/* STATS GRID */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all .25s}
+.stat:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+.stat-ico{font-size:1.4rem;margin-bottom:10px}
+.stat-val{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--gold)}
+.stat-val.purple{color:var(--purple)}
+.stat-val.green{color:var(--green)}
+.stat-lbl{font-size:.62rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+
+/* TABS */
+.tabs{display:flex;gap:0;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.tab{flex:1;padding:13px;font-size:.82rem;font-weight:600;color:var(--w3);cursor:pointer;text-align:center;border:none;background:transparent;transition:all .2s;font-family:'DM Sans',sans-serif;letter-spacing:-.01em}
+.tab.active{color:#fff;background:rgba(255,255,255,.08)}
+
+/* TAB CONTENT */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* CARDS */
+.card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.card-title{font-size:.78rem;font-weight:700;color:var(--w6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+
+/* MINING */
+.mine-btn{width:100%;padding:16px;font-size:1rem;font-weight:700;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px;transition:all .2s;letter-spacing:-.01em}
+.mine-btn.start{background:linear-gradient(90deg,var(--gold),var(--purple));color:#000}
+.mine-btn.stop{background:rgba(255,68,68,.15);color:var(--red);border:1px solid rgba(255,68,68,.3)}
+.mine-btn:disabled{opacity:.5;cursor:not-allowed}
+.progress-wrap{background:rgba(255,255,255,.06);border-radius:100px;height:6px;margin-bottom:16px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--purple));border-radius:100px;width:0%;transition:width .5s}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.82rem}
+.info-row:last-child{border:none}
+.info-key{color:var(--w3)}
+.info-val{color:#fff;font-weight:500}
+.log-box{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:16px;height:160px;overflow-y:auto;font-size:.75rem;font-family:monospace;color:var(--w3);margin-top:16px}
+.log-box .le{margin-bottom:4px;line-height:1.5}
+.le.ok{color:var(--green)}.le.gold{color:var(--gold)}.le.inf{color:var(--w6)}
+
+/* WALLET */
+.addr-box{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-family:monospace;font-size:.78rem;color:var(--w6);word-break:break-all;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.addr-box:hover{border-color:var(--gold);color:var(--gold)}
+.bal-big{font-size:2.5rem;font-weight:800;letter-spacing:-.04em;color:var(--gold);text-align:center;padding:20px 0}
+.bal-lbl{font-size:.68rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;text-align:center;margin-top:-12px;margin-bottom:20px}
+.finput{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s;margin-bottom:12px}
+.finput:focus{border-color:var(--gold)}
+.finput::placeholder{color:var(--w3)}
+.btn-send{width:100%;padding:13px;background:linear-gradient(90deg,var(--gold),var(--purple));color:#000;font-weight:700;font-size:.88rem;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-send:hover{opacity:.9}
+.send-alert{padding:10px 14px;border-radius:10px;font-size:.8rem;margin-bottom:12px;display:none}
+.send-alert.show{display:block}
+.send-alert.ok{background:rgba(20,241,149,.08);border:1px solid rgba(20,241,149,.2);color:var(--green)}
+.send-alert.err{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.2);color:var(--red)}
+
+/* NODE STATUS */
+.node-status{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:100px}
+.ns-on{background:rgba(20,241,149,.1);color:var(--green);border:1px solid rgba(20,241,149,.2)}
+.ns-off{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.ns-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+
+
+
+/* BOTTOM NAV */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:499;background:rgba(8,8,8,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.07);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
+.bni{display:flex;justify-content:space-around}
+.bna{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--w3);font-size:.54rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;transition:.15s}
+.bna.on,.bna:hover{color:var(--gold)}
+.bico{font-size:1.2rem}
+
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  nav{padding:0 20px}
+  .nav-r a:not(.on){display:none}
+  .hbg{display:flex}
+  .bnav{display:block}
+  .page{padding:80px 16px 40px}
+}
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:72px 40px 40px}
+.fi{max-width:1200px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fb .logo-txt{font-size:.95rem;font-weight:800;color:#fff;letter-spacing:-.01em}
+.fb .logo-txt em{font-style:normal;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.fb .logo-img{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fb .logo-img img{height:32px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.fb p{font-size:.8rem;color:var(--w3);margin-top:4px;line-height:1.8;font-weight:300;max-width:220px}
+.fcol h4{font-size:.6rem;text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--w3);margin-bottom:20px}
+.fcol a{display:block;font-size:.8rem;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:12px;transition:.15s;font-weight:300}
+.fcol a:hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;font-size:.7rem;color:var(--w3);flex-wrap:wrap;gap:12px}
+.hpill{font-size:.7rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;border:1px solid rgba(153,69,255,.25);padding:5px 14px;border-radius:100px}
+</style>
+</head>
+<body>
+
+<div class="mesh"><div class="o1"></div><div class="o2"></div></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <img src="HON coin logo.svg" alt="SHIVRAI HON">
+  </a>
+  <div class="nav-r">
+    <a href="explorer.html">Explorer</a>
+    <a href="mining-dashboard.html" class="on">⛏ Mine HON</a>
+    <a href="help.html">Help</a>
+    <button id="logoutBtn" onclick="logout()" style="display:none;background:rgba(255,68,68,.15);color:#FF4444;border:1px solid rgba(255,68,68,.3);padding:7px 16px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;transition:all .2s" onmouseover="this.style.background='rgba(255,68,68,.25)'" onmouseout="this.style.background='rgba(255,68,68,.15)'">Logout</button>
+  </div>
+  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob" id="mob">
+  <a href="index.html" onclick="toggleMob()">🏠 Home</a>
+  <a href="explorer.html" onclick="toggleMob()">🔍 Explorer</a>
+  <a href="help.html" onclick="toggleMob()">❓ Help</a>
+  <a href="mining-dashboard.html">⛏ Mine HON</a>
+</div>
+
+<div class="page">
+  <!-- HERO -->
+  <div class="page-hero">
+    <div class="page-badge"><span class="dot"></span> Web Mining Live</div>
+    <h1 class="page-title">Mine <span class="grd">HON</span><br>in Browser</h1>
+    <p class="page-sub">No install. No setup. Just click and earn.</p>
+    <div style="margin-top:16px"><span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span></div>
+  </div>
+
+  <!-- AUTH -->
+  <div id="authSection">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuth('login')">Login</button>
+      <button class="auth-tab" onclick="switchAuth('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginForm" class="auth-card">
+      <div id="loginAlert" class="auth-alert"></div>
+      <button class="btn-google" onclick="loginGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="divider"><span>or</span></div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="loginPass" class="form-input" placeholder="••••••••">
+      </div>
+      <button class="btn-auth" onclick="login()" id="loginBtn">🔑 Login</button>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="signupForm" class="auth-card" style="display:none">
+      <div id="signupAlert" class="auth-alert"></div>
+      <button class="btn-google" onclick="loginGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign up with Google
+      </button>
+      <div class="divider"><span>or</span></div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="signupName" class="form-input" placeholder="Tuzha naam">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="signupEmail" class="form-input" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="signupPass" class="form-input" placeholder="Min 6 characters">
+      </div>
+      <button class="btn-auth" onclick="signup()" id="signupBtn">✅ Create Account</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dash" id="dashboard">
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0</div><div class="stat-lbl">Total Points</div></div>
+      <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">0.0000</div><div class="stat-lbl">HON Equivalent</div></div>
+      <div class="stat"><div class="stat-ico">📅</div><div class="stat-val green" id="dailyPoints">0/10000</div><div class="stat-lbl">Daily Points</div></div>
+      <div class="stat"><div class="stat-ico">🔥</div><div class="stat-val" id="streakDays">0</div><div class="stat-lbl">Day Streak</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('mining')">⛏ Mining</button>
+      <button class="tab" onclick="switchTab('wallet')">💰 Wallet</button>
+      <button class="tab" onclick="switchTab('send')">📤 Send HON</button>
+    </div>
+
+    <!-- MINING TAB -->
+    <div class="tab-pane active" id="tab-mining">
+      <div class="card">
+        <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">⛏ Start Mining — Earn 2000 HON / Block</button>
+        <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+        <!-- Energy Bar -->
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:.72rem;color:var(--w3);font-weight:600">⚡ ENERGY</span>
+            <span style="font-size:.72rem;color:var(--gold);font-weight:700" id="energyText">100/100</span>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:8px;overflow:hidden">
+            <div id="energyBar" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:100px;width:100%;transition:width .5s"></div>
+          </div>
+          <div style="font-size:.68rem;color:var(--w3);margin-top:4px" id="energyRefill"></div>
+        </div>
+        <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
+        <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
+        <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
+        <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click "Start Mining" to begin!</div></div>
+      </div>
+    </div>
+
+    <!-- WALLET TAB -->
+    <div class="tab-pane" id="tab-wallet">
+      <div class="card">
+        <div class="bal-big" id="walletBal">0.00</div>
+        <div class="bal-lbl">HON Equivalent (2000 pts = 1 HON)</div>
+        <div class="card-title">Your Address</div>
+        <div class="addr-box" id="walletAddr" onclick="copyAddr()">Generate address by clicking Start Mining...</div>
+        <div class="info-row"><span class="info-key">Network</span><span class="info-val">HON Mainnet</span></div>
+        <div class="info-row"><span class="info-key">Account</span><span class="info-val" id="walletEmail">—</span></div>
+      </div>
+    </div>
+
+    <!-- SEND TAB -->
+    <div class="tab-pane" id="tab-send">
+      <div class="card">
+        <div class="card-title">Send HON</div>
+        <div id="sendAlert" class="send-alert"></div>
+        <input type="text" class="finput" id="sendTo" placeholder="Receiver address (bc1q...)">
+        <input type="number" class="finput" id="sendAmt" placeholder="Amount (HON)" min="0.00000001" step="0.00000001">
+        <div class="info-row" style="margin-bottom:16px"><span class="info-key">Available</span><span class="info-val" style="color:var(--gold)" id="sendBal">0 HON</span></div>
+        <button class="btn-send" onclick="sendHON()">📤 Send HON</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div class="fb">
+        <div class="logo-img">
+          <img src="HON coin logo.svg" alt="HON">
+          <span class="logo-txt">SHIVRAI <em>HON</em></span>
+        </div>
+        <p>Real mining. Real coins.<br>No one controls it.<br><br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="fcol">
+        <h4>Network</h4>
+        <a href="explorer.html">Block Explorer</a>
+        <a href="mining-dashboard.html">Mine HON</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">Source Code</a>
+      </div>
+      <div class="fcol">
+        <h4>Resources</h4>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank">Whitepaper</a>
+        <a href="help.html">Help Centre</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>SHIVRAI HON · Decentralized Cryptocurrency · MIT License · © 2026</p>
+      <span class="hpill">HON</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="bni">
+    <a href="index.html" class="bna"><span class="bico">🏠</span>Home</a>
+    <a href="mining-dashboard.html" class="bna on"><span class="bico">⛏️</span>Mine</a>
+    <a href="explorer.html" class="bna"><span class="bico">🔍</span>Explorer</a>
+    <a href="help.html" class="bna"><span class="bico">❓</span>Help</a>
+  </div>
+</nav>
+
+<script>
+const API='https://hon-secure-server.onrender.com'
+const SB_URL='https://pctlqnityusjxlicreax.supabase.co'
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjdGxxbml0eXVzanhsaWNyZWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODg2NDMsImV4cCI6MjA5NjY2NDY0M30.nlo0Pzn_KoaidWgDCp9pXbL7ILoQpd9SER1C_3p-9gw'
+
+let user=null,miningInterval=null,isMining=false,sessionBlocks=0,walletAddress=null
+
+function toggleMob(){document.getElementById('mob').classList.toggle('on')}
+
+function switchAuth(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='login'?0:1)))
+  document.getElementById('loginForm').style.display=tab==='login'?'block':'none'
+  document.getElementById('signupForm').style.display=tab==='signup'?'block':'none'
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'))
+  event.target.classList.add('active')
+  document.getElementById('tab-'+tab).classList.add('active')
+  if(tab==='wallet'||tab==='send')refreshWallet()
+}
+
+// Auth
+function loginGoogle(){
+  const redirectTo = window.location.origin + window.location.pathname
+  window.location.href = `${SB_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`
+}
+
+async function login(){
+  const email=document.getElementById('loginEmail').value.trim()
+  const pass=document.getElementById('loginPass').value
+  if(!email||!pass)return showAuthAlert('loginAlert','Email ani password bhara!','err')
+  const btn=document.getElementById('loginBtn')
+  btn.disabled=true;btn.textContent='Loading...'
+  try{
+    const r=await fetch(`${SB_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pass})
+    })
+    const d=await r.json()
+    if(d.access_token){
+      localStorage.setItem('hon_web_token',d.access_token)
+      if(d.refresh_token)localStorage.setItem('hon_web_refresh',d.refresh_token)
+      user=d.user;initDash()
+    }else{showAuthAlert('loginAlert',d.error_description||'Login failed!','err')}
+  }catch(e){showAuthAlert('loginAlert','Network error!','err')}
+  btn.disabled=false;btn.textContent='🔑 Login'
+}
+
+async function signup(){
+  const name=document.getElementById('signupName').value.trim()
+  const email=document.getElementById('signupEmail').value.trim()
+  const pass=document.getElementById('signupPass').value
+  if(!name||!email||!pass)return showAuthAlert('signupAlert','Sagle fields bhara!','err')
+  if(pass.length<6)return showAuthAlert('signupAlert','Password min 6 characters!','err')
+  const btn=document.getElementById('signupBtn')
+  btn.disabled=true;btn.textContent='Creating...'
+  try{
+    const r=await fetch(`${SB_URL}/auth/v1/signup`,{
+      method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json','Authorization':`Bearer ${SB_KEY}`},
+      body:JSON.stringify({email,password:pass,data:{full_name:name}})
+    })
+    const d=await r.json()
+    if(d.user||d.id){showAuthAlert('signupAlert','✅ Account created! Login kara.','ok');setTimeout(()=>switchAuth('login'),2000)}
+    else{showAuthAlert('signupAlert',d.error_description||'Signup failed!','err')}
+  }catch(e){showAuthAlert('signupAlert','Network error!','err')}
+  btn.disabled=false;btn.textContent='✅ Create Account'
+}
+
+function showAuthAlert(id,msg,type){
+  const el=document.getElementById(id)
+  el.textContent=msg;el.className=`auth-alert ${type} show`
+  setTimeout(()=>el.classList.remove('show'),5000)
+}
+
+async function checkAuth(){
+  // Check URL token
+  const hash=window.location.hash
+  if(hash&&hash.includes('access_token')){
+    const p=new URLSearchParams(hash.substring(1))
+    const token=p.get('access_token')
+    if(token){
+      localStorage.setItem('hon_web_token',token)
+      if(p.get('refresh_token'))localStorage.setItem('hon_web_refresh',p.get('refresh_token'))
+      window.history.replaceState({},document.title,window.location.pathname)
+    }
+  }
+  const token=localStorage.getItem('hon_web_token')
+  if(token){
+    try{
+      const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}})
+      if(r.ok){user=await r.json();return true}
+    }catch(e){}
+  }
+  const refresh=localStorage.getItem('hon_web_refresh')
+  if(refresh){
+    try{
+      const r=await fetch(`${SB_URL}/auth/v1/token?grant_type=refresh_token`,{
+        method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},
+        body:JSON.stringify({refresh_token:refresh})
+      })
+      const d=await r.json()
+      if(d.access_token){
+        localStorage.setItem('hon_web_token',d.access_token)
+        if(d.refresh_token)localStorage.setItem('hon_web_refresh',d.refresh_token)
+        user=d.user;return true
+      }
+    }catch(e){}
+  }
+  return false
+}
+
+async function initDash(){
+  document.getElementById('authSection').style.display='none'
+  document.getElementById('dashboard').classList.add('active')
+  document.getElementById('walletEmail').textContent=user?.email||'—'
+  document.getElementById('logoutBtn').style.display='block'
+  await getWallet()
+  loadStats()
+  loadUserStats()
+  checkNode()
+  setInterval(checkNode,30000)
+}
+
+async function getWallet(){
+  if(!user)return
+  try{
+    const r=await fetch(`${API}/api/wallet/new-address`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:user.id})})
+    const d=await r.json()
+    if(d.address){
+      walletAddress=d.address
+      document.getElementById('walletAddr').textContent=walletAddress
+      document.getElementById('mineAddr').textContent=walletAddress.substring(0,22)+'...'
+    }
+  }catch(e){}
+}
+
+let nodeOnline = false
+
+async function checkNode(){
+  try{
+    const r=await fetch(`${API}/api/node/status`)
+    const d=await r.json()
+    const badge=document.getElementById('nodeStatusBadge')
+    const btn=document.getElementById('mineBtn')
+    
+    if(d.online){
+      badge.className='node-status ns-on'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Live'
+      document.getElementById('netBlock').textContent=(d.blocks||0).toLocaleString()
+      
+      // Re-enable button if was disabled due to offline
+      if(!nodeOnline && btn){
+        nodeOnline = true
+        if(!isMining){
+          btn.disabled=false
+          btn.className='mine-btn start'
+          btn.textContent='⛏ Start Mining — Earn Points'
+          document.getElementById('mineStatus').textContent='Ready'
+        }
+      }
+      nodeOnline = true
+    }else{
+      nodeOnline = false
+      badge.className='node-status ns-off'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+      if(btn){
+        btn.disabled=true
+        btn.className='mine-btn stop'
+        btn.textContent='🔴 Web Mining Offline — Node Down'
+        if(isMining){
+          stopMining()
+          addLog('🔴 Node offline! Mining band kela.','inf')
+        }
+      }
+    }
+  }catch(e){
+    nodeOnline = false
+    const badge=document.getElementById('nodeStatusBadge')
+    if(badge){
+      badge.className='node-status ns-off'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+    }
+    const btn=document.getElementById('mineBtn')
+    if(btn){
+      btn.disabled=true
+      btn.className='mine-btn stop'
+      btn.textContent='🔴 Web Mining Offline — Node Down'
+    }
+  }
+}
+
+async function loadUserStats(){
+  if(!user)return
+  try{
+    const r=await fetch(`${API}/api/mining/stats/${user.id}`)
+    const d=await r.json()
+    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
+    document.getElementById('streakDays').textContent=(d.streak_days||0)+(d.streak_days>0?'🔥':'')
+    updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
+    // Check limits and disable button
+    checkMiningAvailability(d)
+  }catch(e){}
+}
+
+function checkMiningAvailability(d){
+  const btn = document.getElementById('mineBtn')
+  const dailyPoints = d.daily_points || 0
+  const energy = d.energy || 100
+
+  if(dailyPoints >= 10000){
+    // Daily limit reached
+    btn.disabled = true
+    btn.className = 'mine-btn stop'
+    btn.textContent = '🚫 Daily Limit Reached — Come Back Tomorrow!'
+    document.getElementById('mineStatus').textContent = 'Limit reached'
+    addLog('🚫 Daily limit reached! 10,000 pts/day. Reset at midnight UTC.','inf')
+    if(isMining) stopMining()
+  } else if(energy < 20){
+    // No energy
+    const mins = d.minutes_to_next || 0
+    const hrs = Math.floor(mins/60)
+    const min = mins % 60
+    const timeStr = hrs > 0 ? `${hrs}h ${min}m` : `${min}m`
+    btn.disabled = true
+    btn.className = 'mine-btn stop'
+    btn.textContent = `⚡ Energy Empty — Refills in ${timeStr}`
+    document.getElementById('mineStatus').textContent = 'Waiting for energy...'
+    if(isMining) stopMining()
+  } else {
+    // Ready to mine
+    if(!isMining){
+      btn.disabled = false
+      btn.className = 'mine-btn start'
+      btn.textContent = '⛏ Start Mining — Earn Points'
+    }
+  }
+}
+
+function loadStats(){
+  checkNode()
+  setInterval(loadUserStats,30000)
+}
+
+// Mining
+function updateEnergyUI(energy, maxEnergy, minsToNext){
+  const pct = Math.min(100, (energy/maxEnergy)*100)
+  document.getElementById('energyBar').style.width = pct+'%'
+  document.getElementById('energyText').textContent = `${energy}/${maxEnergy}`
+  if(minsToNext > 0){
+    const hrs = Math.floor(minsToNext/60)
+    const mins = minsToNext % 60
+    document.getElementById('energyRefill').textContent = hrs > 0 ? 
+      `Next block in: ${hrs}h ${mins}m` : `Next block in: ${mins}m`
+  } else {
+    document.getElementById('energyRefill').textContent = '✅ Ready to mine!'
+  }
+}
+
+function toggleMining(){
+  if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
+  isMining?stopMining():startMining()
+}
+
+function startMining(){
+  isMining=true
+  const btn=document.getElementById('mineBtn')
+  btn.textContent='⏹ Stop Mining'
+  btn.className='mine-btn stop'
+  document.getElementById('mineStatus').textContent='Mining chalu...'
+  addLog('⛏️ Mining suru!','gold')
+  addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
+  miningInterval=setInterval(async()=>{
+    const prog=Math.random()*100
+    document.getElementById('progressBar').style.width=prog+'%'
+    const hr=Math.floor(Math.random()*500+100)
+    document.getElementById('hashRate').textContent=hr
+    try{
+      const r=await fetch(`${API}/api/mining/share`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:user.id,address:walletAddress})})
+      const d=await r.json()
+      console.log('Mining response:', JSON.stringify(d))
+      if(d.success){
+        sessionBlocks++
+        const earned = d.total_points || 0
+        // Update stats
+        document.getElementById('totalEarned').textContent = earned.toLocaleString()
+        document.getElementById('honEquiv').textContent = d.hon_equivalent || '0.0000'
+        document.getElementById('dailyPoints').textContent = `${d.daily_points || 0}/10000`
+        // Update energy
+        updateEnergyUI(d.energy, d.max_energy, d.minutes_to_next)
+        refreshWallet()
+        addLog(`✅ +${d.points_earned || 2000} pts | Total: ${earned.toLocaleString()} | ⚡ ${d.energy}/${d.max_energy}`,'ok')
+        if(d.streak_bonus > 0){
+          addLog(`🔥 ${d.streak_message}`,'gold')
+        }
+        if(d.streak_days > 0){
+          document.getElementById('streakDays').textContent = d.streak_days + '🔥'
+        }
+        // Check daily limit
+        if(d.daily_points >= 10000){
+          addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
+          stopMining()
+        }
+        // Check energy & daily limit
+        checkMiningAvailability({
+          daily_points: d.daily_points || 0,
+          energy: d.energy || 100,
+          minutes_to_next: d.minutes_to_next || 0
+        })
+      } else if(d.energy_empty){
+        addLog(`⚡ Energy empty! Next block in ${d.minutes_to_next} min.`,'gold')
+        stopMining()
+        updateEnergyUI(d.current_energy, d.max_energy, d.minutes_to_refill)
+      } else if(d.limit_reached){
+        addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
+        stopMining()
+        checkMiningAvailability({daily_points: 10000, energy: d.current_energy || 100})
+      }
+    }catch(e){addLog('⚠️ Mining...','inf')}
+  },5000)
+}
+
+function stopMining(){
+  isMining=false
+  clearInterval(miningInterval)
+  const btn=document.getElementById('mineBtn')
+  btn.textContent='⛏ Start Mining — Earn 2000 HON / Block'
+  btn.className='mine-btn start'
+  document.getElementById('mineStatus').textContent='Stopped'
+  document.getElementById('progressBar').style.width='0%'
+  document.getElementById('hashRate').textContent='0'
+  addLog('⏹ Mining band.','inf')
+}
+
+function addLog(msg,type){
+  const log=document.getElementById('mineLog')
+  const t=new Date().toLocaleTimeString()
+  log.innerHTML+=`<div class="le ${type}">[${t}] ${msg}</div>`
+  log.scrollTop=log.scrollHeight
+}
+
+async function refreshWallet(){
+  if(!user||!user.id)return
+  try{
+    const r=await fetch(`${API}/api/mining/stats/${user.id}`)
+    const d=await r.json()
+    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
+    document.getElementById('walletBal').textContent=d.hon_equivalent||'0.0000'
+    const sendEl=document.getElementById('sendBal')
+    if(sendEl)sendEl.textContent=(d.hon_equivalent||'0')+' HON'
+  }catch(e){console.log('wallet err',e)}
+}
+
+function copyAddr(){
+  if(!walletAddress)return
+  navigator.clipboard.writeText(walletAddress)
+  const el=document.getElementById('walletAddr')
+  el.textContent='✅ Copied!'
+  setTimeout(()=>el.textContent=walletAddress,2000)
+}
+
+async function refreshSend(){
+  document.getElementById('sendBal').textContent=document.getElementById('totalEarned').textContent+' HON'
+  refreshWallet()
+}
+
+async function sendHON(){
+  const to=document.getElementById('sendTo').value.trim()
+  const amt=document.getElementById('sendAmt').value
+  if(!to||!amt)return showSendAlert('Address ani amount bhara!','err')
+  try{
+    const r=await fetch(`${API}/api/wallet/send`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from_user_id:user?.id,to_address:to,amount:amt})})
+    const d=await r.json()
+    if(d.success){showSendAlert(`✅ ${amt} HON pathavle!`,'ok');document.getElementById('sendTo').value='';document.getElementById('sendAmt').value=''}
+    else{showSendAlert(`❌ ${d.error}`,'err')}
+  }catch(e){showSendAlert('Error!','err')}
+}
+
+function showSendAlert(msg,type){
+  const el=document.getElementById('sendAlert')
+  el.textContent=msg;el.className=`send-alert ${type} show`
+  setTimeout(()=>el.classList.remove('show'),5000)
+}
+
+function logout(){
+  localStorage.removeItem('hon_web_token')
+  localStorage.removeItem('hon_web_refresh')
+  user=null;stopMining()
+  document.getElementById('dashboard').classList.remove('active')
+  document.getElementById('authSection').style.display='block'
+  document.getElementById('logoutBtn').style.display='none'
+}
+
+// Init
+window.addEventListener('DOMContentLoaded',async()=>{
+  const authed=await checkAuth()
+  if(authed)initDash()
+  checkNode()
+})
+</script>
+</body>
+</html>

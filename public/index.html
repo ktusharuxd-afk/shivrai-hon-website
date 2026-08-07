@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHIVRAI HON</title>
+<link rel="icon" href="HON coin Fevicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;
+  --gold:#E8A020;
+  --purple:#9945FF;
+  --green:#14F195;
+  --w:rgba(255,255,255,1);
+  --w6:rgba(255,255,255,0.6);
+  --w3:rgba(255,255,255,0.3);
+  --w1:rgba(255,255,255,0.07);
+  --w05:rgba(255,255,255,0.04);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;line-height:1}
+::selection{background:var(--purple);color:#fff}
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold),var(--purple))}
+
+/* ── MESH BG ── */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(140px);will-change:transform}
+.o1{width:700px;height:700px;background:radial-gradient(circle,rgba(153,69,255,.18),transparent 70%);top:-200px;right:-100px;animation:float1 18s ease-in-out infinite}
+.o2{width:500px;height:500px;background:radial-gradient(circle,rgba(20,241,149,.1),transparent 70%);bottom:-100px;left:-100px;animation:float2 22s ease-in-out infinite}
+.o3{width:400px;height:400px;background:radial-gradient(circle,rgba(232,160,32,.09),transparent 70%);top:40%;left:30%;animation:float3 26s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-80px,60px) scale(1.1)}66%{transform:translate(40px,-80px) scale(.9)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(.9)}66%{transform:translate(-40px,60px) scale(1.1)}}
+@keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,40px)}}
+
+
+/* ── 3D CSS COIN ── */
+.coin-scene{display:flex;justify-content:center;align-items:center;position:relative;height:400px;perspective:1000px}
+.coin-outer-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(232,160,32,.2) 0%,rgba(153,69,255,.08) 50%,transparent 70%);animation:glow 4s ease-in-out infinite;pointer-events:none}
+@keyframes glow{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.12);opacity:1}}
+.coin-ring{position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(232,160,32,.25);animation:ring-spin 18s linear infinite}
+.coin-ring::before{content:'';position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 15px var(--gold),0 0 30px var(--gold);transform:translateX(-50%)}
+.coin-ring2{position:absolute;width:340px;height:340px;border-radius:50%;border:1px dashed rgba(232,160,32,.1);animation:ring-spin 30s linear infinite reverse}
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+.coin-3d{width:260px;height:260px;border-radius:50%;position:relative;z-index:2;transform-style:preserve-3d;animation:coin-float 6s ease-in-out infinite}
+@keyframes coin-float{
+  0%{transform:rotateY(-20deg) rotateX(8deg) translateY(0) rotate(-2deg)}
+  25%{transform:rotateY(0deg) rotateX(3deg) translateY(-18px) rotate(0deg)}
+  50%{transform:rotateY(20deg) rotateX(-8deg) translateY(-24px) rotate(2deg)}
+  75%{transform:rotateY(0deg) rotateX(3deg) translateY(-12px) rotate(0deg)}
+  100%{transform:rotateY(-20deg) rotateX(8deg) translateY(0) rotate(-2deg)}
+}
+/* Coin body */
+.coin-body{
+  width:260px;height:260px;border-radius:50%;
+  position:relative;
+  background:
+    radial-gradient(circle at 35% 28%, #FFF5A0 0%, #FFD700 20%, #DAA520 42%, #B8860B 62%, #8B6914 80%, #5C4410 100%);
+  box-shadow:
+    0 0 0 8px #8B6914,
+    0 0 0 10px #DAA520,
+    0 0 0 12px #8B6914,
+    6px 8px 0 12px rgba(0,0,0,.4),
+    0 0 60px rgba(232,160,32,.5),
+    0 0 120px rgba(232,160,32,.2),
+    inset 0 3px 8px rgba(255,255,220,.6),
+    inset 0 -3px 8px rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+/* Coin shine effect */
+.coin-body::before{
+  content:'';position:absolute;
+  width:160px;height:220px;
+  background:linear-gradient(135deg,rgba(255,255,255,.35) 0%,transparent 50%);
+  border-radius:50%;top:-20px;left:-30px;
+  pointer-events:none;
+}
+/* Coin edge highlight */
+.coin-body::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(
+    from 45deg,
+    rgba(255,255,255,.0) 0deg,
+    rgba(255,255,200,.4) 60deg,
+    rgba(255,255,255,.0) 120deg,
+    rgba(0,0,0,.2) 180deg,
+    rgba(255,255,200,.3) 240deg,
+    rgba(255,255,255,.0) 300deg,
+    rgba(0,0,0,.2) 360deg
+  );
+  pointer-events:none;
+}
+.coin-inner{
+  width:208px;height:208px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#FFF0A0 0%,#F0C040 25%,#D4A017 50%,#A07810 70%,#705808 90%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:
+    inset 0 4px 12px rgba(255,255,200,.5),
+    inset 0 -4px 12px rgba(0,0,0,.4),
+    inset 0 0 30px rgba(180,130,0,.3);
+  position:relative;z-index:1;
+}
+.coin-symbol{
+  width:104px;height:104px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#FFE060 0%,#D4A017 40%,#8B6914 75%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.5),
+    inset 0 2px 4px rgba(255,220,80,.5),
+    inset 0 -2px 4px rgba(0,0,0,.4);
+  font-family:"Cabinet Grotesk","DM Sans",sans-serif;
+  font-size:2.8rem;font-weight:900;
+  color:#5C3D00;
+  text-shadow:0 2px 4px rgba(255,200,0,.4),0 -1px 2px rgba(0,0,0,.5);
+  letter-spacing:-.05em;
+}
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr!important;text-align:center}
+  .coin-scene{display:none}
+  .hero-nums{justify-content:center}
+  .hero-ctas{justify-content:center}
+}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.7);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:30px;filter:drop-shadow(0 0 10px rgba(232,160,32,.5))}
+.logo-txt{font-size:.9rem;font-weight:800;letter-spacing:-.02em;color:#fff}
+.logo-txt em{font-style:normal;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-r a{font-size:.78rem;font-weight:500;color:var(--w6);text-decoration:none;padding:7px 13px;border-radius:8px;transition:all .15s}
+.nav-r a:hover{color:#fff;background:var(--w1)}
+.dl-btn{background:linear-gradient(90deg,var(--gold),var(--purple))!important;color:#000!important;font-weight:700!important;border-radius:100px!important;padding:8px 20px!important}
+.dl-btn:hover{opacity:.85!important;transform:translateY(-1px)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;background:none;border:none}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--w6);border-radius:2px;transition:.3s}
+.mob{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(8,8,8,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:16px 24px}
+.mob.on{display:block}
+.mob a{display:block;color:var(--w6);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+.mob a:last-child{border:none;color:var(--gold);font-weight:700}
+
+/* ── HERO ── */
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 40px 60px}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(153,69,255,.35);border-radius:100px;padding:6px 16px;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);background:rgba(153,69,255,.07);margin-bottom:40px;width:fit-content}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.hero-h{font-size:clamp(3.5rem,9vw,9rem);font-weight:900;line-height:.9;letter-spacing:-.05em;margin-bottom:0}
+.hero-h .line{display:block;overflow:hidden}
+.hero-h .word{display:inline-block;will-change:transform}
+.grd{background:linear-gradient(90deg,var(--gold) 0%,var(--purple) 40%,var(--green) 80%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gshift 5s linear infinite}
+@keyframes gshift{0%{background-position:0%}100%{background-position:200%}}
+.hero-body{display:flex;align-items:flex-end;justify-content:space-between;margin-top:40px;gap:40px;flex-wrap:wrap}
+.hero-desc{font-size:1.05rem;color:var(--w6);line-height:1.7;max-width:420px;font-weight:300}
+.hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:20px}
+.hero-ctas{display:flex;gap:12px}
+.btn-p{padding:14px 32px;background:linear-gradient(90deg,var(--gold),var(--purple));color:#000;font-weight:700;font-size:.88rem;border-radius:100px;text-decoration:none;transition:.2s;letter-spacing:-.01em}
+.btn-p:hover{transform:translateY(-2px);opacity:.9}
+.btn-s{padding:14px 32px;border:1px solid rgba(255,255,255,.18);color:#fff;font-weight:500;font-size:.88rem;border-radius:100px;text-decoration:none;transition:.2s}
+.btn-s:hover{border-color:rgba(255,255,255,.4)}
+.hero-nums{display:flex;gap:32px}
+.hnum .n{font-size:2rem;font-weight:800;letter-spacing:-.04em;line-height:1}
+.hnum .n.g{color:var(--gold)}
+.hnum .n.p{color:var(--purple)}
+.hnum .n.gr{color:var(--green)}
+.hnum .l{font-size:.62rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+
+/* ── DIVIDER ── */
+.hdiv{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);position:relative;z-index:1}
+
+/* ── TICKER ── */
+.ticker{position:relative;z-index:1;height:40px;overflow:hidden;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);display:flex;align-items:center}
+.tk-track{display:flex;animation:tk 25s linear infinite;white-space:nowrap}
+.tk-i{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-size:.7rem;color:var(--w3);border-right:1px solid rgba(255,255,255,.05)}
+.tk-v{font-weight:700;font-size:.72rem}
+.tg{color:var(--gold)}.tp{color:var(--purple)}.tgr{color:var(--green)}
+@keyframes tk{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── SECTION BASE ── */
+.sec{position:relative;z-index:1;padding:120px 40px}
+.si{max-width:1200px;margin:0 auto}
+.ey{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;display:block}
+.sh{font-size:clamp(2.2rem,5vw,4.5rem);font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:20px}
+.sd{font-size:.95rem;color:var(--w6);line-height:1.75;font-weight:300;max-width:460px}
+
+/* ── FEATURES GRID ── */
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:20px;overflow:hidden;margin-top:72px}
+.fc{background:var(--bg);padding:40px 36px;transition:background .25s;position:relative;overflow:hidden}
+.fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);opacity:0;transition:.25s}
+.fc:hover{background:rgba(255,255,255,.03)}
+.fc:hover::after{opacity:1}
+.fn{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:28px}
+.fc h3{font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:12px;line-height:1.2}
+.fc p{font-size:.82rem;color:var(--w6);line-height:1.75;font-weight:300;margin-bottom:24px}
+.ftag{display:inline-block;font-size:.65rem;font-weight:600;padding:4px 12px;border-radius:100px;border:1px solid;letter-spacing:.02em}
+.ftg{color:var(--gold);border-color:rgba(232,160,32,.3);background:rgba(232,160,32,.06)}
+.ftp{color:var(--purple);border-color:rgba(153,69,255,.3);background:rgba(153,69,255,.06)}
+.ftgr{color:var(--green);border-color:rgba(20,241,149,.3);background:rgba(20,241,149,.06)}
+
+/* ── STATS ── */
+.stbar{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)}
+.stg{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.st{padding:52px 40px;border-right:1px solid rgba(255,255,255,.06);text-align:center}
+.st:last-child{border:none}
+.stn{font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1;background:linear-gradient(135deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stl{font-size:.62rem;color:var(--w3);text-transform:uppercase;letter-spacing:.12em;margin-top:12px}
+
+/* ── HOW ── */
+.hg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:72px}
+.hc{padding:40px 36px;border:1px solid rgba(255,255,255,.07);border-radius:16px;transition:.25s;position:relative;overflow:hidden}
+.hc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--purple),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.hc:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.02)}
+.hc:hover::before{transform:scaleX(1)}
+.hcn{font-size:4rem;font-weight:800;color:rgba(255,255,255,.05);letter-spacing:-.06em;line-height:1;margin-bottom:24px}
+.hc h3{font-size:.95rem;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.hc p{font-size:.8rem;color:var(--w6);line-height:1.75;font-weight:300;margin-bottom:24px}
+.hl{font-size:.78rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.hl:hover{gap:12px}
+.hl.g{color:var(--gold)}.hl.p{color:var(--purple)}.hl.gr{color:var(--green)}
+
+/* ── HORIZONTAL SCROLL ECOSYSTEM ── */
+.eco-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:8px;margin-top:72px;cursor:grab}
+.eco-wrap::-webkit-scrollbar{display:none}
+.eco-wrap.dragging{cursor:grabbing}
+.eco-track{display:flex;gap:14px;width:max-content;padding:4px}
+.ec{display:flex;flex-direction:column;width:260px;padding:28px;border:1px solid rgba(255,255,255,.07);border-radius:16px;text-decoration:none;transition:.25s;flex-shrink:0}
+.ec:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.03);transform:translateY(-4px)}
+.ec-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:20px;flex-shrink:0}
+.ic-g{background:rgba(232,160,32,.1)}.ic-p{background:rgba(153,69,255,.1)}.ic-gr{background:rgba(20,241,149,.1)}.ic-w{background:rgba(255,255,255,.07)}
+.ec h3{font-size:.88rem;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:6px}
+.ec p{font-size:.76rem;color:var(--w3);font-weight:300;line-height:1.6;margin-bottom:20px;flex:1}
+.ec-arr{font-size:.78rem;font-weight:600;color:var(--w3);transition:.2s}
+.ec:hover .ec-arr{color:#fff}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:72px 40px 40px}
+.fi{max-width:1200px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fb p{font-size:.8rem;color:var(--w3);margin-top:14px;line-height:1.8;font-weight:300;max-width:200px}
+.fcol h4{font-size:.6rem;text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--w3);margin-bottom:20px}
+.fcol a{display:block;font-size:.8rem;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:12px;transition:.15s;font-weight:300}
+.fcol a:hover{color:#fff}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;font-size:.7rem;color:var(--w3);flex-wrap:wrap;gap:12px}
+.hpill{font-size:.7rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;border:1px solid rgba(153,69,255,.25);padding:5px 14px;border-radius:100px}
+
+/* ── BOTTOM NAV ── */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:499;background:rgba(8,8,8,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.07);padding:10px 0 calc(10px + env(safe-area-inset-bottom))}
+.bni{display:flex;justify-content:space-around}
+.bna{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--w3);font-size:.54rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;transition:.15s}
+.bna.on,.bna:hover{color:var(--gold)}
+.bico{font-size:1.2rem}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-r a:not(.dl-btn){display:none}
+  .hbg{display:flex}
+  .hero-h{font-size:3.8rem}
+  #hero{padding:80px 20px 60px}
+  .hero-body{flex-direction:column;align-items:flex-start}
+  .hero-actions{align-items:flex-start}
+  .hero-nums{gap:24px}
+  .sec{padding:80px 20px}
+  .fg,.hg,.ft{grid-template-columns:1fr}
+  .stg{grid-template-columns:repeat(2,1fr)}
+  .bnav{display:block}
+  body{padding-bottom:72px}
+  .eco-track{padding:4px 4px 4px 20px}
+}
+@media(max-width:480px){
+  .hero-h{font-size:3rem}
+  .stg{grid-template-columns:1fr}
+  .hnum .n{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<div class="mesh">
+  <div class="mesh-orb o1"></div>
+  <div class="mesh-orb o2"></div>
+  <div class="mesh-orb o3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <img src="HON coin logo.svg" alt="SHIVRAI HON" style="height:38px;filter:drop-shadow(0 0 12px rgba(232,160,32,.5))">
+  </a>
+  <div class="nav-r">
+    <a href="explorer.html">Explorer</a>
+    <a href="mining-dashboard.html">⛏ Mine</a>
+    <a href="help.html">Help</a>
+    <a href="mining-dashboard.html" class="dl-btn">⛏ Mine Free</a>
+  </div>
+  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob" id="mob">
+  <a href="explorer.html" onclick="toggleMob()">🔍 Explorer</a>
+  <a href="mining-dashboard.html" onclick="toggleMob()">⛏ Mine HON</a>
+  <a style="opacity:.4;color:var(--w3)">🔄 Convert HON ↔ wHON <span style="font-size:.65rem;color:var(--purple);font-weight:700">Coming Soon</span></a>
+  <a href="help.html" onclick="toggleMob()">❓ Help</a>
+  <a href="mining-dashboard.html" onclick="toggleMob()">⛏ Start Mining Free</a>
+</div>
+
+<!-- HERO -->
+<section id="hero" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;min-height:100vh;padding:100px 40px 80px">
+  <div>
+    <div class="hero-tag"><span class="dot"></span> Mainnet Live</div>
+    <h1 class="hero-h">
+      <span class="line"><span class="word">Mine it.</span></span>
+      <span class="line"><span class="word">Hold it.</span></span>
+      <span class="line"><span class="word grd">Rule it.</span></span>
+    </h1>
+    <p class="hero-desc" style="margin-top:32px">SHIVRAI HON is a fully independent digital currency. Every coin is mined — not assigned. Start earning from your browser, and bridge to Polygon via wHON.</p>
+    <div class="hero-ctas" style="margin-top:32px">
+      <a href="mining-dashboard.html" class="btn-p">⛏ Start Mining Free</a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank" class="btn-s">Read Whitepaper</a>
+    </div>
+    <div class="hero-nums" style="margin-top:40px">
+      <div class="hnum"><div class="n g" id="hBlk">—</div><div class="l">Blocks Mined</div></div>
+      <div class="hnum"><div class="n p">2000</div><div class="l">HON / Block</div></div>
+      <div class="hnum"><div class="n gr">∞</div><div class="l">Permanent</div></div>
+    </div>
+  </div>
+  <div class="coin-scene">
+    <div class="coin-outer-glow"></div>
+    <div class="coin-ring"></div>
+    <div class="coin-3d">
+      <div class="coin-face">
+        <div class="coin-face-inner">
+          <img src="Final Hon coin-Transparant.png" alt="SHIVRAI HON Coin" class="coin-logo">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tk-track">
+    <div class="tk-i"><span>Block Reward</span><span class="tk-v tg">2000 HON</span></div>
+    <div class="tk-i"><span>Algorithm</span><span class="tk-v tp">HONPoW</span></div>
+    <div class="tk-i"><span>Block Time</span><span class="tk-v tgr">5 min</span></div>
+    <div class="tk-i"><span>Pre-mine</span><span class="tk-v" style="color:#fff">None</span></div>
+    <div class="tk-i"><span>Supply</span><span class="tk-v" style="color:#fff">Unlimited</span></div>
+    <div class="tk-i"><span>Network</span><span class="tk-v tgr" id="ns">Live</span></div>
+    <div class="tk-i"><span>Block</span><span class="tk-v tg" id="tb">—</span></div>
+    <div class="tk-i"><span>Block Reward</span><span class="tk-v tg">2000 HON</span></div>
+    <div class="tk-i"><span>Algorithm</span><span class="tk-v tp">HONPoW</span></div>
+    <div class="tk-i"><span>Block Time</span><span class="tk-v tgr">5 min</span></div>
+    <div class="tk-i"><span>Pre-mine</span><span class="tk-v" style="color:#fff">None</span></div>
+    <div class="tk-i"><span>Supply</span><span class="tk-v" style="color:#fff">Unlimited</span></div>
+    <div class="tk-i"><span>Network</span><span class="tk-v tgr">Live</span></div>
+    <div class="tk-i"><span>Block</span><span class="tk-v tg">—</span></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="sec">
+  <div class="si">
+    <span class="ey">Why HON</span>
+    <h2 class="sh">Built different.<br>Owned by no one.</h2>
+    <div class="fg">
+      <div class="fc"><div class="fn">01</div><h3>Fair Mining</h3><p>Every HON was earned through Proof of Work. Zero pre-mine, zero team allocation, zero insider advantage — ever.</p><span class="ftag ftg">HONPoW</span></div>
+      <div class="fc"><div class="fn">02</div><h3>Permanent Rewards</h3><p>2000 HON per block — forever. No halving means miners always have incentive to secure the network.</p><span class="ftag ftgr">2000 / Block</span></div>
+      <div class="fc"><div class="fn">03</div><h3>Mine in Browser</h3><p>No downloads. No setup. Open the site, click Start Mining, earn HON from your browser instantly.</p><span class="ftag ftp">Zero Setup</span></div>
+      <div class="fc"><div class="fn">04</div><h3>Built-in Wallet</h3><p>Your HON wallet is auto-created on register. Send and receive HON on-chain, from anywhere.</p><span class="ftag ftg">Non-Custodial</span></div>
+      <div class="fc"><div class="fn">05</div><h3>Sovereign Design</h3><p>No central authority. No foundation wallet. Every transaction secured by cryptographic proof.</p><span class="ftag ftp">Decentralized</span></div>
+      <div class="fc"><div class="fn">06</div><h3>wHON Bridge</h3><p>Convert HON to wHON on Polygon. Gasless via NEXUS relayer — no POL needed. Trade on Uniswap coming soon.</p><span class="ftag ftp">Coming Soon</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stbar">
+  <div class="stg">
+    <div class="st"><div class="stn" id="stBlk" data-target="0">—</div><div class="stl">Blocks Mined</div></div>
+    <div class="st"><div class="stn">2,000</div><div class="stl">HON Per Block</div></div>
+    <div class="st"><div class="stn">0</div><div class="stl">Pre-mine</div></div>
+    <div class="st"><div class="stn">∞</div><div class="stl">Reward Duration</div></div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section class="sec">
+  <div class="si">
+    <span class="ey">Get Started</span>
+    <h2 class="sh">Mine HON<br>in 3 steps.</h2>
+    <p class="sd">No downloads. No setup. No technical knowledge. Just open, click, earn.</p>
+    <div class="hg">
+      <div class="hc"><div class="hcn">01</div><h3>Create Account</h3><p>Register with your email. A HON wallet address is auto-generated and secured on-chain.</p><a href="mining-dashboard.html" class="hl g">Get started →</a></div>
+      <div class="hc"><div class="hcn">02</div><h3>Click Mine</h3><p>One click starts mining. Your browser connects to the HON network and earns rewards live.</p><a href="mining-dashboard.html" class="hl p">Start now →</a></div>
+      <div class="hc"><div class="hcn">03</div><h3>Earn 2000 HON</h3><p>Every block earns 2000 HON — permanently. Check balance, send HON to anyone, anywhere.</p><a href="mining-dashboard.html" class="hl gr">View wallet →</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="hdiv"></div>
+
+<!-- ECOSYSTEM (horizontal scroll) -->
+<section class="sec">
+  <div class="si">
+    <span class="ey">Ecosystem</span>
+    <h2 class="sh">Everything<br>in one place.</h2>
+  </div>
+  <div class="eco-wrap" id="ecoWrap">
+    <div class="eco-track">
+      <a href="mining-dashboard.html" class="ec"><div class="ec-ico ic-g">⛏️</div><h3>Web Mining</h3><p>Mine HON in your browser — free, no setup required</p><span class="ec-arr">↗</span></a>
+      <a href="explorer.html" class="ec"><div class="ec-ico ic-p">🔍</div><h3>Block Explorer</h3><p>Real-time blockchain data, blocks and transactions</p><span class="ec-arr">↗</span></a>
+
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank" class="ec"><div class="ec-ico ic-w">📄</div><h3>Whitepaper v3</h3><p>Technical documentation and protocol specs</p><span class="ec-arr">↗</span></a>
+      <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank" class="ec"><div class="ec-ico ic-w">💻</div><h3>Source Code</h3><p>Open source — verify everything yourself on GitHub</p><span class="ec-arr">↗</span></a>
+      <div class="ec" style="opacity:.5;cursor:default;border-style:dashed"><div class="ec-ico ic-p">🔄</div><h3>wHON Bridge <span style="font-size:.65rem;color:var(--purple);font-weight:700;display:inline-block;padding:2px 8px;border:1px solid rgba(153,69,255,.3);border-radius:50px;background:rgba(153,69,255,.08)">Soon</span></h3><p>Convert HON ↔ wHON on Polygon. Gasless via NEXUS relayer</p><span class="ec-arr" style="color:var(--purple)">🔜</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div class="fb">
+        <div class="logo-txt">SHIVRAI <em>HON</em></div>
+        <p>Real mining. Real coins.<br>No one controls it.<br><br>Inspired by Chhatrapati Shivaji Maharaj</p>
+      </div>
+      <div class="fcol">
+        <h4>Network</h4>
+        <a href="explorer.html">Block Explorer</a>
+        <a href="mining-dashboard.html">Mine HON</a>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core" target="_blank">Source Code</a>
+      </div>
+      <div class="fcol">
+        <h4>Resources</h4>
+        <a href="https://github.com/ktusharuxd-afk/shivrai-hon-core/blob/master/SHIVRAI_HON_Whitepaper_v3.pdf" target="_blank">Whitepaper</a>
+
+        <a href="help.html">Help Centre</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p>SHIVRAI HON · Decentralized Cryptocurrency · MIT License · © 2026</p>
+      <span class="hpill">HON</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="bni">
+    <a href="index.html" class="bna on"><span class="bico">🏠</span>Home</a>
+    <a href="mining-dashboard.html" class="bna"><span class="bico">⛏️</span>Mine</a>
+    <a href="explorer.html" class="bna"><span class="bico">🔍</span>Explorer</a>
+    <a href="#" class="bna" style="opacity:.4"><span class="bico">🔄</span>Convert</a>
+    <a href="help.html" class="bna"><span class="bico">❓</span>Help</a>
+  </div>
+</nav>
+
+<script>
+gsap.registerPlugin(ScrollTrigger)
+
+function toggleMob(){document.getElementById('mob').classList.toggle('on')}
+
+// Hero text reveal
+gsap.from('.word',{
+  y:80,opacity:0,duration:1,stagger:.12,ease:'power3.out',delay:.2
+})
+gsap.from('.hero-tag',{y:20,opacity:0,duration:.8,ease:'power3.out'})
+gsap.from('.hero-desc',{y:30,opacity:0,duration:1,delay:.6,ease:'power3.out'})
+gsap.from('.hero-ctas',{y:20,opacity:0,duration:.8,delay:.8,ease:'power3.out'})
+gsap.from('.hero-nums',{y:20,opacity:0,duration:.8,delay:1,ease:'power3.out'})
+
+// Section reveals
+gsap.utils.toArray('.sec .ey,.sec .sh,.sec .sd').forEach(el=>{
+  gsap.from(el,{
+    y:40,opacity:0,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%',once:true}
+  })
+})
+
+gsap.utils.toArray('.fc,.hc,.ec').forEach((el,i)=>{
+  gsap.from(el,{
+    y:50,opacity:0,duration:.8,delay:i*.06,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%',once:true}
+  })
+})
+
+gsap.utils.toArray('.st').forEach((el,i)=>{
+  gsap.from(el,{
+    y:30,opacity:0,duration:.7,delay:i*.1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%',once:true}
+  })
+})
+
+// Draggable eco scroll
+const wrap=document.getElementById('ecoWrap')
+let isDrag=false,startX,scrollLeft
+wrap.addEventListener('mousedown',e=>{isDrag=true;startX=e.pageX-wrap.offsetLeft;scrollLeft=wrap.scrollLeft;wrap.classList.add('dragging')})
+wrap.addEventListener('mouseleave',()=>{isDrag=false;wrap.classList.remove('dragging')})
+wrap.addEventListener('mouseup',()=>{isDrag=false;wrap.classList.remove('dragging')})
+wrap.addEventListener('mousemove',e=>{if(!isDrag)return;e.preventDefault();const x=e.pageX-wrap.offsetLeft;wrap.scrollLeft=scrollLeft-(x-startX)*1.5})
+
+// Live stats
+async function loadStats(){
+  try{
+    const r=await fetch('https://hon-secure-server.onrender.com/api/node/status')
+    const d=await r.json()
+    if(d.online){
+      const b=(d.blocks||0).toLocaleString()
+      document.getElementById('hBlk').textContent=b
+      document.getElementById('tb').textContent=b
+      document.getElementById('stBlk').textContent=b
+      document.getElementById('ns').textContent='● Live'
+    }
+  }catch(e){}
+}
+loadStats()
+setInterval(loadStats,30000)
+</script>
+</body>
+</html>
