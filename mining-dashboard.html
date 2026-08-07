@@ -117,6 +117,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .log-box{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:16px;height:160px;overflow-y:auto;font-size:.75rem;font-family:monospace;color:var(--w3);margin-top:16px}
 .log-box .le{margin-bottom:4px;line-height:1.5}
 .le.ok{color:var(--green)}.le.gold{color:var(--gold)}.le.inf{color:var(--w6)}
+.mining-block-wrap{display:none;margin-bottom:16px}
+.block-anim{background:rgba(255,255,255,.04);border:1px solid rgba(232,160,32,.2);border-radius:14px;padding:16px;position:relative;overflow:hidden}
+.block-anim::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,160,32,.08),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{to{left:100%}}
+.block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.block-num{font-size:.72rem;font-weight:700;color:var(--gold);letter-spacing:.08em}
+.block-status{font-size:.68rem;padding:3px 10px;border-radius:50px}
+.block-status.mining{background:rgba(232,160,32,.1);color:var(--gold);border:1px solid rgba(232,160,32,.2)}
+.block-status.mined{background:rgba(20,241,149,.1);color:var(--green);border:1px solid rgba(20,241,149,.2)}
+.block-hash-txt{font-family:monospace;font-size:.68rem;color:var(--w3);margin-bottom:10px;word-break:break-all}
+.block-prog{background:rgba(255,255,255,.06);border-radius:100px;height:6px;margin-bottom:10px;overflow:hidden}
+.block-prog-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--purple));border-radius:100px;width:0%;transition:width .3s}
+.block-rewards{display:none;flex-wrap:wrap;gap:8px}
+.bred{background:rgba(20,241,149,.08);border:1px solid rgba(20,241,149,.15);border-radius:8px;padding:5px 12px;font-size:.75rem;font-weight:700;color:var(--green)}
+.bpts{background:rgba(232,160,32,.08);border:1px solid rgba(232,160,32,.15);border-radius:8px;padding:5px 12px;font-size:.75rem;font-weight:700;color:var(--gold)}
+.bhon{background:rgba(153,69,255,.08);border:1px solid rgba(153,69,255,.15);border-radius:8px;padding:5px 12px;font-size:.75rem;font-weight:700;color:var(--purple)}
 
 /* WALLET */
 .addr-box{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-family:monospace;font-size:.78rem;color:var(--w6);word-break:break-all;cursor:pointer;transition:all .2s;margin-bottom:16px}
@@ -292,6 +308,17 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
         <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
         <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
         <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
+        <div class="mining-block-wrap" id="miningBlockWrap">
+          <div class="block-anim">
+            <div class="block-header">
+              <span class="block-num">🧱 Block <span id="blockNum">#—</span></span>
+              <span class="block-status mining" id="blockStatusBadge">⛏ Mining...</span>
+            </div>
+            <div class="block-hash-txt" id="blockHashTxt">Hash: calculating...</div>
+            <div class="block-prog"><div class="block-prog-bar" id="blockProgBar"></div></div>
+            <div class="block-rewards" id="blockRewards"></div>
+          </div>
+        </div>
         <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click Start Mining to begin!</div></div>
       </div>
     </div>
@@ -616,6 +643,42 @@ function updateEnergyUI(energy, maxEnergy, minsToNext){
   }
 }
 
+let blockProgInterval = null
+
+function showMiningBlock(height){
+  const w = document.getElementById('miningBlockWrap')
+  if(w) w.style.display = 'block'
+  document.getElementById('blockNum').textContent = '#' + (height || '—')
+  document.getElementById('blockStatusBadge').className = 'block-status mining'
+  document.getElementById('blockStatusBadge').textContent = '⛏ Mining...'
+  document.getElementById('blockHashTxt').textContent = 'Hash: calculating...'
+  document.getElementById('blockRewards').style.display = 'none'
+  document.getElementById('blockProgBar').style.width = '0%'
+  let prog = 0
+  clearInterval(blockProgInterval)
+  blockProgInterval = setInterval(()=>{
+    prog += Math.random() * 12
+    if(prog > 95) prog = 95
+    document.getElementById('blockProgBar').style.width = prog + '%'
+    const chars = '0123456789abcdef'
+    let h = '0000'
+    for(let i=0;i<60;i++) h += chars[Math.floor(Math.random()*chars.length)]
+    document.getElementById('blockHashTxt').textContent = 'Hash: ' + h.substring(0,40) + '...'
+  }, 200)
+}
+
+function showMinedBlock(hash, pts, hon, bonus){
+  clearInterval(blockProgInterval)
+  document.getElementById('blockProgBar').style.width = '100%'
+  document.getElementById('blockStatusBadge').className = 'block-status mined'
+  document.getElementById('blockStatusBadge').textContent = '✅ Mined!'
+  document.getElementById('blockHashTxt').textContent = 'Hash: ' + (hash||'').substring(0,40) + '...'
+  const r = document.getElementById('blockRewards')
+  r.style.display = 'flex'
+  r.innerHTML = '<span class="bred">✅ Block Mined!</span><span class="bpts">+'+pts+' Points</span><span class="bhon">+'+hon+' HON</span>' + (bonus>0 ? '<span class="bpts">🔥 +'+bonus+' Streak!</span>' : '')
+  setTimeout(()=>{ if(isMining) showMiningBlock() }, 3000)
+}
+
 function toggleMining(){
   if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
   isMining?stopMining():startMining()
@@ -628,6 +691,7 @@ function startMining(){
   btn.className='mine-btn stop'
   document.getElementById('mineStatus').textContent='Mining...'
   addLog('⛏️ Mining started!','gold')
+  showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
     const prog=Math.random()*100
@@ -649,6 +713,7 @@ function startMining(){
         updateEnergyUI(d.energy, d.max_energy, d.minutes_to_next)
         refreshWallet()
         addLog(`✅ +${d.points_earned || 2000} pts | Total: ${earned.toLocaleString()} | ⚡ ${d.energy}/${d.max_energy}`,'ok')
+        showMinedBlock(d.block_hash, d.points_earned||2000, d.hon_equivalent||'0', d.streak_bonus||0)
         if(d.streak_bonus > 0){
           addLog(`🔥 ${d.streak_message}`,'gold')
         }
@@ -689,6 +754,8 @@ function stopMining(){
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
   addLog('⏹ Mining stopped.','inf')
+  const bw=document.getElementById('miningBlockWrap'); if(bw) bw.style.display='none'
+  clearInterval(blockProgInterval)
 }
 
 function addLog(msg,type){
