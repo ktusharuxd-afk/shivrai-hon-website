@@ -117,27 +117,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .log-box .le{margin-bottom:4px;line-height:1.5}
 .le.ok{color:var(--green)}.le.gold{color:var(--gold)}.le.inf{color:var(--w6)}
 
-/* ── MINING BLOCK ANIMATION ── */
-.mining-block-wrap{display:none;margin-bottom:16px}
-.mining-block-wrap.show{display:block}
-.block-anim{background:rgba(255,255,255,.04);border:1px solid rgba(232,160,32,.2);border-radius:14px;padding:16px;position:relative;overflow:hidden}
-.block-anim::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,160,32,.08),transparent);animation:shimmer 1.5s infinite}
-@keyframes shimmer{to{left:100%}}
-.block-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.block-num{font-size:.72rem;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
-.block-status{font-size:.68rem;padding:3px 10px;border-radius:50px}
-.block-status.mining{background:rgba(232,160,32,.1);color:var(--gold);border:1px solid rgba(232,160,32,.2)}
-.block-status.mined{background:rgba(20,241,149,.1);color:var(--green);border:1px solid rgba(20,241,149,.2)}
-.block-hash{font-family:monospace;font-size:.72rem;color:var(--w3);margin-bottom:12px;word-break:break-all}
-.block-progress{background:rgba(255,255,255,.06);border-radius:100px;height:6px;margin-bottom:12px;overflow:hidden}
-.block-progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--purple));border-radius:100px;width:0%;transition:width .3s}
-.block-reward-badge{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.bred{background:rgba(20,241,149,.08);border:1px solid rgba(20,241,149,.15);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;color:var(--green)}
-.bpts{background:rgba(232,160,32,.08);border:1px solid rgba(232,160,32,.15);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;color:var(--gold)}
-.bhon{background:rgba(153,69,255,.08);border:1px solid rgba(153,69,255,.15);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;color:var(--purple)}
-.mined-celebrate{text-align:center;padding:8px 0;font-size:1.1rem;animation:pop .5s ease}
-@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
-
 /* WALLET */
 .addr-box{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-family:monospace;font-size:.78rem;color:var(--w6);word-break:break-all;cursor:pointer;transition:all .2s;margin-bottom:16px}
 .addr-box:hover{border-color:var(--gold);color:var(--gold)}
@@ -312,22 +291,6 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
         <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
         <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
         <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
-        <!-- Animated Mining Block -->
-        <div class="mining-block-wrap" id="miningBlockWrap">
-          <div class="block-anim" id="miningBlock">
-            <div class="block-header">
-              <span class="block-num">🧱 Block <span id="blockNum">#—</span></span>
-              <span class="block-status mining" id="blockStatusBadge">⛏ Mining...</span>
-            </div>
-            <div class="block-hash" id="blockHash">Hash: calculating...</div>
-            <div class="block-progress"><div class="block-progress-bar" id="blockProgressBar"></div></div>
-            <div class="block-reward-badge" id="blockRewards" style="display:none">
-              <span class="bred">✅ Block Mined!</span>
-              <span class="bpts">+2000 Points</span>
-              <span class="bhon">+1.0000 HON</span>
-            </div>
-          </div>
-        </div>
         <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click "Start Mining" to begin!</div></div>
       </div>
     </div>
@@ -538,27 +501,36 @@ async function getWallet(){
   }catch(e){}
 }
 
+let nodeOnline = false
+
 async function checkNode(){
   try{
     const r=await fetch(`${API}/api/node/status`)
     const d=await r.json()
     const badge=document.getElementById('nodeStatusBadge')
     const btn=document.getElementById('mineBtn')
+    
     if(d.online){
       badge.className='node-status ns-on'
       badge.innerHTML='<span class="ns-dot"></span> Web Mining Live'
       document.getElementById('netBlock').textContent=(d.blocks||0).toLocaleString()
+      
       // Re-enable button if was disabled due to offline
-      if(btn && btn.textContent.includes('Offline')){
-        btn.disabled=false
-        btn.className='mine-btn start'
-        btn.textContent='⛏ Start Mining — Earn Points'
+      if(!nodeOnline && btn){
+        nodeOnline = true
+        if(!isMining){
+          btn.disabled=false
+          btn.className='mine-btn start'
+          btn.textContent='⛏ Start Mining — Earn Points'
+          document.getElementById('mineStatus').textContent='Ready'
+        }
       }
+      nodeOnline = true
     }else{
+      nodeOnline = false
       badge.className='node-status ns-off'
       badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
-      // Disable mining button
-      if(btn && !btn.textContent.includes('Limit')){
+      if(btn){
         btn.disabled=true
         btn.className='mine-btn stop'
         btn.textContent='🔴 Web Mining Offline — Node Down'
@@ -569,12 +541,14 @@ async function checkNode(){
       }
     }
   }catch(e){
-    // Network error - show offline
+    nodeOnline = false
     const badge=document.getElementById('nodeStatusBadge')
-    badge.className='node-status ns-off'
-    badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+    if(badge){
+      badge.className='node-status ns-off'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+    }
     const btn=document.getElementById('mineBtn')
-    if(btn && !btn.textContent.includes('Limit')){
+    if(btn){
       btn.disabled=true
       btn.className='mine-btn stop'
       btn.textContent='🔴 Web Mining Offline — Node Down'
@@ -651,57 +625,6 @@ function updateEnergyUI(energy, maxEnergy, minsToNext){
   }
 }
 
-// Animated block functions
-let blockProgressInterval = null
-
-function showMiningBlock(blockHeight){
-  document.getElementById('miningBlockWrap').classList.add('show')
-  document.getElementById('blockNum').textContent = '#' + (blockHeight || '—')
-  document.getElementById('blockStatusBadge').className = 'block-status mining'
-  document.getElementById('blockStatusBadge').textContent = '⛏ Mining...'
-  document.getElementById('blockHash').textContent = 'Hash: calculating...'
-  document.getElementById('blockRewards').style.display = 'none'
-  document.getElementById('blockProgressBar').style.width = '0%'
-  
-  // Animate progress
-  let progress = 0
-  blockProgressInterval = setInterval(()=>{
-    progress += Math.random() * 15
-    if(progress > 95) progress = 95
-    document.getElementById('blockProgressBar').style.width = progress + '%'
-    // Animate hash
-    const chars = '0123456789abcdef'
-    let fakeHash = '0000'
-    for(let i=0;i<60;i++) fakeHash += chars[Math.floor(Math.random()*chars.length)]
-    document.getElementById('blockHash').textContent = 'Hash: ' + fakeHash.substring(0,32) + '...'
-  }, 200)
-}
-
-function showMinedBlock(blockHash, points, honEquiv, streakBonus){
-  clearInterval(blockProgressInterval)
-  document.getElementById('blockProgressBar').style.width = '100%'
-  document.getElementById('blockStatusBadge').className = 'block-status mined'
-  document.getElementById('blockStatusBadge').textContent = '✅ Mined!'
-  document.getElementById('blockHash').textContent = 'Hash: ' + (blockHash || '').substring(0,32) + '...'
-  
-  const rewards = document.getElementById('blockRewards')
-  rewards.style.display = 'flex'
-  rewards.innerHTML = `
-    <span class="bred">✅ Block Mined!</span>
-    <span class="bpts">+${points} Points</span>
-    <span class="bhon">+${honEquiv} HON</span>
-    ${streakBonus > 0 ? '<span class="bpts">🔥 +'+streakBonus+' Streak Bonus!</span>' : ''}
-  `
-  
-  // Reset after 3 sec
-  setTimeout(()=>{
-    document.getElementById('blockStatusBadge').className = 'block-status mining'
-    document.getElementById('blockStatusBadge').textContent = '⛏ Mining...'
-    document.getElementById('blockRewards').style.display = 'none'
-    document.getElementById('blockProgressBar').style.width = '0%'
-  }, 3000)
-}
-
 function toggleMining(){
   if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
   isMining?stopMining():startMining()
@@ -741,10 +664,6 @@ function startMining(){
         if(d.streak_days > 0){
           document.getElementById('streakDays').textContent = d.streak_days + '🔥'
         }
-        // Show animated block
-        showMinedBlock(d.block_hash, d.points_earned || 2000, d.hon_equivalent || '0', d.streak_bonus || 0)
-        // Show next block mining
-        setTimeout(()=>{ if(isMining) showMiningBlock(parseInt(document.getElementById('netBlock').textContent.replace(',',''))+1) }, 1000)
         // Check daily limit
         if(d.daily_points >= 10000){
           addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
@@ -772,14 +691,12 @@ function startMining(){
 function stopMining(){
   isMining=false
   clearInterval(miningInterval)
-  clearInterval(blockProgressInterval)
   const btn=document.getElementById('mineBtn')
-  btn.textContent='⛏ Start Mining — Earn Points'
+  btn.textContent='⛏ Start Mining — Earn 2000 HON / Block'
   btn.className='mine-btn start'
   document.getElementById('mineStatus').textContent='Stopped'
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
-  document.getElementById('miningBlockWrap').classList.remove('show')
   addLog('⏹ Mining band.','inf')
 }
 
