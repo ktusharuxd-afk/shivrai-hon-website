@@ -184,6 +184,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <a href="explorer.html">Explorer</a>
     <a href="mining-dashboard.html" class="on">⛏ Mine HON</a>
     <a href="help.html">Help</a>
+    <button id="logoutBtn" onclick="logout()" style="display:none;background:rgba(255,68,68,.15);color:#FF4444;border:1px solid rgba(255,68,68,.3);padding:7px 16px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;transition:all .2s" onmouseover="this.style.background='rgba(255,68,68,.25)'" onmouseout="this.style.background='rgba(255,68,68,.15)'">Logout</button>
   </div>
   <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
 </nav>
@@ -261,7 +262,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0</div><div class="stat-lbl">Total Points</div></div>
       <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">0.0000</div><div class="stat-lbl">HON Equivalent</div></div>
       <div class="stat"><div class="stat-ico">📅</div><div class="stat-val green" id="dailyPoints">0/10000</div><div class="stat-lbl">Daily Points</div></div>
-      <div class="stat"><div class="stat-ico">🌐</div><div class="stat-val" id="netBlock">—</div><div class="stat-lbl">Network Block</div></div>
+      <div class="stat"><div class="stat-ico">🔥</div><div class="stat-val" id="streakDays">0</div><div class="stat-lbl">Day Streak</div></div>
     </div>
 
     <!-- TABS -->
@@ -318,10 +319,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       </div>
     </div>
 
-    <!-- LOGOUT -->
-    <div style="text-align:center;margin-top:24px">
-      <button onclick="logout()" style="background:none;border:1px solid rgba(255,255,255,.1);color:var(--w3);padding:8px 24px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem;transition:all .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--w3)'">Logout</button>
-    </div>
+
   </div>
 </div>
 
@@ -482,6 +480,7 @@ async function initDash(){
   document.getElementById('authSection').style.display='none'
   document.getElementById('dashboard').classList.add('active')
   document.getElementById('walletEmail').textContent=user?.email||'—'
+  document.getElementById('logoutBtn').style.display='block'
   await getWallet()
   loadStats()
   loadUserStats()
@@ -507,15 +506,43 @@ async function checkNode(){
     const r=await fetch(`${API}/api/node/status`)
     const d=await r.json()
     const badge=document.getElementById('nodeStatusBadge')
+    const btn=document.getElementById('mineBtn')
     if(d.online){
       badge.className='node-status ns-on'
-      badge.innerHTML='<span class="ns-dot"></span> Node Online'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Live'
       document.getElementById('netBlock').textContent=(d.blocks||0).toLocaleString()
+      // Re-enable button if was disabled due to offline
+      if(btn && btn.textContent.includes('Offline')){
+        btn.disabled=false
+        btn.className='mine-btn start'
+        btn.textContent='⛏ Start Mining — Earn Points'
+      }
     }else{
       badge.className='node-status ns-off'
-      badge.innerHTML='<span class="ns-dot"></span> Node Offline'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+      // Disable mining button
+      if(btn && !btn.textContent.includes('Limit')){
+        btn.disabled=true
+        btn.className='mine-btn stop'
+        btn.textContent='🔴 Web Mining Offline — Node Down'
+        if(isMining){
+          stopMining()
+          addLog('🔴 Node offline! Mining band kela.','inf')
+        }
+      }
     }
-  }catch(e){}
+  }catch(e){
+    // Network error - show offline
+    const badge=document.getElementById('nodeStatusBadge')
+    badge.className='node-status ns-off'
+    badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+    const btn=document.getElementById('mineBtn')
+    if(btn && !btn.textContent.includes('Limit')){
+      btn.disabled=true
+      btn.className='mine-btn stop'
+      btn.textContent='🔴 Web Mining Offline — Node Down'
+    }
+  }
 }
 
 async function loadUserStats(){
@@ -526,6 +553,7 @@ async function loadUserStats(){
     document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
     document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
+    document.getElementById('streakDays').textContent=(d.streak_days||0)+(d.streak_days>0?'🔥':'')
     updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
     // Check limits and disable button
     checkMiningAvailability(d)
@@ -619,6 +647,12 @@ function startMining(){
         updateEnergyUI(d.energy, d.max_energy, d.minutes_to_next)
         refreshWallet()
         addLog(`✅ +${d.points_earned || 2000} pts | Total: ${earned.toLocaleString()} | ⚡ ${d.energy}/${d.max_energy}`,'ok')
+        if(d.streak_bonus > 0){
+          addLog(`🔥 ${d.streak_message}`,'gold')
+        }
+        if(d.streak_days > 0){
+          document.getElementById('streakDays').textContent = d.streak_days + '🔥'
+        }
         // Check daily limit
         if(d.daily_points >= 10000){
           addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
@@ -713,6 +747,7 @@ function logout(){
   user=null;stopMining()
   document.getElementById('dashboard').classList.remove('active')
   document.getElementById('authSection').style.display='block'
+  document.getElementById('logoutBtn').style.display='none'
 }
 
 // Init
