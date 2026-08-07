@@ -697,7 +697,7 @@ function startMining(){
     const prog=Math.random()*100
     document.getElementById('progressBar').style.width=prog+'%'
     const hr=Math.floor(Math.random()*500+100)
-    document.getElementById('hashRate').textContent=hr
+    const hrEl=document.getElementById('hashRate'); if(hrEl) hrEl.textContent=hr
     try{
       const r=await fetch(`${API}/api/mining/share`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:user.id,address:walletAddress})})
       const d=await r.json()
