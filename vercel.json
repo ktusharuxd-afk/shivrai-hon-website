@@ -1,4 +1,7 @@
 {
   "outputDirectory": "public",
-  "framework": null
+  "buildCommand": "mkdir -p public && cp *.html *.svg *.png public/",
+  "framework": null,
+  "devCommand": null,
+  "installCommand": null
 }
