@@ -292,7 +292,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
         <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
         <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
         <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
-        <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click "Start Mining" to begin!</div></div>
+        <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click Start Mining to begin!</div></div>
       </div>
     </div>
 
@@ -538,7 +538,7 @@ async function checkNode(){
         btn.textContent='🔴 Web Mining Offline — Node Down'
         if(isMining){
           stopMining()
-          addLog('🔴 Node offline! Mining band kela.','inf')
+          addLog('🔴 Node offline! Mining stopped.','inf')
         }
       }
     }
@@ -573,7 +573,7 @@ function checkMiningAvailability(d){
     btn.className = 'mine-btn stop'
     btn.textContent = '🚫 Daily Limit Reached — Come Back Tomorrow!'
     document.getElementById('mineStatus').textContent = 'Limit reached'
-    addLog('🚫 Daily limit reached! 10,000 pts/day. Reset at midnight UTC.','inf')
+    addLog('🚫 Daily limit reached! 10,000 pts/day. Resets at midnight UTC.','inf')
     if(isMining) stopMining()
   } else if(energy < 20){
     // No energy
@@ -627,7 +627,7 @@ function startMining(){
   btn.textContent='⏹ Stop Mining'
   btn.className='mine-btn stop'
   document.getElementById('mineStatus').textContent='Mining chalu...'
-  addLog('⛏️ Mining suru!','gold')
+  addLog('⛏️ Mining started!','gold')
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
     const prog=Math.random()*100
@@ -688,7 +688,7 @@ function stopMining(){
   document.getElementById('mineStatus').textContent='Stopped'
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
-  addLog('⏹ Mining band.','inf')
+  addLog('⏹ Mining stopped.','inf')
 }
 
 function addLog(msg,type){
