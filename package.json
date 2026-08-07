@@ -1,0 +1,7 @@
+{
+  "name": "shivrai-hon-website",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Static site'"
+  }
+}
