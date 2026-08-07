@@ -626,7 +626,7 @@ function startMining(){
   const btn=document.getElementById('mineBtn')
   btn.textContent='⏹ Stop Mining'
   btn.className='mine-btn stop'
-  document.getElementById('mineStatus').textContent='Mining chalu...'
+  document.getElementById('mineStatus').textContent='Mining...'
   addLog('⛏️ Mining started!','gold')
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
