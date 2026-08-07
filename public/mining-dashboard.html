@@ -737,6 +737,8 @@ function startMining(){
         updateEnergyUI(d.current_energy, d.max_energy, d.minutes_to_refill)
       } else if(d.limit_reached){
         addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
+        clearInterval(miningInterval)
+        isMining=false
         stopMining()
         checkMiningAvailability({daily_points: 10000, energy: d.current_energy || 100})
       }
@@ -813,10 +815,12 @@ function showSendAlert(msg,type){
 function logout(){
   localStorage.removeItem('hon_web_token')
   localStorage.removeItem('hon_web_refresh')
-  user=null;stopMining()
-  document.getElementById('dashboard').classList.remove('active')
-  document.getElementById('authSection').style.display='block'
-  document.getElementById('logoutBtn').style.display='none'
+  localStorage.removeItem('hon_refresh_token')
+  user=null
+  clearInterval(miningInterval)
+  clearInterval(blockProgInterval)
+  isMining=false
+  window.location.reload()
 }
 
 // Init
