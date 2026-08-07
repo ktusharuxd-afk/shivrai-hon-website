@@ -625,7 +625,11 @@ function startMining(){
           stopMining()
         }
         // Check energy & daily limit
-        checkMiningAvailability(d)
+        checkMiningAvailability({
+          daily_points: d.daily_points || 0,
+          energy: d.energy || 100,
+          minutes_to_next: d.minutes_to_next || 0
+        })
       } else if(d.energy_empty){
         addLog(`⚡ Energy empty! Next block in ${d.minutes_to_next} min.`,'gold')
         stopMining()
@@ -633,6 +637,7 @@ function startMining(){
       } else if(d.limit_reached){
         addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
         stopMining()
+        checkMiningAvailability({daily_points: 10000, energy: d.current_energy || 100})
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
   },5000)
