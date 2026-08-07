@@ -543,7 +543,18 @@ async function checkNode(){
       }
     }
   }catch(e){
-    console.log('checkNode error:', e.message)
+    nodeOnline = false
+    const badge=document.getElementById('nodeStatusBadge')
+    if(badge){
+      badge.className='node-status ns-off'
+      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+    }
+    const btn=document.getElementById('mineBtn')
+    if(btn){
+      btn.disabled=true
+      btn.className='mine-btn stop'
+      btn.textContent='🔴 Web Mining Offline — Node Down'
+    }
   }
 }
 
@@ -678,7 +689,8 @@ function startMining(){
     }catch(e){addLog('⚠️ Mining...','inf')}
   },5000)
 }
-
+cd ~/shivrai-hon-website
+nano mining-dashboard.html
 function stopMining(){
   isMining=false
   clearInterval(miningInterval)

@@ -543,18 +543,7 @@ async function checkNode(){
       }
     }
   }catch(e){
-    nodeOnline = false
-    const badge=document.getElementById('nodeStatusBadge')
-    if(badge){
-      badge.className='node-status ns-off'
-      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
-    }
-    const btn=document.getElementById('mineBtn')
-    if(btn){
-      btn.disabled=true
-      btn.className='mine-btn stop'
-      btn.textContent='🔴 Web Mining Offline — Node Down'
-    }
+    console.log('checkNode error:', e.message)
   }
 }
 
