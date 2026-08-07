@@ -527,7 +527,43 @@ async function loadUserStats(){
     document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
     updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
+    // Check limits and disable button
+    checkMiningAvailability(d)
   }catch(e){}
+}
+
+function checkMiningAvailability(d){
+  const btn = document.getElementById('mineBtn')
+  const dailyPoints = d.daily_points || 0
+  const energy = d.energy || 100
+
+  if(dailyPoints >= 10000){
+    // Daily limit reached
+    btn.disabled = true
+    btn.className = 'mine-btn stop'
+    btn.textContent = '🚫 Daily Limit Reached — Come Back Tomorrow!'
+    document.getElementById('mineStatus').textContent = 'Limit reached'
+    addLog('🚫 Daily limit reached! 10,000 pts/day. Reset at midnight UTC.','inf')
+    if(isMining) stopMining()
+  } else if(energy < 20){
+    // No energy
+    const mins = d.minutes_to_next || 0
+    const hrs = Math.floor(mins/60)
+    const min = mins % 60
+    const timeStr = hrs > 0 ? `${hrs}h ${min}m` : `${min}m`
+    btn.disabled = true
+    btn.className = 'mine-btn stop'
+    btn.textContent = `⚡ Energy Empty — Refills in ${timeStr}`
+    document.getElementById('mineStatus').textContent = 'Waiting for energy...'
+    if(isMining) stopMining()
+  } else {
+    // Ready to mine
+    if(!isMining){
+      btn.disabled = false
+      btn.className = 'mine-btn start'
+      btn.textContent = '⛏ Start Mining — Earn Points'
+    }
+  }
 }
 
 function loadStats(){
@@ -588,11 +624,8 @@ function startMining(){
           addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
           stopMining()
         }
-        // Check energy
-        if(d.energy < 20){
-          addLog(`⚡ Low energy! Next block in ${d.minutes_to_next} min.`,'gold')
-          stopMining()
-        }
+        // Check energy & daily limit
+        checkMiningAvailability(d)
       } else if(d.energy_empty){
         addLog(`⚡ Energy empty! Next block in ${d.minutes_to_next} min.`,'gold')
         stopMining()
