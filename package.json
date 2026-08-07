@@ -2,6 +2,6 @@
   "name": "shivrai-hon-website",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'Static site'"
+    "build": "mkdir -p public && cp *.html *.svg *.png public/ 2>/dev/null; echo Done"
   }
 }
