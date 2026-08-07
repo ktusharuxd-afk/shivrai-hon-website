@@ -276,6 +276,17 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <div class="card">
         <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">⛏ Start Mining — Earn 2000 HON / Block</button>
         <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+        <!-- Energy Bar -->
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:.72rem;color:var(--w3);font-weight:600">⚡ ENERGY</span>
+            <span style="font-size:.72rem;color:var(--gold);font-weight:700" id="energyText">100/100</span>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:8px;overflow:hidden">
+            <div id="energyBar" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:100px;width:100%;transition:width .5s"></div>
+          </div>
+          <div style="font-size:.68rem;color:var(--w3);margin-top:4px" id="energyRefill"></div>
+        </div>
         <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
         <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
         <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
@@ -515,6 +526,7 @@ async function loadUserStats(){
     document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
     document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
+    updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
   }catch(e){}
 }
 
@@ -524,6 +536,20 @@ function loadStats(){
 }
 
 // Mining
+function updateEnergyUI(energy, maxEnergy, minsToNext){
+  const pct = Math.min(100, (energy/maxEnergy)*100)
+  document.getElementById('energyBar').style.width = pct+'%'
+  document.getElementById('energyText').textContent = `${energy}/${maxEnergy}`
+  if(minsToNext > 0){
+    const hrs = Math.floor(minsToNext/60)
+    const mins = minsToNext % 60
+    document.getElementById('energyRefill').textContent = hrs > 0 ? 
+      `Next block in: ${hrs}h ${mins}m` : `Next block in: ${mins}m`
+  } else {
+    document.getElementById('energyRefill').textContent = '✅ Ready to mine!'
+  }
+}
+
 function toggleMining(){
   if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
   isMining?stopMining():startMining()
@@ -548,21 +574,32 @@ function startMining(){
       console.log('Mining response:', JSON.stringify(d))
       if(d.success){
         sessionBlocks++
-        const earned = d.total_earned || 0
-        const blocks = d.blocks_mined || sessionBlocks
-        console.log('Updating UI - earned:', earned, 'blocks:', blocks)
-        document.getElementById('blocksMined').textContent = blocks
+        const earned = d.total_points || 0
+        // Update stats
         document.getElementById('totalEarned').textContent = earned.toLocaleString()
-        refreshWallet()
-        addLog(`✅ +${d.points_earned || 2000} Points | Total: ${earned.toLocaleString()} | HON: ${d.hon_equivalent || 0}`,'ok')
-        // Update daily points
-        document.getElementById('dailyPoints').textContent = `${d.daily_points || 0}/10000`
         document.getElementById('honEquiv').textContent = d.hon_equivalent || '0.0000'
+        document.getElementById('dailyPoints').textContent = `${d.daily_points || 0}/10000`
+        // Update energy
+        updateEnergyUI(d.energy, d.max_energy, d.minutes_to_next)
+        refreshWallet()
+        addLog(`✅ +${d.points_earned || 2000} pts | Total: ${earned.toLocaleString()} | ⚡ ${d.energy}/${d.max_energy}`,'ok')
         // Check daily limit
         if(d.daily_points >= 10000){
-          addLog('🚫 Daily limit reached! 10,000 points/day max. Reset at midnight UTC.','inf')
+          addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
           stopMining()
         }
+        // Check energy
+        if(d.energy < 20){
+          addLog(`⚡ Low energy! Next block in ${d.minutes_to_next} min.`,'gold')
+          stopMining()
+        }
+      } else if(d.energy_empty){
+        addLog(`⚡ Energy empty! Next block in ${d.minutes_to_next} min.`,'gold')
+        stopMining()
+        updateEnergyUI(d.current_energy, d.max_energy, d.minutes_to_refill)
+      } else if(d.limit_reached){
+        addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
+        stopMining()
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
   },5000)
