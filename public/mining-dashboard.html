@@ -743,7 +743,7 @@ function startMining(){
         checkMiningAvailability({daily_points: 10000, energy: d.current_energy || 100})
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
-  },5000)
+  },1800000)
 }
 
 function stopMining(){
