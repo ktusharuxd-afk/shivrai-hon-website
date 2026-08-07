@@ -258,9 +258,9 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <div class="dash" id="dashboard">
     <!-- STATS -->
     <div class="stats">
-      <div class="stat"><div class="stat-ico">💰</div><div class="stat-val" id="totalEarned">0</div><div class="stat-lbl">Total Earned (HON)</div></div>
-      <div class="stat"><div class="stat-ico">🧱</div><div class="stat-val purple" id="blocksMined">0</div><div class="stat-lbl">Blocks Mined</div></div>
-      <div class="stat"><div class="stat-ico">⚡</div><div class="stat-val green" id="hashRate">0</div><div class="stat-lbl">Hash Rate (H/s)</div></div>
+      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0</div><div class="stat-lbl">Total Points</div></div>
+      <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">0.0000</div><div class="stat-lbl">HON Equivalent</div></div>
+      <div class="stat"><div class="stat-ico">📅</div><div class="stat-val green" id="dailyPoints">0/10000</div><div class="stat-lbl">Daily Points</div></div>
       <div class="stat"><div class="stat-ico">🌐</div><div class="stat-val" id="netBlock">—</div><div class="stat-lbl">Network Block</div></div>
     </div>
 
@@ -287,7 +287,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <div class="tab-pane" id="tab-wallet">
       <div class="card">
         <div class="bal-big" id="walletBal">0.00</div>
-        <div class="bal-lbl">HON Balance</div>
+        <div class="bal-lbl">HON Equivalent (2000 pts = 1 HON)</div>
         <div class="card-title">Your Address</div>
         <div class="addr-box" id="walletAddr" onclick="copyAddr()">Generate address by clicking Start Mining...</div>
         <div class="info-row"><span class="info-key">Network</span><span class="info-val">HON Mainnet</span></div>
@@ -512,8 +512,9 @@ async function loadUserStats(){
   try{
     const r=await fetch(`${API}/api/mining/stats/${user.id}`)
     const d=await r.json()
-    document.getElementById('totalEarned').textContent=(d.total_earned||0).toLocaleString()
-    document.getElementById('blocksMined').textContent=d.blocks_mined||0
+    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
   }catch(e){}
 }
 
@@ -553,7 +554,15 @@ function startMining(){
         document.getElementById('blocksMined').textContent = blocks
         document.getElementById('totalEarned').textContent = earned.toLocaleString()
         refreshWallet()
-        addLog(`✅ Block mined! +2000 HON | Total: ${earned.toLocaleString()}`,'ok')
+        addLog(`✅ +${d.points_earned || 2000} Points | Total: ${earned.toLocaleString()} | HON: ${d.hon_equivalent || 0}`,'ok')
+        // Update daily points
+        document.getElementById('dailyPoints').textContent = `${d.daily_points || 0}/10000`
+        document.getElementById('honEquiv').textContent = d.hon_equivalent || '0.0000'
+        // Check daily limit
+        if(d.daily_points >= 10000){
+          addLog('🚫 Daily limit reached! 10,000 points/day max. Reset at midnight UTC.','inf')
+          stopMining()
+        }
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
   },5000)
@@ -583,12 +592,12 @@ async function refreshWallet(){
   try{
     const r=await fetch(`${API}/api/mining/stats/${user.id}`)
     const d=await r.json()
-    const bal=(d.total_earned||0).toLocaleString()
-    document.getElementById('walletBal').textContent=bal
-    document.getElementById('totalEarned').textContent=bal
-    document.getElementById('blocksMined').textContent=d.blocks_mined||0
+    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
+    document.getElementById('walletBal').textContent=d.hon_equivalent||'0.0000'
     const sendEl=document.getElementById('sendBal')
-    if(sendEl)sendEl.textContent=bal+' HON'
+    if(sendEl)sendEl.textContent=(d.hon_equivalent||'0')+' HON'
   }catch(e){console.log('wallet err',e)}
 }
 
