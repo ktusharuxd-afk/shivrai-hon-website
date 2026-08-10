@@ -199,6 +199,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
   .hbg{display:flex}
   .bnav{display:block}
   .page{padding:80px 16px 40px}
+  .tabs{gap:4px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .tab{font-size:.72rem;padding:8px 10px;white-space:nowrap;flex-shrink:0}
+  .card{padding:16px}
+  .stat{padding:16px 10px}
+  .stat-val{font-size:1.4rem}
+  .mine-btn{font-size:.85rem;padding:14px 20px}
+  .log-box{height:120px;font-size:.7rem}
+  #liveMiningStats{flex-wrap:wrap;gap:8px;padding:10px 14px;border-radius:12px}
+  .block-anim{padding:12px}
+  .block-rewards{flex-wrap:wrap;gap:6px}
+  .bred,.bpts,.bhon{font-size:.7rem;padding:4px 10px}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat-val{font-size:1.2rem}
+  .stat-lbl{font-size:.6rem}
+  .tabs{gap:2px}
+  .tab{font-size:.68rem;padding:7px 8px}
+  .page{padding:70px 12px 32px}
+  .card{padding:14px}
+  nav{padding:0 14px}
 }
 /* ── FOOTER ── */
 footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);padding:72px 40px 40px}
