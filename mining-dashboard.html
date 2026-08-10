@@ -1077,7 +1077,7 @@ async function loadHistory(){
     Object.keys(groups).forEach(date=>{
       html+=`<div class="hist-date">📅 ${date}</div>`
       groups[date].forEach(h=>{
-        const time=new Date(h.mined_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
+        const time=new Date(h.mined_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'})
         html+=`<div class="hist-item">
           <div class="hist-left">
             <span class="hist-block">🧱 Block mined</span>
