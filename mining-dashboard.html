@@ -1080,13 +1080,12 @@ async function loadHistory(){
         const time=new Date(h.mined_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'})
         html+=`<div class="hist-item">
           <div class="hist-left">
-            <span class="hist-block">🧱 Block mined</span>
-            <span class="hist-hash">${(h.block_hash||'').substring(0,20)}...</span>
-            <span class="hist-time">⏰ ${time}</span>
+            <span class="hist-block">🧱 Block mined <span style="color:var(--w3);font-weight:400;font-size:.65rem">⏰ ${time}</span></span>
+            <span class="hist-hash">${(h.block_hash||'').substring(0,24)}...</span>
           </div>
           <div class="hist-right">
             <div class="hist-pts">+${h.points_earned||2000} pts</div>
-            ${h.streak_bonus>0?`<div class="hist-bonus">🔥 +${h.streak_bonus} streak</div>`:''}
+            ${h.streak_bonus>0?`<div class="hist-bonus">🔥 +${h.streak_bonus}</div>`:''}
           </div>
         </div>`
       })
