@@ -231,22 +231,24 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <div class="page-badge"><span class="dot"></span> Web Mining Live</div>
     <h1 class="page-title">Mine <span class="grd">HON</span><br>in Browser</h1>
     <p class="page-sub">No install. No setup. Just click and earn.</p>
-    <div style="margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="margin-top:16px;text-align:center">
       <span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span>
-      <div id="liveMiningStats" style="display:none;flex:1;background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.2);border-radius:100px;padding:6px 16px;display:none;align-items:center;gap:12px">
-        <span style="font-size:.82rem;font-weight:800;color:var(--gold)" id="totalEarned2">—</span>
-        <span style="font-size:.7rem;color:var(--w3)">pts</span>
-        <span style="font-size:.75rem;color:var(--w3)">|</span>
-        <span style="font-size:.75rem;color:var(--w3)">⚡</span>
-        <span style="font-size:.78rem;font-weight:700;color:var(--gold)" id="miningRate">0.00</span>
-        <span style="font-size:.7rem;color:var(--w3)">pts/sec</span>
-        <span id="miningRateStatus" style="font-size:.72rem;font-weight:700;color:var(--green)">STEADY ●</span>
-        <span style="font-size:.68rem;color:var(--w3)" id="miningTimeLeft">30:00 left</span>
+    </div>
+    <!-- Live Mining Stats — below badge, center -->
+    <div id="liveMiningStats" style="display:none;margin-top:12px;text-align:center">
+      <div style="font-size:1.8rem;font-weight:800;letter-spacing:-.03em;color:var(--gold);line-height:1" id="totalEarned2">—</div>
+      <div style="font-size:.65rem;color:var(--w3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">POINTS</div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:.8rem;color:var(--w3)">⚡</span>
+        <span style="font-size:.85rem;font-weight:700;color:var(--gold)" id="miningRate">0.00</span>
+        <span style="font-size:.75rem;color:var(--w3)">pts/sec</span>
+        <span id="miningRateStatus" style="font-size:.75rem;font-weight:700;color:var(--green)">STEADY ●</span>
       </div>
+      <div style="font-size:.7rem;color:var(--w3)" id="miningTimeLeft">30:00 left</div>
     </div>
     <!-- Session Progress Bar -->
-    <div id="sessionProgressWrap" style="display:none;margin-top:8px;background:rgba(255,255,255,.06);border-radius:100px;height:4px;overflow:hidden">
-      <div id="sessionProgressBar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:100px;width:0%;transition:width 1s;box-shadow:0 0 8px var(--gold)"></div>
+    <div id="sessionProgressWrap" style="display:none;margin-top:10px;background:rgba(255,255,255,.06);border-radius:100px;height:4px;overflow:hidden">
+      <div id="sessionProgressBar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:100px;width:0%;transition:width 1s;box-shadow:0 0 6px var(--gold)"></div>
     </div>
   </div>
 
