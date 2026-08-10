@@ -681,8 +681,8 @@ function showMinedBlock(hash, pts, hon, bonus){
 }
 
 function toggleMining(){
-  if(!walletAddress){addLog('❌ Address milala nahi! Thoda vel thamba...','inf');return}
-  isMining?stopMining():startMining()
+  if(!walletAddress){addLog('❌ No wallet address found! Please wait...','inf');return}
+  if(isMining){stopMining()}else{startMining()}
 }
 
 function startMining(){
@@ -784,11 +784,18 @@ function stopMining(){
   document.getElementById('hashRate').textContent='0'
   clearInterval(window.miningCounter)
   window.miningCounter = null
+  // Reset display
+  document.getElementById('totalEarned').textContent = '0.000'
+  // Hide block animation
+  const bw=document.getElementById('miningBlockWrap')
+  if(bw) bw.style.display='none'
+  clearInterval(blockProgInterval)
+  blockProgInterval=null
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('⏹ Mining Stopped — Come back for next block!','inf')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
-  // Reset counter to actual points
-  loadUserStats()
+  // Load actual points after stop
+  setTimeout(loadUserStats, 500)
   const bw=document.getElementById('miningBlockWrap'); if(bw) bw.style.display='none'
   clearInterval(blockProgInterval)
   blockProgInterval=null
