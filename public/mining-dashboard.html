@@ -557,8 +557,8 @@ async function checkNode(){
       nodeOnline = true
     }else{
       nodeOnline = false
-      badge2.className='node-status ns-off'
-      badge2.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+      nodeBadge.className='node-status ns-off'
+      nodeBadge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
       if(btn){
         btn.disabled=true
         btn.className='mine-btn stop'
