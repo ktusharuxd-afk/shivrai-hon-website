@@ -680,7 +680,11 @@ function showMinedBlock(hash, pts, hon, bonus){
   setTimeout(()=>{ if(isMining) showMiningBlock() }, 3000)
 }
 
+let miningToggleLock = false
 function toggleMining(){
+  if(miningToggleLock) return
+  miningToggleLock = true
+  setTimeout(()=>{ miningToggleLock = false }, 1000)
   if(!walletAddress){addLog('❌ No wallet address found! Please wait...','inf');return}
   if(isMining){stopMining()}else{startMining()}
 }
