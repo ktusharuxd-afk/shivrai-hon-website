@@ -615,8 +615,8 @@ function checkMiningAvailability(d){
     document.getElementById('mineStatus').textContent = 'Waiting for energy...'
     if(isMining) stopMining()
   } else {
-    // Ready to mine
-    if(!isMining){
+    // Ready to mine - only update if not currently mining
+    if(!isMining && btn){
       btn.disabled = false
       btn.className = 'mine-btn start'
       btn.textContent = '⛏ Start Mining — Earn Points'
