@@ -694,9 +694,19 @@ function startMining(){
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('▶️ Start Mining — Session Started','gold')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
-  if(document.getElementById('totalEarned').textContent==='0.000'){
-    document.getElementById('totalEarned').textContent='0.0001'
-  }
+  // Start live counter animation
+  let counterVal = parseFloat(document.getElementById('totalEarned').textContent) || 0
+  if(counterVal === 0) counterVal = 0.0001
+  document.getElementById('totalEarned').textContent = counterVal.toFixed(4)
+  
+  // Animate counter every second
+  window.miningCounter = setInterval(()=>{
+    if(!isMining) { clearInterval(window.miningCounter); return }
+    counterVal += 0.0001
+    const el = document.getElementById('totalEarned')
+    if(el && counterVal < 2000) el.textContent = counterVal.toFixed(4)
+  }, 100)
+  
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
@@ -719,7 +729,18 @@ function startMining(){
         updateEnergyUI(d.energy, d.max_energy, d.minutes_to_next)
         refreshWallet()
         addLog(`✅ +${d.points_earned || 2000} pts | Total: ${earned.toLocaleString()} | ⚡ ${d.energy}/${d.max_energy}`,'ok')
+        clearInterval(window.miningCounter)
         showMinedBlock(d.block_hash, d.points_earned||2000, d.hon_equivalent||'0', d.streak_bonus||0)
+        // Restart counter for next block
+        if(isMining){
+          let cv = d.total_points || 0
+          window.miningCounter = setInterval(()=>{
+            if(!isMining){clearInterval(window.miningCounter);return}
+            cv += 0.0001
+            const el=document.getElementById('totalEarned')
+            if(el) el.textContent = cv < (d.total_points+2000) ? cv.toFixed(4) : cv.toLocaleString()
+          }, 100)
+        }
         if(d.streak_bonus > 0){
           addLog(`🔥 ${d.streak_message}`,'gold')
         }
@@ -761,6 +782,7 @@ function stopMining(){
   document.getElementById('mineStatus').textContent='Stopped'
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
+  clearInterval(window.miningCounter)
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('⏹ Mining Stopped — Come back for next block!','inf')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
