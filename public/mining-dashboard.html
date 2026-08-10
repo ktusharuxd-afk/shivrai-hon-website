@@ -276,7 +276,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <div class="dash" id="dashboard">
     <!-- STATS -->
     <div class="stats">
-      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned"><span style="font-size:.8rem;color:var(--w3)">Loading...</span></div><div class="stat-lbl">Total Points</div></div>
+      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0.000</div><div class="stat-lbl">Total Points</div></div>
       <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">—</div><div class="stat-lbl">HON Equivalent</div></div>
       <div class="stat"><div class="stat-ico">📅</div><div class="stat-val green" id="dailyPoints">0/10000</div><div class="stat-lbl">Daily Points</div></div>
       <div class="stat"><div class="stat-ico">🔥</div><div class="stat-val" id="streakDays">0</div><div class="stat-lbl">Day Streak</div></div>
@@ -579,7 +579,8 @@ async function loadUserStats(){
   try{
     const r=await fetch(`${API}/api/mining/stats/${user.id}`)
     const d=await r.json()
-    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    const tp=d.total_points||0
+    document.getElementById('totalEarned').textContent=tp>0?tp.toLocaleString():(isMining?'0.0001':'0.000')
     document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
     document.getElementById('streakDays').textContent=(d.streak_days||0)+(d.streak_days>0?'🔥':'')
@@ -693,6 +694,9 @@ function startMining(){
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('▶️ Start Mining — Session Started','gold')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
+  if(document.getElementById('totalEarned').textContent==='0.000'){
+    document.getElementById('totalEarned').textContent='0.0001'
+  }
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
@@ -757,7 +761,9 @@ function stopMining(){
   document.getElementById('mineStatus').textContent='Stopped'
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
-  addLog('⏹ Stop Mining — Session Ended.','inf')
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
+  addLog('⏹ Mining Stopped — Come back for next block!','inf')
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   const bw=document.getElementById('miningBlockWrap'); if(bw) bw.style.display='none'
   clearInterval(blockProgInterval)
   blockProgInterval=null
@@ -777,7 +783,8 @@ async function refreshWallet(){
   try{
     const r=await fetch(`${API}/api/mining/stats/${user.id}`)
     const d=await r.json()
-    document.getElementById('totalEarned').textContent=(d.total_points||0).toLocaleString()
+    const tp=d.total_points||0
+    document.getElementById('totalEarned').textContent=tp>0?tp.toLocaleString():(isMining?'0.0001':'0.000')
     document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
     document.getElementById('walletBal').textContent=d.hon_equivalent||'0.0000'
