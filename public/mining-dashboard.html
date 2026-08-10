@@ -536,7 +536,7 @@ async function checkNode(){
   try{
     const r=await fetch(`${API}/api/node/status`)
     const d=await r.json()
-    const badge=document.getElementById('nodeStatusBadge')
+    const nodeBadge=document.getElementById('nodeStatusBadge')
     const btn=document.getElementById('mineBtn')
     
     if(d.online){
