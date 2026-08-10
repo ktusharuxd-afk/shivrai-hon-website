@@ -783,14 +783,15 @@ function stopMining(){
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
   clearInterval(window.miningCounter)
+  window.miningCounter = null
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('⏹ Mining Stopped — Come back for next block!','inf')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
+  // Reset counter to actual points
+  loadUserStats()
   const bw=document.getElementById('miningBlockWrap'); if(bw) bw.style.display='none'
   clearInterval(blockProgInterval)
   blockProgInterval=null
-  const pb=document.getElementById('blockProgBar'); if(pb) pb.style.width='0%'
-  const bs=document.getElementById('blockStatusBadge'); if(bs){bs.className='block-status mining';bs.textContent='⛏ Mining...'}
 }
 
 function addLog(msg,type){
