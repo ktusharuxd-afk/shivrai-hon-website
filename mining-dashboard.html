@@ -276,8 +276,8 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <div class="dash" id="dashboard">
     <!-- STATS -->
     <div class="stats">
-      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0</div><div class="stat-lbl">Total Points</div></div>
-      <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">0.0000</div><div class="stat-lbl">HON Equivalent</div></div>
+      <div class="stat"><div class="stat-ico">⭐</div><div class="stat-val" id="totalEarned">0.0001</div><div class="stat-lbl">Total Points</div></div>
+      <div class="stat"><div class="stat-ico">🪙</div><div class="stat-val purple" id="honEquiv">0.0001</div><div class="stat-lbl">HON Equivalent</div></div>
       <div class="stat"><div class="stat-ico">📅</div><div class="stat-val green" id="dailyPoints">0/10000</div><div class="stat-lbl">Daily Points</div></div>
       <div class="stat"><div class="stat-ico">🔥</div><div class="stat-val" id="streakDays">0</div><div class="stat-lbl">Day Streak</div></div>
     </div>
@@ -690,12 +690,14 @@ function startMining(){
   btn.textContent='⏹ Stop Mining'
   btn.className='mine-btn stop'
   document.getElementById('mineStatus').textContent='Mining...'
-  addLog('⛏️ Mining started!','gold')
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
+  addLog('▶️ Start Mining — Session Started','gold')
+  addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
   miningInterval=setInterval(async()=>{
     const prog=Math.random()*100
-    document.getElementById('progressBar').style.width=prog+'%'
+    const pb=document.getElementById('progressBar'); if(pb) pb.style.width=prog+'%'
     const hr=Math.floor(Math.random()*500+100)
     const hrEl=document.getElementById('hashRate'); if(hrEl) hrEl.textContent=hr
     try{
@@ -755,9 +757,12 @@ function stopMining(){
   document.getElementById('mineStatus').textContent='Stopped'
   document.getElementById('progressBar').style.width='0%'
   document.getElementById('hashRate').textContent='0'
-  addLog('⏹ Mining stopped.','inf')
+  addLog('⏹ Stop Mining — Session Ended.','inf')
   const bw=document.getElementById('miningBlockWrap'); if(bw) bw.style.display='none'
   clearInterval(blockProgInterval)
+  blockProgInterval=null
+  const pb=document.getElementById('blockProgBar'); if(pb) pb.style.width='0%'
+  const bs=document.getElementById('blockStatusBadge'); if(bs){bs.className='block-status mining';bs.textContent='⛏ Mining...'}
 }
 
 function addLog(msg,type){
