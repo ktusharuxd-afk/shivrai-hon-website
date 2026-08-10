@@ -231,7 +231,23 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <div class="page-badge"><span class="dot"></span> Web Mining Live</div>
     <h1 class="page-title">Mine <span class="grd">HON</span><br>in Browser</h1>
     <p class="page-sub">No install. No setup. Just click and earn.</p>
-    <div style="margin-top:16px"><span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span></div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span>
+      <div id="liveMiningStats" style="display:none;flex:1;background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.2);border-radius:100px;padding:6px 16px;display:none;align-items:center;gap:12px">
+        <span style="font-size:.82rem;font-weight:800;color:var(--gold)" id="totalEarned2">—</span>
+        <span style="font-size:.7rem;color:var(--w3)">pts</span>
+        <span style="font-size:.75rem;color:var(--w3)">|</span>
+        <span style="font-size:.75rem;color:var(--w3)">⚡</span>
+        <span style="font-size:.78rem;font-weight:700;color:var(--gold)" id="miningRate">0.00</span>
+        <span style="font-size:.7rem;color:var(--w3)">pts/sec</span>
+        <span id="miningRateStatus" style="font-size:.72rem;font-weight:700;color:var(--green)">STEADY ●</span>
+        <span style="font-size:.68rem;color:var(--w3)" id="miningTimeLeft">30:00 left</span>
+      </div>
+    </div>
+    <!-- Session Progress Bar -->
+    <div id="sessionProgressWrap" style="display:none;margin-top:8px;background:rgba(255,255,255,.06);border-radius:100px;height:4px;overflow:hidden">
+      <div id="sessionProgressBar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:100px;width:0%;transition:width 1s;box-shadow:0 0 8px var(--gold)"></div>
+    </div>
   </div>
 
   <!-- AUTH -->
@@ -307,27 +323,6 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <div class="card">
         <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">⛏ Start Mining — Earn 2000 HON / Block</button>
         <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-        <!-- Live Mining Stats -->
-        <div id="liveMiningStats" style="display:none;background:rgba(0,0,0,.3);border:1px solid rgba(232,160,32,.15);border-radius:12px;padding:16px;margin-bottom:16px;text-align:center">
-          <div style="font-size:2rem;font-weight:800;letter-spacing:-.03em;color:var(--gold)" id="totalEarned2">—</div>
-          <div style="font-size:.7rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">POINTS</div>
-          <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">
-            <span style="color:var(--w3)">⚡ </span>
-            <span id="miningRate" style="color:var(--gold)">0.00</span>
-            <span style="color:var(--w3)"> pts/sec</span>
-          </div>
-          <div id="miningRateStatus" style="font-size:.78rem;font-weight:700;margin-bottom:12px;color:var(--green)">STEADY ●</div>
-          <!-- Progress bar -->
-          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:6px;margin-bottom:10px;overflow:hidden;position:relative">
-            <div id="sessionProgressBar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:100px;width:0%;transition:width .5s;position:relative">
-              <div style="position:absolute;right:0;top:-4px;width:14px;height:14px;background:var(--gold);border-radius:50%;box-shadow:0 0 8px var(--gold)"></div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--w3)">
-            <span id="miningRemaining">2000 remaining</span>
-            <span id="miningTimeLeft">30:00 left</span>
-          </div>
-        </div>
         <!-- Energy Bar -->
         <div style="margin-bottom:16px">
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
@@ -742,7 +737,8 @@ function startMining(){
   document.getElementById('mineStatus').textContent='Mining...'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('▶️ Start Mining — Session Started','gold')
-  const lms=document.getElementById('liveMiningStats'); if(lms) lms.style.display='block'
+  const lms=document.getElementById('liveMiningStats'); if(lms) lms.style.display='flex'
+  const spw=document.getElementById('sessionProgressWrap'); if(spw) spw.style.display='block'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   // Start live counter animation
   const rawText = document.getElementById('totalEarned').textContent.replace(/,/g,'').trim()
@@ -906,6 +902,7 @@ function stopMining(){
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('⏹ Mining Stopped — Come back for next block!','inf')
   const lms2=document.getElementById('liveMiningStats'); if(lms2) lms2.style.display='none'
+  const spw2=document.getElementById('sessionProgressWrap'); if(spw2) spw2.style.display='none'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   // Load actual points after stop
   setTimeout(loadUserStats, 500)
@@ -1033,4 +1030,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Mon Aug 10 00:07:06 PDT 2026
+Mon Aug 10 00:10:33 PDT 2026
