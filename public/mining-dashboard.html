@@ -540,8 +540,8 @@ async function checkNode(){
     const btn=document.getElementById('mineBtn')
     
     if(d.online){
-      badge.className='node-status ns-on'
-      badge.innerHTML='<span class="ns-dot"></span> Web Mining Live'
+      badge2.className='node-status ns-on'
+      badge2.innerHTML='<span class="ns-dot"></span> Web Mining Live'
       document.getElementById('netBlock').textContent=(d.blocks||0).toLocaleString()
       
       // Re-enable button if was disabled due to offline
@@ -557,8 +557,8 @@ async function checkNode(){
       nodeOnline = true
     }else{
       nodeOnline = false
-      badge.className='node-status ns-off'
-      badge.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
+      badge2.className='node-status ns-off'
+      badge2.innerHTML='<span class="ns-dot"></span> Web Mining Offline'
       if(btn){
         btn.disabled=true
         btn.className='mine-btn stop'
