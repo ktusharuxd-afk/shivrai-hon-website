@@ -779,11 +779,12 @@ function startMining(){
     
     // Update points display
     const el = document.getElementById('totalEarned')
-    if(el){
-      const base = Math.floor(counterVal)
-      const decimal = (counterVal - base).toFixed(2).substring(1)
-      el.textContent = base.toLocaleString() + decimal
-    }
+    const el2 = document.getElementById('totalEarned2')
+    const base = Math.floor(counterVal)
+    const decimal = (counterVal - base).toFixed(2).substring(1)
+    const displayVal = base.toLocaleString() + decimal
+    if(el) el.textContent = displayVal
+    if(el2) el2.textContent = displayVal
     
     // Update rate display
     const rateEl = document.getElementById('miningRate')
