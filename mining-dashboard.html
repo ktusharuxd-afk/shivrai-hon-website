@@ -787,8 +787,8 @@ function stopMining(){
   // Reset display
   document.getElementById('totalEarned').textContent = '0.000'
   // Hide block animation
-  const bw=document.getElementById('miningBlockWrap')
-  if(bw) bw.style.display='none'
+  const bw2=document.getElementById('miningBlockWrap')
+  if(bw2) bw2.style.display='none'
   clearInterval(blockProgInterval)
   blockProgInterval=null
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
