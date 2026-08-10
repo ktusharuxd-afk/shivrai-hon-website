@@ -307,6 +307,27 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <div class="card">
         <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">⛏ Start Mining — Earn 2000 HON / Block</button>
         <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+        <!-- Live Mining Stats -->
+        <div id="liveMiningStats" style="display:none;background:rgba(0,0,0,.3);border:1px solid rgba(232,160,32,.15);border-radius:12px;padding:16px;margin-bottom:16px;text-align:center">
+          <div style="font-size:2rem;font-weight:800;letter-spacing:-.03em;color:var(--gold)" id="totalEarned2">—</div>
+          <div style="font-size:.7rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">POINTS</div>
+          <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">
+            <span style="color:var(--w3)">⚡ </span>
+            <span id="miningRate" style="color:var(--gold)">0.00</span>
+            <span style="color:var(--w3)"> pts/sec</span>
+          </div>
+          <div id="miningRateStatus" style="font-size:.78rem;font-weight:700;margin-bottom:12px;color:var(--green)">STEADY ●</div>
+          <!-- Progress bar -->
+          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:6px;margin-bottom:10px;overflow:hidden;position:relative">
+            <div id="sessionProgressBar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:100px;width:0%;transition:width .5s;position:relative">
+              <div style="position:absolute;right:0;top:-4px;width:14px;height:14px;background:var(--gold);border-radius:50%;box-shadow:0 0 8px var(--gold)"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--w3)">
+            <span id="miningRemaining">2000 remaining</span>
+            <span id="miningTimeLeft">30:00 left</span>
+          </div>
+        </div>
         <!-- Energy Bar -->
         <div style="margin-bottom:16px">
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
@@ -721,6 +742,7 @@ function startMining(){
   document.getElementById('mineStatus').textContent='Mining...'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('▶️ Start Mining — Session Started','gold')
+  const lms=document.getElementById('liveMiningStats'); if(lms) lms.style.display='block'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   // Start live counter animation
   const rawText = document.getElementById('totalEarned').textContent.replace(/,/g,'').trim()
@@ -729,18 +751,72 @@ function startMining(){
   if(counterVal === 0) counterVal = 0.0001
   document.getElementById('totalEarned').textContent = counterVal.toFixed(4)
   
-  // Micro counting from existing points
-  // +0.0001 every 100ms = very slow smooth increment
+  // Smart adaptive rate algorithm
+  const BLOCK_POINTS = 2000
+  const BLOCK_TIME = 1800 // 30 min in seconds
+  let elapsedSeconds = 0
+  let sessionPoints = 0
+  let currentRate = BLOCK_POINTS / BLOCK_TIME
+
   window.miningCounter = setInterval(()=>{
     if(!isMining){ clearInterval(window.miningCounter); return }
-    counterVal += 0.0001
+    elapsedSeconds++
+    
+    const remainingPoints = BLOCK_POINTS - sessionPoints
+    const remainingSeconds = Math.max(1, BLOCK_TIME - elapsedSeconds)
+    const baseRate = remainingPoints / remainingSeconds
+    
+    // Controlled fluctuation
+    const factors = [0.65, 0.85, 1.00, 1.25, 1.50]
+    let fluctuation = factors[Math.floor(Math.random() * factors.length)]
+    
+    // Final push in last 60 seconds
+    if(remainingSeconds < 60) fluctuation = 1.5 + Math.random() * 0.5
+    
+    currentRate = baseRate * fluctuation
+    sessionPoints = Math.min(BLOCK_POINTS, sessionPoints + currentRate)
+    counterVal = existingPoints + sessionPoints
+    
+    // Update points display
     const el = document.getElementById('totalEarned')
     if(el){
       const base = Math.floor(counterVal)
-      const decimal = (counterVal - base).toFixed(4).substring(1)
+      const decimal = (counterVal - base).toFixed(2).substring(1)
       el.textContent = base.toLocaleString() + decimal
     }
-  }, 100)
+    
+    // Update rate display
+    const rateEl = document.getElementById('miningRate')
+    const statusEl = document.getElementById('miningRateStatus')
+    const remainEl = document.getElementById('miningRemaining')
+    const timeEl = document.getElementById('miningTimeLeft')
+    
+    if(rateEl) rateEl.textContent = currentRate.toFixed(2)
+    // Update session progress bar
+    const spb=document.getElementById('sessionProgressBar')
+    if(spb) spb.style.width = Math.min(100, (sessionPoints/BLOCK_POINTS)*100) + '%'
+    if(remainEl) remainEl.textContent = Math.ceil(remainingPoints) + ' remaining'
+    
+    // Time left
+    const minsLeft = Math.floor(remainingSeconds / 60)
+    const secsLeft = remainingSeconds % 60
+    if(timeEl) timeEl.textContent = minsLeft + ':' + String(secsLeft).padStart(2,'0') + ' left'
+    
+    // Status based on rate
+    if(statusEl){
+      if(currentRate < 0.8) { statusEl.textContent = 'SLOW ○'; statusEl.style.color = 'var(--w3)' }
+      else if(currentRate < 1.2) { statusEl.textContent = 'STEADY ●'; statusEl.style.color = 'var(--green)' }
+      else if(currentRate < 1.5) { statusEl.textContent = 'FAST ⚡'; statusEl.style.color = 'var(--gold)' }
+      else { statusEl.textContent = 'BURST 🔥'; statusEl.style.color = '#FF6B6B' }
+    }
+    
+    // Final push animation
+    if(remainingSeconds < 60 && remainingSeconds > 0){
+      if(el) el.style.color = 'var(--gold)'
+      if(statusEl){ statusEl.textContent = '⚡ FINAL PUSH 🔥'; statusEl.style.color = 'var(--gold)' }
+    }
+    
+  }, 1000)
   
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
@@ -828,6 +904,7 @@ function stopMining(){
   blockProgInterval=null
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   addLog('⏹ Mining Stopped — Come back for next block!','inf')
+  const lms2=document.getElementById('liveMiningStats'); if(lms2) lms2.style.display='none'
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   // Load actual points after stop
   setTimeout(loadUserStats, 500)
@@ -955,4 +1032,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Sun Aug  9 23:54:35 PDT 2026
+Mon Aug 10 00:04:58 PDT 2026
