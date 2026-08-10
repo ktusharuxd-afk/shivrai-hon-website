@@ -727,13 +727,18 @@ function startMining(){
   if(counterVal === 0) counterVal = 0.0001
   document.getElementById('totalEarned').textContent = counterVal.toFixed(4)
   
-  // Animate counter every second
+  // Micro counting - 2000 pts in 30 min (1800 sec)
+  const ptsPerTick = 2000 / 1800
   window.miningCounter = setInterval(()=>{
-    if(!isMining) { clearInterval(window.miningCounter); return }
-    counterVal += 0.0001
+    if(!isMining){ clearInterval(window.miningCounter); return }
+    counterVal += ptsPerTick
     const el = document.getElementById('totalEarned')
-    if(el && counterVal < 2000) el.textContent = counterVal.toFixed(4)
-  }, 100)
+    if(el){
+      if(counterVal < 10) el.textContent = counterVal.toFixed(4)
+      else if(counterVal < 100) el.textContent = counterVal.toFixed(2)
+      else el.textContent = Math.floor(counterVal).toLocaleString()
+    }
+  }, 1000)
   
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
