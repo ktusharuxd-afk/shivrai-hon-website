@@ -723,7 +723,9 @@ function startMining(){
   addLog('▶️ Start Mining — Session Started','gold')
   addLog('━━━━━━━━━━━━━━━━━━━━━━━','inf')
   // Start live counter animation
-  let counterVal = parseFloat(document.getElementById('totalEarned').textContent) || 0
+  const rawText = document.getElementById('totalEarned').textContent.replace(/,/g,'').trim()
+  const existingPoints = parseFloat(rawText) || 0
+  let counterVal = existingPoints + 0.0001
   if(counterVal === 0) counterVal = 0.0001
   document.getElementById('totalEarned').textContent = counterVal.toFixed(4)
   
