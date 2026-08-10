@@ -99,6 +99,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .tab-pane{display:none}
 .tab-pane.active{display:block}
 
+/* LEADERBOARD */
+.lb-item{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.lb-item:last-child{border:none}
+.lb-rank{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;flex-shrink:0}
+.lb-rank.gold{background:rgba(232,160,32,.2);color:var(--gold);border:1px solid rgba(232,160,32,.3)}
+.lb-rank.silver{background:rgba(255,255,255,.1);color:#C0C0C0;border:1px solid rgba(255,255,255,.2)}
+.lb-rank.bronze{background:rgba(205,127,50,.15);color:#CD7F32;border:1px solid rgba(205,127,50,.2)}
+.lb-rank.normal{background:rgba(255,255,255,.05);color:var(--w3);border:1px solid rgba(255,255,255,.1)}
+.lb-info{flex:1}
+.lb-email{font-size:.82rem;font-weight:600;color:#fff}
+.lb-sub{font-size:.68rem;color:var(--w3);margin-top:2px}
+.lb-pts{text-align:right}
+.lb-pts-val{font-size:.9rem;font-weight:800;color:var(--gold)}
+.lb-pts-lbl{font-size:.62rem;color:var(--w3);text-transform:uppercase;letter-spacing:.08em}
+.lb-you{background:rgba(232,160,32,.05);border-radius:10px;padding:4px 8px;font-size:.65rem;color:var(--gold);border:1px solid rgba(232,160,32,.2);margin-left:6px}
+
 /* HISTORY */
 .hist-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
 .hist-item:last-child{border:none}
@@ -316,6 +332,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <button class="tab" onclick="switchTab('wallet')">💰 Wallet</button>
       <button class="tab" onclick="switchTab('send')">📤 Send HON</button>
       <button class="tab" onclick="switchTab('history')">📋 History</button>
+      <button class="tab" onclick="switchTab('leaderboard')">🏆 Top Miners</button>
     </div>
 
     <!-- MINING TAB -->
@@ -377,6 +394,16 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     </div>
 
 
+
+    <!-- LEADERBOARD TAB -->
+    <div class="tab-pane" id="tab-leaderboard">
+      <div class="card">
+        <div class="card-title">🏆 Top Miners</div>
+        <div id="leaderboardContent">
+          <div style="text-align:center;padding:20px;color:var(--w3);font-size:.85rem">Loading...</div>
+        </div>
+      </div>
+    </div>
 
     <!-- HISTORY TAB -->
     <div class="tab-pane" id="tab-history">
@@ -452,6 +479,7 @@ function switchTab(tab){
   document.getElementById('tab-'+tab).classList.add('active')
   if(tab==='wallet'||tab==='send')refreshWallet()
   if(tab==='history')loadHistory()
+  if(tab==='leaderboard')loadLeaderboard()
 }
 
 // Auth
@@ -962,6 +990,44 @@ function showSendAlert(msg,type){
   const el=document.getElementById('sendAlert')
   el.textContent=msg;el.className=`send-alert ${type} show`
   setTimeout(()=>el.classList.remove('show'),5000)
+}
+
+async function loadLeaderboard(){
+  const el = document.getElementById('leaderboardContent')
+  if(!el) return
+  el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--w3)">Loading...</div>'
+  try{
+    const r = await fetch(`${API}/api/leaderboard`)
+    const data = await r.json()
+    if(!data || !data.length){
+      el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--w3)">No miners yet!</div>'
+      return
+    }
+    const medals = ['🥇','🥈','🥉']
+    const rankClass = ['gold','silver','bronze']
+    let html = ''
+    data.forEach((m, i) => {
+      const isYou = user && m.user_id === user.id
+      const emailDisplay = m.email ? m.email.split('@')[0].substring(0,12) + '...' : 'Miner'
+      const rank = i + 1
+      const cls = i < 3 ? rankClass[i] : 'normal'
+      const medal = i < 3 ? medals[i] : rank
+      html += `<div class="lb-item">
+        <div class="lb-rank ${cls}">${medal}</div>
+        <div class="lb-info">
+          <div class="lb-email">${emailDisplay}${isYou ? '<span class="lb-you">You</span>' : ''}</div>
+          <div class="lb-sub">⛏ ${m.blocks_mined || 0} blocks ${m.streak_days > 0 ? '🔥 '+m.streak_days+' day streak' : ''}</div>
+        </div>
+        <div class="lb-pts">
+          <div class="lb-pts-val">${(m.total_points||0).toLocaleString()}</div>
+          <div class="lb-pts-lbl">points</div>
+        </div>
+      </div>`
+    })
+    el.innerHTML = html
+  }catch(e){
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--w3)">Error loading leaderboard.</div>'
+  }
 }
 
 async function loadHistory(){
