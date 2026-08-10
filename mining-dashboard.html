@@ -670,7 +670,7 @@ async function loadUserStats(){
     const d=await r.json()
     const tp=d.total_points||0
     document.getElementById('totalEarned').textContent=tp>0?tp.toLocaleString():(isMining?'0.0001':'0.000')
-    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('honEquiv').textContent=Math.floor(d.hon_equivalent||0)
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
     document.getElementById('streakDays').textContent=(d.streak_days||0)+(d.streak_days>0?'🔥':'')
     updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
@@ -974,9 +974,9 @@ async function refreshWallet(){
     const d=await r.json()
     const tp=d.total_points||0
     document.getElementById('totalEarned').textContent=tp>0?tp.toLocaleString():(isMining?'0.0001':'0.000')
-    document.getElementById('honEquiv').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('honEquiv').textContent=Math.floor(d.hon_equivalent||0)
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
-    document.getElementById('walletBal').textContent=d.hon_equivalent||'0.0000'
+    document.getElementById('walletBal').textContent=Math.floor(d.hon_equivalent||0)
     const sendEl=document.getElementById('sendBal')
     if(sendEl)sendEl.textContent=(d.hon_equivalent||'0')+' HON'
   }catch(e){console.log('wallet err',e)}
