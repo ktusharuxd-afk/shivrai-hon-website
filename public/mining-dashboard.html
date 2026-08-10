@@ -234,17 +234,22 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <div style="margin-top:16px;text-align:center">
       <span id="nodeStatusBadge" class="node-status ns-off"><span class="ns-dot"></span> Checking...</span>
     </div>
-    <!-- Live Mining Stats — below badge, center -->
-    <div id="liveMiningStats" style="display:none;margin-top:12px;text-align:center">
-      <div style="font-size:1.8rem;font-weight:800;letter-spacing:-.03em;color:var(--gold);line-height:1" id="totalEarned2">—</div>
-      <div style="font-size:.65rem;color:var(--w3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">POINTS</div>
-      <div style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:.8rem;color:var(--w3)">⚡</span>
-        <span style="font-size:.85rem;font-weight:700;color:var(--gold)" id="miningRate">0.00</span>
-        <span style="font-size:.75rem;color:var(--w3)">pts/sec</span>
-        <span id="miningRateStatus" style="font-size:.75rem;font-weight:700;color:var(--green)">STEADY ●</span>
+    <!-- Live Mining Stats Box -->
+    <div id="liveMiningStats" style="display:none;margin-top:12px;background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.2);border-radius:14px;padding:14px 20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--gold);line-height:1" id="totalEarned2">—</div>
+          <div style="font-size:.6rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em">LIVE POINTS</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:.9rem;font-weight:700;color:var(--gold)">⚡ <span id="miningRate">0.00</span> pts/sec</div>
+          <div id="miningRateStatus" style="font-size:.72rem;font-weight:700;color:var(--green)">STEADY ●</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:.85rem;font-weight:700;color:var(--w6)" id="miningTimeLeft">30:00 left</div>
+          <div style="font-size:.6rem;color:var(--w3)">TO NEXT BLOCK</div>
+        </div>
       </div>
-      <div style="font-size:.7rem;color:var(--w3)" id="miningTimeLeft">30:00 left</div>
     </div>
     <!-- Session Progress Bar -->
     <div id="sessionProgressWrap" style="display:none;margin-top:10px;background:rgba(255,255,255,.06);border-radius:100px;height:4px;overflow:hidden">
@@ -1032,4 +1037,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Mon Aug 10 00:12:41 PDT 2026
+Mon Aug 10 00:18:20 PDT 2026
