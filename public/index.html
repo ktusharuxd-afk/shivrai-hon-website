@@ -120,11 +120,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;overflow-x
   letter-spacing:-.05em;
 }
 @media(max-width:900px){
-  #hero{grid-template-columns:1fr!important;text-align:center}
+  #hero{grid-template-columns:1fr!important;text-align:center;padding:80px 20px 60px!important}
   .coin-scene{display:none}
   .hero-nums{justify-content:center}
   .hero-ctas{justify-content:center}
+  nav{padding:0 20px}
+  .nav-r a{display:none}
+  .hamburger{display:flex!important}
+  .ht{font-size:clamp(2.8rem,10vw,5rem)!important}
+  .sec .si{padding:60px 20px!important}
 }
+@media(max-width:480px){
+  .ht{font-size:clamp(2.2rem,9vw,3.5rem)!important}
+  #hero{padding:80px 16px 40px!important}
+}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px}
+.mob-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(8,8,8,.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.08);z-index:499;padding:20px;flex-direction:column;gap:8px}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:.9rem;font-weight:500;color:var(--w6);text-decoration:none;padding:12px 16px;border-radius:10px}
+.mob-menu .mine-mob{background:linear-gradient(90deg,var(--gold),var(--purple));color:#000!important;font-weight:700;text-align:center}
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(8,8,8,.7);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06)}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
