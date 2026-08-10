@@ -99,6 +99,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;ali
 .tab-pane{display:none}
 .tab-pane.active{display:block}
 
+/* HISTORY */
+.hist-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
+.hist-item:last-child{border:none}
+.hist-left{display:flex;flex-direction:column;gap:4px}
+.hist-block{font-size:.78rem;font-weight:700;color:var(--gold)}
+.hist-hash{font-size:.68rem;color:var(--w3);font-family:monospace}
+.hist-time{font-size:.68rem;color:var(--w3)}
+.hist-right{text-align:right}
+.hist-pts{font-size:.85rem;font-weight:700;color:var(--green)}
+.hist-bonus{font-size:.68rem;color:var(--gold)}
+.hist-date{font-size:.7rem;font-weight:700;color:var(--w3);text-transform:uppercase;letter-spacing:.1em;padding:12px 0 8px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:4px}
+
 /* CARDS */
 .card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
 .card-title{font-size:.78rem;font-weight:700;color:var(--w6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
@@ -287,6 +299,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
       <button class="tab active" onclick="switchTab('mining')">⛏ Mining</button>
       <button class="tab" onclick="switchTab('wallet')">💰 Wallet</button>
       <button class="tab" onclick="switchTab('send')">📤 Send HON</button>
+      <button class="tab" onclick="switchTab('history')">📋 History</button>
     </div>
 
     <!-- MINING TAB -->
@@ -412,6 +425,7 @@ function switchTab(tab){
   event.target.classList.add('active')
   document.getElementById('tab-'+tab).classList.add('active')
   if(tab==='wallet'||tab==='send')refreshWallet()
+  if(tab==='history')loadHistory()
 }
 
 // Auth
@@ -856,6 +870,52 @@ function showSendAlert(msg,type){
   const el=document.getElementById('sendAlert')
   el.textContent=msg;el.className=`send-alert ${type} show`
   setTimeout(()=>el.classList.remove('show'),5000)
+}
+
+async function loadHistory(){
+  if(!user) return
+  try{
+    const r=await fetch(`${API}/api/mining/history/${user.id}`)
+    const data=await r.json()
+    const el=document.getElementById('historyContent')
+    if(!data||!data.length){
+      el.innerHTML='<div style="text-align:center;padding:20px;color:var(--w3);font-size:.85rem">No mining history yet. Start mining!</div>'
+      return
+    }
+    // Group by date
+    const groups={}
+    data.forEach(h=>{
+      const date=new Date(h.mined_at)
+      const today=new Date()
+      const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1)
+      let label=date.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+      if(date.toDateString()===today.toDateString()) label='Today'
+      else if(date.toDateString()===yesterday.toDateString()) label='Yesterday'
+      if(!groups[label]) groups[label]=[]
+      groups[label].push(h)
+    })
+    let html=''
+    Object.keys(groups).forEach(date=>{
+      html+=`<div class="hist-date">📅 ${date}</div>`
+      groups[date].forEach(h=>{
+        const time=new Date(h.mined_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
+        html+=`<div class="hist-item">
+          <div class="hist-left">
+            <span class="hist-block">🧱 Block mined</span>
+            <span class="hist-hash">${(h.block_hash||'').substring(0,20)}...</span>
+            <span class="hist-time">⏰ ${time}</span>
+          </div>
+          <div class="hist-right">
+            <div class="hist-pts">+${h.points_earned||2000} pts</div>
+            ${h.streak_bonus>0?`<div class="hist-bonus">🔥 +${h.streak_bonus} streak</div>`:''}
+          </div>
+        </div>`
+      })
+    })
+    el.innerHTML=html
+  }catch(e){
+    document.getElementById('historyContent').innerHTML='<div style="text-align:center;padding:20px;color:var(--w3)">Error loading history.</div>'
+  }
 }
 
 function logout(){
