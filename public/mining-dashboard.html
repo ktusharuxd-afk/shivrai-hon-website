@@ -727,18 +727,18 @@ function startMining(){
   if(counterVal === 0) counterVal = 0.0001
   document.getElementById('totalEarned').textContent = counterVal.toFixed(4)
   
-  // Micro counting - 2000 pts in 30 min (1800 sec)
-  const ptsPerTick = 2000 / 1800
+  // Micro counting from existing points
+  // +0.0001 every 100ms = very slow smooth increment
   window.miningCounter = setInterval(()=>{
     if(!isMining){ clearInterval(window.miningCounter); return }
-    counterVal += ptsPerTick
+    counterVal += 0.0001
     const el = document.getElementById('totalEarned')
     if(el){
-      if(counterVal < 10) el.textContent = counterVal.toFixed(4)
-      else if(counterVal < 100) el.textContent = counterVal.toFixed(2)
-      else el.textContent = Math.floor(counterVal).toLocaleString()
+      const base = Math.floor(counterVal)
+      const decimal = (counterVal - base).toFixed(4).substring(1)
+      el.textContent = base.toLocaleString() + decimal
     }
-  }, 1000)
+  }, 100)
   
   showMiningBlock()
   addLog(`📍 ${walletAddress.substring(0,20)}...`,'inf')
@@ -953,4 +953,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Sun Aug  9 23:31:19 PDT 2026
+Sun Aug  9 23:49:27 PDT 2026
