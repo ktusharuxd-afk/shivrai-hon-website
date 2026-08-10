@@ -779,9 +779,9 @@ function stopMining(){
   const btn=document.getElementById('mineBtn')
   btn.textContent='⛏ Start Mining — Earn 2000 HON / Block'
   btn.className='mine-btn start'
-  document.getElementById('mineStatus').textContent='Stopped'
-  document.getElementById('progressBar').style.width='0%'
-  document.getElementById('hashRate').textContent='0'
+  const ms=document.getElementById('mineStatus'); if(ms) ms.textContent='Stopped'
+  const prb=document.getElementById('progressBar'); if(prb) prb.style.width='0%'
+  const hr2=document.getElementById('hashRate'); if(hr2) hr2.textContent='0'
   clearInterval(window.miningCounter)
   window.miningCounter = null
   // Reset display
