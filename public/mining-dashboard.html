@@ -675,8 +675,20 @@ async function loadUserStats(){
     document.getElementById('dailyPoints').textContent=`${d.daily_points||0}/10000`
     document.getElementById('streakDays').textContent=(d.streak_days||0)+(d.streak_days>0?'🔥':'')
     updateEnergyUI(d.energy||100, d.max_energy||100, d.minutes_to_next||0)
-    // Check limits and disable button
-    checkMiningAvailability(d)
+    // Only update button state, no log messages
+    const btn = document.getElementById('mineBtn')
+    if(btn && !isMining){
+      if((d.daily_points||0) >= 10000){
+        btn.disabled=true; btn.className='mine-btn stop'
+        btn.textContent='🚫 Daily Limit Reached — Come Back Tomorrow!'
+      } else if((d.energy||100) < 20){
+        btn.disabled=true; btn.className='mine-btn stop'
+        btn.textContent='⚡ Energy Empty — Refilling...'
+      } else {
+        btn.disabled=false; btn.className='mine-btn start'
+        btn.textContent='⛏ Start Mining — Earn Points'
+      }
+    }
   }catch(e){}
 }
 
@@ -1118,4 +1130,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Tue Aug 11 06:38:47 PDT 2026
+Tue Aug 11 06:40:31 PDT 2026
