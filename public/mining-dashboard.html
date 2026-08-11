@@ -594,6 +594,7 @@ async function checkAuth(){
 }
 
 async function initDash(){
+  limitReached = false
   document.getElementById('authSection').style.display='none'
   document.getElementById('dashboard').classList.add('active')
   document.getElementById('walletEmail').textContent=user?.email||'—'
@@ -770,6 +771,7 @@ function showMinedBlock(hash, pts, hon, bonus){
 }
 
 let miningToggleLock = false
+let limitReached = false
 function toggleMining(){
   if(miningToggleLock) return
   miningToggleLock = true
@@ -1116,4 +1118,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Tue Aug 11 06:37:15 PDT 2026
+Tue Aug 11 06:38:47 PDT 2026
