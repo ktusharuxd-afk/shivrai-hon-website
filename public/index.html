@@ -336,6 +336,42 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <a href="mining-dashboard.html" onclick="toggleMob()">⛏ Start Mining Free</a>
 </div>
 
+<!-- LIVE STATS BAR -->
+<div style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 40px;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.68rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em">HON Price</span>
+    <span style="font-size:.82rem;font-weight:700;color:var(--gold)">Listed on CMC Soon</span>
+  </div>
+  <div style="width:1px;height:16px;background:rgba(255,255,255,.1)"></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.68rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em">Circulating Supply</span>
+    <span style="font-size:.82rem;font-weight:700;color:#fff" id="liveSupply">Loading...</span>
+  </div>
+  <div style="width:1px;height:16px;background:rgba(255,255,255,.1)"></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.68rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em">Miners</span>
+    <span style="font-size:.82rem;font-weight:700;color:var(--green)" id="liveMinerCount">10+</span>
+  </div>
+  <div style="width:1px;height:16px;background:rgba(255,255,255,.1)"></div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.68rem;color:var(--w3);text-transform:uppercase;letter-spacing:.1em">Network</span>
+    <span style="font-size:.82rem;font-weight:700;color:var(--green)">● Mainnet Live</span>
+  </div>
+</div>
+
+<script>
+// Load live supply
+fetch('https://hon-secure-server.onrender.com/api/supply/total')
+  .then(r=>r.text())
+  .then(supply=>{
+    const el = document.getElementById('liveSupply')
+    if(el) el.textContent = parseInt(supply).toLocaleString() + ' HON'
+  }).catch(()=>{
+    const el = document.getElementById('liveSupply')
+    if(el) el.textContent = '66,000+ HON'
+  })
+</script>
+
 <!-- HERO -->
 <section id="hero" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;min-height:100vh;padding:100px 40px 80px">
   <div>
