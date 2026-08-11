@@ -920,10 +920,10 @@ function startMining(){
         stopMining()
         updateEnergyUI(d.current_energy, d.max_energy, d.minutes_to_refill)
       } else if(d.limit_reached){
-        addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
         clearInterval(miningInterval)
+        miningInterval=null
         isMining=false
-        stopMining()
+        addLog('🚫 Daily limit reached! Reset at midnight UTC.','inf')
         checkMiningAvailability({daily_points: 10000, energy: d.current_energy || 100})
       }
     }catch(e){addLog('⚠️ Mining...','inf')}
