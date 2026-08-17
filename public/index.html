@@ -312,6 +312,10 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
   <span style="font-size:1.1rem">🟢</span>
   <span>Node is LIVE! Start mining now</span>
 </div>
+<div id="nodeToastOff" style="position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:9999;background:linear-gradient(135deg,#FF4444,#cc3333);color:#fff;padding:14px 24px;border-radius:100px;font-weight:700;font-size:.85rem;box-shadow:0 8px 24px rgba(255,68,68,.4);display:none;align-items:center;gap:10px;opacity:0;transition:opacity .4s,transform .4s;white-space:nowrap">
+  <span style="font-size:1.1rem">🔴</span>
+  <span>Node went offline — mining paused</span>
+</div>
 
 <div class="mesh">
   <div class="mesh-orb o1"></div>
@@ -647,8 +651,8 @@ setInterval(loadStats,30000)
 let nodeOnline = false
 let nodeStatusKnown = false
 
-function showNodeToast(){
-  const t = document.getElementById('nodeToast')
+function showToastEl(elId){
+  const t = document.getElementById(elId)
   if(!t) return
   t.style.display = 'flex'
   requestAnimationFrame(()=>{
@@ -661,18 +665,23 @@ function showNodeToast(){
     setTimeout(()=>{ t.style.display = 'none' }, 400)
   }, 4000)
 }
+function showNodeToast(){ showToastEl('nodeToast') }
+function showNodeOfflineToast(){ showToastEl('nodeToastOff') }
 
 async function checkHomeNode(){
   try{
     const r = await fetch('https://hon-secure-server.onrender.com/api/node/status')
     const d = await r.json()
     if(d.online){
-      if(nodeStatusKnown && !nodeOnline){
+      if(!nodeStatusKnown || !nodeOnline){
         showNodeToast()
       }
       nodeStatusKnown = true
       nodeOnline = true
     } else {
+      if(nodeStatusKnown && nodeOnline){
+        showNodeOfflineToast()
+      }
       nodeStatusKnown = true
       nodeOnline = false
     }
