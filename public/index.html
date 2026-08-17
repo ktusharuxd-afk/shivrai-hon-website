@@ -673,15 +673,19 @@ async function checkHomeNode(){
     const r = await fetch('https://hon-secure-server.onrender.com/api/node/status')
     const d = await r.json()
     if(d.online){
-      if(!nodeStatusKnown || !nodeOnline){
+      const lastNodeStatus = localStorage.getItem('hon_node_status')
+      if(lastNodeStatus === 'offline'){
         showNodeToast()
       }
+      localStorage.setItem('hon_node_status','online')
       nodeStatusKnown = true
       nodeOnline = true
     } else {
-      if(nodeStatusKnown && nodeOnline){
+      const lastNodeStatus2 = localStorage.getItem('hon_node_status')
+      if(lastNodeStatus2 === 'online'){
         showNodeOfflineToast()
       }
+      localStorage.setItem('hon_node_status','offline')
       nodeStatusKnown = true
       nodeOnline = false
     }

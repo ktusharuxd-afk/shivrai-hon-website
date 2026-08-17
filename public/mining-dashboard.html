@@ -657,9 +657,11 @@ async function checkNode(){
     const btn=document.getElementById('mineBtn')
     
     if(d.online){
-      if(!nodeStatusKnown || !nodeOnline){
+      const lastNodeStatus = localStorage.getItem('hon_node_status')
+      if(lastNodeStatus === 'offline'){
         showNodeToast()
       }
+      localStorage.setItem('hon_node_status','online')
       nodeStatusKnown = true
       nodeOnline = true
       nodeBadge.className='node-status ns-on'
@@ -679,9 +681,11 @@ async function checkNode(){
       nodeOnline = true
     }else{
       nodeOnline = false
-      if(nodeStatusKnown && nodeOnline){
+      const lastNodeStatus2 = localStorage.getItem('hon_node_status')
+      if(lastNodeStatus2 === 'online'){
         showNodeOfflineToast()
       }
+      localStorage.setItem('hon_node_status','offline')
       nodeStatusKnown = true
       nodeOnline = false
       nodeBadge.className='node-status ns-off'
@@ -1167,4 +1171,4 @@ window.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
-Sun Aug 16 22:44:42 PDT 2026
+Sun Aug 16 22:54:00 PDT 2026
