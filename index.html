@@ -307,6 +307,11 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 </style>
 </head>
 <body>
+<!-- Node Status Toast -->
+<div id="nodeToast" style="position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:9999;background:linear-gradient(135deg,#14F195,#0d9488);color:#000;padding:14px 24px;border-radius:100px;font-weight:700;font-size:.85rem;box-shadow:0 8px 24px rgba(20,241,149,.4);display:none;align-items:center;gap:10px;opacity:0;transition:opacity .4s,transform .4s;white-space:nowrap">
+  <span style="font-size:1.1rem">🟢</span>
+  <span>Node is LIVE! Start mining now</span>
+</div>
 
 <div class="mesh">
   <div class="mesh-orb o1"></div>
@@ -637,6 +642,44 @@ async function loadStats(){
 }
 loadStats()
 setInterval(loadStats,30000)
+</script>
+<script>
+let nodeOnline = false
+let nodeStatusKnown = false
+
+function showNodeToast(){
+  const t = document.getElementById('nodeToast')
+  if(!t) return
+  t.style.display = 'flex'
+  requestAnimationFrame(()=>{
+    t.style.opacity = '1'
+    t.style.transform = 'translateX(-50%) translateY(0)'
+  })
+  setTimeout(()=>{
+    t.style.opacity = '0'
+    t.style.transform = 'translateX(-50%) translateY(-20px)'
+    setTimeout(()=>{ t.style.display = 'none' }, 400)
+  }, 4000)
+}
+
+async function checkHomeNode(){
+  try{
+    const r = await fetch('https://hon-secure-server.onrender.com/api/node/status')
+    const d = await r.json()
+    if(d.online){
+      if(nodeStatusKnown && !nodeOnline){
+        showNodeToast()
+      }
+      nodeStatusKnown = true
+      nodeOnline = true
+    } else {
+      nodeStatusKnown = true
+      nodeOnline = false
+    }
+  }catch(e){}
+}
+checkHomeNode()
+setInterval(checkHomeNode, 30000)
 </script>
 </body>
 </html>
