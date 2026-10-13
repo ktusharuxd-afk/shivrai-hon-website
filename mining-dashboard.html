@@ -272,9 +272,52 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 </div>
 
 <div class="page">
+<!-- Web Mining Ended Banner -->
+<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #E8A020;border-radius:16px;padding:24px;margin:0 0 24px;text-align:center;">
+  <h2 style="color:#E8A020;margin:0 0 12px;font-size:1.15rem">🎉 Web Mining Phase Complete!</h2>
+  <p style="color:rgba(255,255,255,.7);font-size:.88rem;margin:8px 0;line-height:1.7">
+    Your points are safe. Real <b style="color:#14F195">wHON tokens</b> are being prepared.<br>
+    <span style="font-size:.78rem;color:rgba(255,255,255,.5)">Snapshot: 13 Oct 2026</span>
+  </p>
+
+  <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px;margin:16px auto;max-width:380px;text-align:left;font-size:.85rem;line-height:2">
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:8px;margin-bottom:8px">
+      <span style="color:rgba(255,255,255,.6)">Your Points</span>
+      <b id="bannerPoints" style="color:#E8A020">—</b>
+    </div>
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:8px;margin-bottom:8px">
+      <span style="color:rgba(255,255,255,.6)">Your wHON</span>
+      <b id="bannerWHON" style="color:#14F195">—</b>
+    </div>
+    <div style="display:flex;justify-content:space-between">
+      <span style="color:rgba(255,255,255,.6)">Blocks Mined</span>
+      <b id="bannerBlocks" style="color:#fff">—</b>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:16px;margin:16px auto;max-width:380px;text-align:left">
+    <h3 style="color:#fff;margin:0 0 10px;font-size:.85rem">🔗 Submit Your BSC Wallet Address</h3>
+    <p style="color:rgba(255,255,255,.5);font-size:.75rem;margin:0 0 10px;line-height:1.6">
+      Open MetaMask → Switch to BNB Smart Chain → Copy your 0x... address
+    </p>
+    <input id="bscAddress" placeholder="0x1234567890abcdef..." maxlength="42"
+           style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;font-family:monospace;font-size:.8rem;box-sizing:border-box">
+    <button onclick="submitBscAddress()"
+            style="width:100%;padding:12px;background:#14F195;color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.85rem;margin-top:10px;font-family:'DM Sans',sans-serif">
+      Submit Address →
+    </button>
+    <div id="claimStatus" style="margin-top:10px;font-size:.75rem;text-align:center;color:rgba(255,255,255,.5)"></div>
+  </div>
+
+  <div style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.8;margin-top:12px">
+    ✅ Points secured · 📌 Hold your wHON · 🚀 CMC/CoinGecko listing applied
+  </div>
+</div>
+
+
   <!-- HERO -->
   <div class="page-hero">
-    <div class="page-badge"><span class="dot"></span> Web Mining Live</div>
+    <div class="page-badge"><span class="dot" style="background:#E8A020"></span> Web Mining Complete</div>
     <h1 class="page-title">Mine <span class="grd">HON</span><br>in Browser</h1>
     <p class="page-sub">No install. No setup. Just click and earn.</p>
     <div style="margin-top:16px;text-align:center">
@@ -368,7 +411,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <!-- MINING TAB -->
     <div class="tab-pane active" id="tab-mining">
       <div class="card">
-        <button class="mine-btn start" id="mineBtn" onclick="toggleMining()">⛏ Start Mining — Earn 2000 HON / Block</button>
+        <button class="mine-btn stop" id="mineBtn" disabled onclick="return false" style="cursor:not-allowed;opacity:.6">🚫 Web Mining Ended — Claim wHON Above</button>
         <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
         <!-- Energy Bar -->
         <div style="margin-bottom:16px">
@@ -826,6 +869,8 @@ function showMinedBlock(hash, pts, hon, bonus){
 let miningToggleLock = false
 let limitReached = false
 function toggleMining(){
+  alert('⛏️ Web Mining पूर्ण झालं!\n\nतुमचे wHON तयार आहेत.\nBSC address submit करा वरच्या form मध्ये.');
+  return
   if(miningToggleLock) return
   miningToggleLock = true
   setTimeout(()=>{ miningToggleLock = false }, 1000)
