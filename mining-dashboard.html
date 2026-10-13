@@ -401,72 +401,12 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
 
     <!-- TABS -->
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('mining')">⛏ Mining</button>
-      <button class="tab" onclick="switchTab('wallet')">💰 Wallet</button>
-      <button class="tab" onclick="switchTab('send')">📤 Send HON</button>
-      <button class="tab" onclick="switchTab('history')">📋 History</button>
+      
+      
+      
+      <button class="tab active" onclick="switchTab('history')">📋 History</button>
       <button class="tab" onclick="switchTab('leaderboard')">🏆 Top Miners</button>
     </div>
-
-    <!-- MINING TAB -->
-    <div class="tab-pane active" id="tab-mining">
-      <div class="card">
-        <button class="mine-btn stop" id="mineBtn" disabled onclick="return false" style="cursor:not-allowed;opacity:.6">🚫 Web Mining Ended — Claim wHON Above</button>
-        <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-        <!-- Energy Bar -->
-        <div style="margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span style="font-size:.72rem;color:var(--w3);font-weight:600">⚡ ENERGY</span>
-            <span style="font-size:.72rem;color:var(--gold);font-weight:700" id="energyText">100/100</span>
-          </div>
-          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:8px;overflow:hidden">
-            <div id="energyBar" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:100px;width:100%;transition:width .5s"></div>
-          </div>
-          <div style="font-size:.68rem;color:var(--w3);margin-top:4px" id="energyRefill"></div>
-        </div>
-        <div class="info-row"><span class="info-key">Status</span><span class="info-val" id="mineStatus">Ready</span></div>
-        <div class="info-row"><span class="info-key">Address</span><span class="info-val" id="mineAddr" style="font-size:.75rem;font-family:monospace">—</span></div>
-        <div class="info-row"><span class="info-key">Block Reward</span><span class="info-val" style="color:var(--gold)">2000 HON</span></div>
-        <div class="mining-block-wrap" id="miningBlockWrap">
-          <div class="block-anim">
-            <div class="block-header">
-              <span class="block-num">🧱 Block <span id="blockNum">#—</span></span>
-              <span class="block-status mining" id="blockStatusBadge">⛏ Mining...</span>
-            </div>
-            <div class="block-hash-txt" id="blockHashTxt">Hash: calculating...</div>
-            <div class="block-prog"><div class="block-prog-bar" id="blockProgBar"></div></div>
-            <div class="block-rewards" id="blockRewards"></div>
-          </div>
-        </div>
-        <div class="log-box" id="mineLog"><div class="le inf">HON Web Miner ready. Click Start Mining to begin!</div></div>
-      </div>
-    </div>
-
-    <!-- WALLET TAB -->
-    <div class="tab-pane" id="tab-wallet">
-      <div class="card">
-        <div class="bal-big" id="walletBal">0.00</div>
-        <div class="bal-lbl">HON Equivalent (2000 pts = 1 HON)</div>
-        <div class="card-title">Your Address</div>
-        <div class="addr-box" id="walletAddr" onclick="copyAddr()">Generate address by clicking Start Mining...</div>
-        <div class="info-row"><span class="info-key">Network</span><span class="info-val">HON Mainnet</span></div>
-        <div class="info-row"><span class="info-key">Account</span><span class="info-val" id="walletEmail">—</span></div>
-      </div>
-    </div>
-
-    <!-- SEND TAB -->
-    <div class="tab-pane" id="tab-send">
-      <div class="card">
-        <div class="card-title">Send HON</div>
-        <div id="sendAlert" class="send-alert"></div>
-        <input type="text" class="finput" id="sendTo" placeholder="Receiver address (bc1q...)">
-        <input type="number" class="finput" id="sendAmt" placeholder="Amount (HON)" min="0.00000001" step="0.00000001">
-        <div class="info-row" style="margin-bottom:16px"><span class="info-key">Available</span><span class="info-val" style="color:var(--gold)" id="sendBal">0 HON</span></div>
-        <button class="btn-send" onclick="sendHON()">📤 Send HON</button>
-      </div>
-    </div>
-
-
 
     <!-- LEADERBOARD TAB -->
     <div class="tab-pane" id="tab-leaderboard">
@@ -479,7 +419,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     </div>
 
     <!-- HISTORY TAB -->
-    <div class="tab-pane" id="tab-history">
+    <div class="tab-pane active" id="tab-history">
       <div class="card">
         <div class="card-title">Mining History</div>
         <div id="historyContent">
@@ -881,6 +821,8 @@ function toggleMining(){
 }
 
 function startMining(){
+  console.log('Mining disabled');
+  return;
   isMining=true
   const btn=document.getElementById('mineBtn')
   btn.textContent='⏹ Stop Mining'
