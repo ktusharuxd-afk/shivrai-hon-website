@@ -535,7 +535,7 @@ const API='https://hon-secure-server.onrender.com'
 const SB_URL='https://pctlqnityusjxlicreax.supabase.co'
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjdGxxbml0eXVzanhsaWNyZWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODg2NDMsImV4cCI6MjA5NjY2NDY0M30.nlo0Pzn_KoaidWgDCp9pXbL7ILoQpd9SER1C_3p-9gw'
 
-let user=null,miningInterval=null,isMining=false,sessionBlocks=0,walletAddress=null
+window.user=null; let miningInterval=null,isMining=false,sessionBlocks=0,walletAddress=null; let user=null
 
 function toggleMob(){document.getElementById('mob').classList.toggle('on')}
 
@@ -576,7 +576,7 @@ async function login(){
     if(d.access_token){
       localStorage.setItem('hon_web_token',d.access_token)
       if(d.refresh_token)localStorage.setItem('hon_web_refresh',d.refresh_token)
-      user=d.user;initDash()
+      user=d.user;window.user=user;initDash()
     }else{showAuthAlert('loginAlert',d.error_description||'Login failed!','err')}
   }catch(e){showAuthAlert('loginAlert','Network error!','err')}
   btn.disabled=false;btn.textContent='🔑 Login'
@@ -624,7 +624,7 @@ async function checkAuth(){
   if(token){
     try{
       const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}})
-      if(r.ok){user=await r.json();return true}
+      if(r.ok){user=await r.json();window.user=user;return true}
     }catch(e){}
   }
   const refresh=localStorage.getItem('hon_web_refresh')
@@ -638,7 +638,7 @@ async function checkAuth(){
       if(d.access_token){
         localStorage.setItem('hon_web_token',d.access_token)
         if(d.refresh_token)localStorage.setItem('hon_web_refresh',d.refresh_token)
-        user=d.user;return true
+        user=d.user;window.user=user;return true
       }
     }catch(e){}
   }
@@ -1221,24 +1221,29 @@ window.addEventListener('DOMContentLoaded',async()=>{
 const HON_API = 'https://hon-secure-server.onrender.com';
 
 async function loadBannerStats() {
-  // Wait for user to be logged in
+  // Wait for main script to load user
   let attempts = 0;
-  while (attempts < 10) {
+  while (attempts < 20) {
+    // Try multiple ways to get user
     if (window.user && window.user.id) break;
-    await new Promise(r => setTimeout(r, 500));
+    if (window._honUser && window._honUser.id) break;
+    if (typeof user !== 'undefined' && user && user.id) break;
+    await new Promise(r => setTimeout(r, 300));
     attempts++;
   }
   
-  if (!window.user || !window.user.id) {
-    // Not logged in
-    document.getElementById('bannerPoints').textContent = 'Login first';
+  // Get user from any source
+  const u = window.user || window._honUser || (typeof user !== 'undefined' ? user : null);
+  
+  if (!u || !u.id) {
+    document.getElementById('bannerPoints').textContent = 'Login to see';
     document.getElementById('bannerWHON').textContent = '—';
     document.getElementById('bannerBlocks').textContent = '—';
     return;
   }
   
   try {
-    const r = await fetch(`${HON_API}/api/mining/stats/${window.user.id}`);
+    const r = await fetch(`${HON_API}/api/mining/stats/${u.id}`);
     const d = await r.json();
     
     const pts = d.total_points || 0;
@@ -1246,18 +1251,18 @@ async function loadBannerStats() {
     document.getElementById('bannerWHON').textContent = (pts / 2000).toFixed(2) + ' wHON';
     document.getElementById('bannerBlocks').textContent = d.blocks_mined || Math.floor(pts / 2000);
     
-    // Also store user_id for the claim function
-    localStorage.setItem('user_id', window.user.id);
+    localStorage.setItem('user_id', u.id);
   } catch(e) {
     console.error('Stats load failed:', e);
-    document.getElementById('bannerPoints').textContent = '—';
+    document.getElementById('bannerPoints').textContent = 'Error';
   }
 }
 
 async function submitBscAddress() {
   const addr = document.getElementById('bscAddress').value.trim();
   const status = document.getElementById('claimStatus');
-  const userId = window.user?.id || localStorage.getItem('user_id');
+  const u = window.user || (typeof user !== 'undefined' ? user : null);
+  const userId = u?.id || localStorage.getItem('user_id');
 
   if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
     status.textContent = '❌ Invalid address. Use 0x... format (42 characters).';
@@ -1293,7 +1298,13 @@ async function submitBscAddress() {
   }
 }
 
-loadBannerStats();
+// Called on page load
+window.addEventListener('load', () => {
+  // Multiple attempts — user may already be logged in
+  setTimeout(loadBannerStats, 500);
+  setTimeout(loadBannerStats, 1500);
+  setTimeout(loadBannerStats, 3000);
+});
 </script>
 </body>
 </html>
