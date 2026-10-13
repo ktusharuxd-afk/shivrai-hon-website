@@ -1169,6 +1169,64 @@ window.addEventListener('DOMContentLoaded',async()=>{
   checkNode()
 })
 </script>
+
+<script>
+const HON_API = 'https://hon-secure-server.onrender.com';
+
+async function loadBannerStats() {
+  const userId = localStorage.getItem('user_id');
+  if (!userId) return;
+  try {
+    const r = await fetch(`${HON_API}/api/mining/stats/${userId}`);
+    const d = await r.json();
+    document.getElementById('bannerPoints').textContent = (d.total_points || 0).toLocaleString();
+    document.getElementById('bannerWHON').textContent = ((d.total_points || 0) / 2000).toFixed(2) + ' wHON';
+    document.getElementById('bannerBlocks').textContent = d.blocks_mined || 0;
+  } catch(e) {
+    console.error('Stats load failed:', e);
+  }
+}
+
+async function submitBscAddress() {
+  const addr = document.getElementById('bscAddress').value.trim();
+  const status = document.getElementById('claimStatus');
+  const userId = localStorage.getItem('user_id');
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
+    status.textContent = '❌ Invalid address. Use 0x... format (42 characters).';
+    status.style.color = '#ef4444';
+    return;
+  }
+  if (!userId) {
+    status.textContent = '❌ Please login first.';
+    status.style.color = '#ef4444';
+    return;
+  }
+
+  status.textContent = '⏳ Saving...';
+  status.style.color = 'rgba(255,255,255,.5)';
+
+  try {
+    const r = await fetch(`${HON_API}/api/claim-whon`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({user_id: userId, bsc_address: addr})
+    });
+    const d = await r.json();
+    if (d.success) {
+      status.innerHTML = `✅ Address saved! <b>${d.whon_owed} wHON</b> will arrive in 24h.`;
+      status.style.color = '#14F195';
+    } else {
+      status.textContent = '❌ ' + d.error;
+      status.style.color = '#ef4444';
+    }
+  } catch(e) {
+    status.textContent = '❌ Server error. Try later.';
+    status.style.color = '#ef4444';
+  }
+}
+
+loadBannerStats();
+</script>
 </body>
 </html>
-Sun Aug 16 22:54:00 PDT 2026
