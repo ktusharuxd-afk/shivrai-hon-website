@@ -300,7 +300,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.07);pa
     <p style="color:rgba(255,255,255,.5);font-size:.75rem;margin:0 0 10px;line-height:1.6">
       Open MetaMask → Switch to BNB Smart Chain → Copy your 0x... address
     </p>
-    <input id="bscAddress" placeholder="0x1234567890abcdef..." maxlength="42"
+    <input id="bscAddress" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" placeholder="0x1234... (42 chars)" maxlength="42"
            style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;font-family:monospace;font-size:.8rem;box-sizing:border-box">
     <button onclick="submitBscAddress()"
             style="width:100%;padding:12px;background:#14F195;color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.85rem;margin-top:10px;font-family:'DM Sans',sans-serif">
@@ -646,6 +646,8 @@ async function checkAuth(){
 }
 
 async function initDash(){
+  // Reload banner stats after login
+  setTimeout(loadBannerStats, 1000);
   limitReached = false
   document.getElementById('authSection').style.display='none'
   document.getElementById('dashboard').classList.add('active')
@@ -1219,23 +1221,43 @@ window.addEventListener('DOMContentLoaded',async()=>{
 const HON_API = 'https://hon-secure-server.onrender.com';
 
 async function loadBannerStats() {
-  const userId = localStorage.getItem('user_id');
-  if (!userId) return;
+  // Wait for user to be logged in
+  let attempts = 0;
+  while (attempts < 10) {
+    if (window.user && window.user.id) break;
+    await new Promise(r => setTimeout(r, 500));
+    attempts++;
+  }
+  
+  if (!window.user || !window.user.id) {
+    // Not logged in
+    document.getElementById('bannerPoints').textContent = 'Login first';
+    document.getElementById('bannerWHON').textContent = '—';
+    document.getElementById('bannerBlocks').textContent = '—';
+    return;
+  }
+  
   try {
-    const r = await fetch(`${HON_API}/api/mining/stats/${userId}`);
+    const r = await fetch(`${HON_API}/api/mining/stats/${window.user.id}`);
     const d = await r.json();
-    document.getElementById('bannerPoints').textContent = (d.total_points || 0).toLocaleString();
-    document.getElementById('bannerWHON').textContent = ((d.total_points || 0) / 2000).toFixed(2) + ' wHON';
-    document.getElementById('bannerBlocks').textContent = d.blocks_mined || 0;
+    
+    const pts = d.total_points || 0;
+    document.getElementById('bannerPoints').textContent = pts.toLocaleString();
+    document.getElementById('bannerWHON').textContent = (pts / 2000).toFixed(2) + ' wHON';
+    document.getElementById('bannerBlocks').textContent = d.blocks_mined || Math.floor(pts / 2000);
+    
+    // Also store user_id for the claim function
+    localStorage.setItem('user_id', window.user.id);
   } catch(e) {
     console.error('Stats load failed:', e);
+    document.getElementById('bannerPoints').textContent = '—';
   }
 }
 
 async function submitBscAddress() {
   const addr = document.getElementById('bscAddress').value.trim();
   const status = document.getElementById('claimStatus');
-  const userId = localStorage.getItem('user_id');
+  const userId = window.user?.id || localStorage.getItem('user_id');
 
   if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
     status.textContent = '❌ Invalid address. Use 0x... format (42 characters).';
